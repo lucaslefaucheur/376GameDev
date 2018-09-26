@@ -308,10 +308,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  xMin: -15
-  xMax: 15
-  yMin: -10
-  yMax: 10
+  xMin: -14.7
+  xMax: 14.7
+  yMin: -10.6
+  yMax: 10.6
 --- !u!1 &1602383976
 GameObject:
   m_ObjectHideFlags: 0
