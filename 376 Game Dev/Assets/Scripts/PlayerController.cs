@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour 
 {
     public float speed;
     public float xMin, xMax, yMin, yMax;
@@ -13,8 +14,19 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.blue;
+    }
+
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.red;
+            return;
+        }
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
@@ -27,5 +39,7 @@ public class PlayerController : MonoBehaviour
                 Mathf.Clamp(rb.position.y, yMin, yMax),
                 0.0f
             );
+
+
     }
 }
