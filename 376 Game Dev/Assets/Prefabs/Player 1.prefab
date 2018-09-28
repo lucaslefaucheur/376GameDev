@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 135609998145036602}
   - component: {fileID: 114097178879159864}
   - component: {fileID: 114209190375489148}
+  - component: {fileID: 114806314469371790}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Untagged
@@ -216,6 +217,27 @@ MonoBehaviour:
     i15: 159
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114806314469371790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1191734544276710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!135 &135609998145036602
 SphereCollider:
   m_ObjectHideFlags: 1
