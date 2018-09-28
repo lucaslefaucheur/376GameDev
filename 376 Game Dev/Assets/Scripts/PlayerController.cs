@@ -6,24 +6,28 @@ public class PlayerController : NetworkBehaviour
 {
     public float speed;
     public float xMin, xMax, yMin, yMax;
-
+    public GameObject sprite;
     private Rigidbody rb;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        if (!isLocalPlayer)
+        {
+            sprite.GetComponent<SpriteRenderer>().color = Color.blue;
+        }
     }
 
     public override void OnStartLocalPlayer()
     {
-        GetComponent<MeshRenderer>().material.color = Color.blue;
+       
     }
 
     void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
-            GetComponent<MeshRenderer>().material.color = Color.red;
+            sprite.GetComponent<SpriteRenderer>().color = Color.red;
             return;
         }
 
