@@ -12,22 +12,17 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (!isLocalPlayer)
-        {
-            sprite.GetComponent<SpriteRenderer>().color = Color.blue;
-        }
     }
 
     public override void OnStartLocalPlayer()
     {
-       
+        sprite.GetComponent<SpriteRenderer>().color = Color.blue;
     }
 
     void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
-            sprite.GetComponent<SpriteRenderer>().color = Color.red;
             return;
         }
 
