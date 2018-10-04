@@ -1,27 +1,54 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : NetworkBehaviour {
 
     [SerializeField]
-    Transform Target;
+    private Transform Target;
     [SerializeField]
     float FollowSpeed;
     [SerializeField]
     float FollowRange;
 
+    GameObject[] players;
+
+    void Start()
+    {
+    }
+
     void Update()
     {
-        if (Target != null)
+
+        players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length != 0)
         {
-            if (transform.position.x - Target.transform.position.x < FollowRange)
+            Debug.Log(players.Length);
+            CmdFollow();
+        }
+    }
+
+    [Command]
+    void CmdFollow()
+    {
+        gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+
+        var closestPlayer = players[0];
+        var dist = Vector3.Distance(transform.position, players[0].transform.position);
+        for (var i = 0; i < players.Length; i++)
+        {
+            var tempDist = Vector3.Distance(transform.position, players[i].transform.position);
+            if (tempDist > dist)
             {
-                transform.LookAt(Target.position);
-                transform.Rotate(new Vector3(0, 90, 180), Space.Self);
-                transform.Translate(new Vector3(FollowSpeed * Time.deltaTime, 0, 0));
+                closestPlayer = players[i];
 
             }
         }
+        //do something with the closestEnemy 
+        transform.position = Vector2.MoveTowards(new Vector2(transform.position.x, transform.position.y), closestPlayer.transform.position, 1 * Time.deltaTime);
+        gameObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+
     }
+
 }
