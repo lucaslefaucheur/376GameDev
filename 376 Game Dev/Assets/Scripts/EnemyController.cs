@@ -4,50 +4,53 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class EnemyController : NetworkBehaviour {
-
-    [SerializeField]
+    
     private Transform Target;
-    [SerializeField]
-    float FollowSpeed;
-    [SerializeField]
-    float FollowRange;
+    private Transform loc;
+    private LayerMask caster;
+    private float FollowRange = 100;
 
-    GameObject[] players;
+    float FollowSpeed;
 
     void Start()
     {
+        loc = transform;
+        caster = 1 << LayerMask.NameToLayer("Player");
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        SearchForTarget();
+        Follow();
+    }
 
-        players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length != 0)
+    void SearchForTarget()
+    {
+        if (!isServer)
         {
-            Debug.Log(players.Length);
-            CmdFollow();
+            return;
         }
-    }
-
-    [Command]
-    void CmdFollow()
-    {
-        gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
-
-        var closestPlayer = players[0];
-        var dist = Vector3.Distance(transform.position, players[0].transform.position);
-        for (var i = 0; i < players.Length; i++)
+        if (Target == null)
         {
-            var tempDist = Vector3.Distance(transform.position, players[i].transform.position);
-            if (tempDist > dist)
+            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            if (hitColliders.Length > 0)
             {
-                closestPlayer = players[i];
 
+                int randomint = Random.Range(0, hitColliders.Length);
+                Target = hitColliders[randomint].transform;
             }
         }
-        //do something with the closestEnemy 
-        transform.position = Vector2.MoveTowards(new Vector2(transform.position.x, transform.position.y), closestPlayer.transform.position, 1 * Time.deltaTime);
-        gameObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+        
+    }
+
+    void Follow()
+    {
+        if (Target!= null && isServer)
+        {
+            transform.position = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, 1 * Time.deltaTime);
+        }
+       
+        
 
     }
 
