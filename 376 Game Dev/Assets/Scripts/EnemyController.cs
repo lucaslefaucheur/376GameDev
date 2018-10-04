@@ -16,6 +16,7 @@ public class EnemyController : NetworkBehaviour {
     {
         loc = transform;
         caster = 1 << LayerMask.NameToLayer("Player");
+        NetworkServer.Spawn(gameObject);
     }
 
     void FixedUpdate()
