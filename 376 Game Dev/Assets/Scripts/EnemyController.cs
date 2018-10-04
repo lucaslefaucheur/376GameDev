@@ -10,13 +10,18 @@ public class EnemyController : NetworkBehaviour {
     private LayerMask caster;
     private float FollowRange = 100;
 
+    private Animator anim;
+    private SpriteRenderer rendy;
+
     float FollowSpeed;
 
     void Start()
     {
         loc = transform;
+        rendy = GetComponent<SpriteRenderer>();
         caster = 1 << LayerMask.NameToLayer("Player");
         NetworkServer.Spawn(gameObject);
+        anim = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -48,11 +53,78 @@ public class EnemyController : NetworkBehaviour {
     {
         if (Target!= null && isServer)
         {
-            transform.position = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, 1 * Time.deltaTime);
-        }
-       
-        
 
+            Vector2 direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, 1 * Time.deltaTime);
+            if (Mathf.Abs(loc.position.x - Target.position.x) > Mathf.Abs(loc.position.y - Target.position.y))
+            {
+                anim.SetBool("Side", true);
+                anim.SetBool("Up", false);
+                anim.SetBool("Down", false);
+                anim.SetBool("Move", true);
+                if ((loc.position.x - Target.position.x) < 0)
+                {
+                    rendy.flipX = false;
+                    // invoke the change on the Server as you already named the function
+                    CmdProvideFlipStateToServer(rendy.flipX);
+                }
+                else if ((loc.position.x - Target.position.x) > 0)
+                {
+                    rendy.flipX = true;
+                    // invoke the change on the Server as you already named the function
+                    CmdProvideFlipStateToServer(rendy.flipX);
+                }
+            }
+            else if (Mathf.Abs((loc.position.x - Target.position.x)) < Mathf.Abs((loc.position.y - Target.position.y)))
+            {
+                anim.SetBool("Side", false);
+                anim.SetBool("Move", true);
+                if ((loc.position.y - Target.position.y) < 0)
+                {
+                    anim.SetBool("Up", true);
+                    anim.SetBool("Down", false);
+                }
+
+                else
+                {
+                    anim.SetBool("Up", false);
+                    anim.SetBool("Down", true);
+                }
+
+            }
+            else if ((loc.position.y - Target.position.y) == 0 && (loc.position.x - Target.position.x) == 0)
+            {
+                anim.SetBool("Move", false);
+            }
+
+            transform.position = direction;
+        }
     }
+
+
+    [Command]
+    void CmdProvideFlipStateToServer(bool state)
+    {
+        // make the change local on the server
+        rendy.flipX = state;
+
+        // forward the change also to all clients
+        RpcSendFlipState(state);
+    }
+
+
+    [ClientRpc]
+    void RpcSendFlipState(bool state)
+    {
+        // skip this function on the LocalPlayer 
+        // because he is the one who originally invoked this
+        if (isLocalPlayer) return;
+
+        //make the change local on all clients
+        rendy.flipX = state;
+    }
+
+
+
+
 
 }
