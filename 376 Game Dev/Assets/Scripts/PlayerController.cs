@@ -55,10 +55,14 @@ public class PlayerController : NetworkBehaviour
             if (moveHorizontal < 0)
             {
                 rendy.flipX = true;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if (moveHorizontal > 0)
             {
                 rendy.flipX = false;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
         else if(Mathf.Abs(moveHorizontal) < Mathf.Abs(moveVertical))
@@ -85,5 +89,27 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
+    }
+
+    [Command]
+    void CmdProvideFlipStateToServer(bool state)
+    {
+        // make the change local on the server
+        rendy.flipX = state;
+
+        // forward the change also to all clients
+        RpcSendFlipState(state);
+    }
+
+    // invoked by the server only but executed on ALL clients
+    [ClientRpc]
+    void RpcSendFlipState(bool state)
+    {
+        // skip this function on the LocalPlayer 
+        // because he is the one who originally invoked this
+        if (isLocalPlayer) return;
+
+        //make the change local on all clients
+        rendy.flipX = state;
     }
 }
