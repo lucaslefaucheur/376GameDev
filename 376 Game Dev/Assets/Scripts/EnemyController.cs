@@ -21,6 +21,9 @@ public class EnemyController : NetworkBehaviour {
     private Vector2 direction;
     int Health = 10; // TODO: put it on the network 
 
+    public Transform moveSpot; 
+    private float minX, maxX, minY, maxY;
+
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
     void Start()
@@ -30,14 +33,21 @@ public class EnemyController : NetworkBehaviour {
         caster = 1 << LayerMask.NameToLayer("Player");
         NetworkServer.Spawn(gameObject);
         anim = GetComponent<Animator>();
+
         InitialPosition.x = transform.position.x;
         InitialPosition.y = transform.position.y;
-        PatrolSpeed = 2f;
+        minX = InitialPosition.x - PatrolRange;
+        maxX = InitialPosition.x + PatrolRange;
+        minY = InitialPosition.y - PatrolRange;
+        maxY = InitialPosition.y + PatrolRange;
+
+        PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
-        direction = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        direction = new Vector2(0, 0);
         direction.Normalize();
         anim.SetBool("Move", true);
+        moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
     }
 
     void FixedUpdate()
@@ -54,17 +64,22 @@ public class EnemyController : NetworkBehaviour {
                 Follow();
             else {
                 Attack(distance);
-
             }
         }
         Orientation();
+    }
+
+    void TakeDamage() {
+        Health--;
+        if (Health <= 0)
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player") 
         {
-
+            // TODO: if player is attacking -> TakeDamage() 
         }
     }
 
@@ -84,7 +99,6 @@ public class EnemyController : NetworkBehaviour {
                 anim.SetBool("Up", false);
                 anim.SetBool("Down", true);
             }
-
         }
         else
         {
@@ -107,13 +121,13 @@ public class EnemyController : NetworkBehaviour {
 
     void Patrol() 
     {
-        if (Vector3.Distance(InitialPosition, transform.position) > PatrolRange)
+        direction = Vector2.MoveTowards(transform.position, moveSpot.position, PatrolSpeed * Time.deltaTime);
+        transform.position = direction;
+
+        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
         {
-            direction.x = Random.Range(-1.0f, 1.0f);
-            direction.y = Random.Range(-1.0f, 1.0f);
-            direction.Normalize();
+            moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         }
-        transform.Translate(PatrolSpeed * direction.x * Time.deltaTime, PatrolSpeed * direction.y * Time.deltaTime, 0);
     }
 
     void Attack(float distance)
