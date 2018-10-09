@@ -85,6 +85,7 @@ public class EnemyController : NetworkBehaviour {
 
     void Orientation()
     {
+        /*
         if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x) && direction.y > 0)
         {
             anim.SetBool("Side", false);
@@ -117,6 +118,7 @@ public class EnemyController : NetworkBehaviour {
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
+        */
     }
 
     void Patrol() 
