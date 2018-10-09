@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,19 +8,20 @@ public class EnemyController : NetworkBehaviour {
     private Transform Target;
     private Transform loc;
     private LayerMask caster;
-    private float FollowRange = 10;
+    private readonly float FollowRange = 10;
+    private readonly float PatrolRange = 3;
 
     private Animator anim;
     private SpriteRenderer rendy;
 
-    float FollowSpeed;
+    private int front = 1; 
+    private bool test1, test2 = false;
+    private float counter = 2.0f;
+    Vector2 InitialPosition;
+    private Vector2 direction;
+    int Health = 10; // TODO: put it on the network 
 
-    private float distance;
-    private int front = 1;
-
-    bool test1 = false;
-    bool test2 = false;
-    float counter = 2.0f;
+    private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
     void Start()
     {
@@ -29,40 +30,99 @@ public class EnemyController : NetworkBehaviour {
         caster = 1 << LayerMask.NameToLayer("Player");
         NetworkServer.Spawn(gameObject);
         anim = GetComponent<Animator>();
+        InitialPosition.x = transform.position.x;
+        InitialPosition.y = transform.position.y;
+        PatrolSpeed = 2f;
+        FollowSpeed = 2;
+        AttackSpeed = 3;
+        direction = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        direction.Normalize();
+        anim.SetBool("Move", true);
     }
 
     void FixedUpdate()
     {
         SearchForTarget();
-        if (Target != null)
+        if (Target == null) 
         {
-            distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
+            Patrol();
+        }
+        else
+        {
+            float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
             if (distance > 2)
                 Follow();
             else {
                 Attack(distance);
 
             }
-                
         }
+        Orientation();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player") 
         {
-            // TODO: TakeDamage(); add: only if player was attacking 
-            // Destroy(gameObject, 2.0f);
-            // dying animation 
+
         }
+    }
+
+    void Orientation()
+    {
+        if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x) && direction.y > 0)
+        {
+            anim.SetBool("Side", false);
+
+            if (direction.y > 0)
+            {
+                anim.SetBool("Up", true);
+                anim.SetBool("Down", false);
+            }
+            else
+            {
+                anim.SetBool("Up", false);
+                anim.SetBool("Down", true);
+            }
+
+        }
+        else
+        {
+            anim.SetBool("Side", true);
+            anim.SetBool("Up", false);
+            anim.SetBool("Down", false);
+
+            if (direction.x > 0)
+            {
+                rendy.flipX = false;
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+            else 
+            {
+                rendy.flipX = true;
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+        }
+    }
+
+    void Patrol() 
+    {
+        if (Vector3.Distance(InitialPosition, transform.position) > PatrolRange)
+        {
+            direction.x = Random.Range(-1.0f, 1.0f);
+            direction.y = Random.Range(-1.0f, 1.0f);
+            direction.Normalize();
+        }
+        transform.Translate(PatrolSpeed * direction.x * Time.deltaTime, PatrolSpeed * direction.y * Time.deltaTime, 0);
     }
 
     void Attack(float distance)
     {
         if (!test2) 
         {
-            float xdirection = Target.transform.position.x - transform.position.x;
-            float ydirection = Target.transform.position.y - transform.position.y;
+            direction.x = Target.transform.position.x - transform.position.x;
+            direction.y = Target.transform.position.y - transform.position.y;
+            direction.Normalize();
 
             if (distance >= 1.9)
             {
@@ -80,7 +140,7 @@ public class EnemyController : NetworkBehaviour {
                 test1 = true;
             }
 
-            transform.Translate(4 * front * xdirection * Time.deltaTime, 4 * front * ydirection * Time.deltaTime, 0);
+            transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
         }
         else 
         {
@@ -117,49 +177,44 @@ public class EnemyController : NetworkBehaviour {
     {
         if (Target!= null && isServer)
         {
-            Vector2 direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, 1 * Time.deltaTime);
-            if (Mathf.Abs(loc.position.x - Target.position.x) > Mathf.Abs(loc.position.y - Target.position.y))
-            {
-                anim.SetBool("Side", true);
-                anim.SetBool("Up", false);
-                anim.SetBool("Down", false);
-                anim.SetBool("Move", true);
-                if ((loc.position.x - Target.position.x) < 0)
-                {
-                    rendy.flipX = false;
-                    // invoke the change on the Server as you already named the function
-                    CmdProvideFlipStateToServer(rendy.flipX);
-                }
-                else if ((loc.position.x - Target.position.x) > 0)
-                {
-                    rendy.flipX = true;
-                    // invoke the change on the Server as you already named the function
-                    CmdProvideFlipStateToServer(rendy.flipX);
-                }
-            }
-            else if (Mathf.Abs((loc.position.x - Target.position.x)) < Mathf.Abs((loc.position.y - Target.position.y)))
-            {
-                anim.SetBool("Side", false);
-                anim.SetBool("Move", true);
-                if ((loc.position.y - Target.position.y) < 0)
-                {
-                    anim.SetBool("Up", true);
-                    anim.SetBool("Down", false);
-                }
-
-                else
-                {
-                    anim.SetBool("Up", false);
-                    anim.SetBool("Down", true);
-                }
-
-            }
-            else if ((loc.position.y - Target.position.y) == 0 && (loc.position.x - Target.position.x) == 0)
-            {
-                anim.SetBool("Move", false);
-            }
-
+            direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
+            /*
+        if (Mathf.Abs(loc.position.x - Target.position.x) > Mathf.Abs(loc.position.y - Target.position.y))
+        {
+            anim.SetBool("Side", true);
+            anim.SetBool("Up", false);
+            anim.SetBool("Down", false);
+
+            if ((loc.position.x - Target.position.x) < 0)
+            {
+                rendy.flipX = false;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+            else if ((loc.position.x - Target.position.x) > 0)
+            {
+                rendy.flipX = true;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+        }
+        else if (Mathf.Abs((loc.position.x - Target.position.x)) < Mathf.Abs((loc.position.y - Target.position.y)))
+        {
+            anim.SetBool("Side", false);
+            if ((loc.position.y - Target.position.y) < 0)
+            {
+                anim.SetBool("Up", true);
+                anim.SetBool("Down", false);
+            }
+
+            else
+            {
+                anim.SetBool("Up", false);
+                anim.SetBool("Down", true);
+            }
+        }
+        */
         }
     }
 
