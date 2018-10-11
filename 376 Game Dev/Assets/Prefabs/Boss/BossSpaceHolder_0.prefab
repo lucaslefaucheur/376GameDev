@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4881777954829082}
   - component: {fileID: 212672414957706936}
+  - component: {fileID: 114036273119755340}
   m_Layer: 0
   m_Name: BossSpaceHolder_0
   m_TagString: Untagged
@@ -40,6 +41,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114036273119755340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610060691667200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef46845e98776a04d934b74bca1770af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212672414957706936
 SpriteRenderer:
   m_ObjectHideFlags: 1
