@@ -140,10 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b5aa5e06fee06469c4768c1ce0f93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossList:
-  - {fileID: 1610060691667200, guid: 5962dcca562ce5447ae4cf04a1d3d92f, type: 2}
-  - {fileID: 1604498535501344, guid: d068e5aebe15f5f4381ee0ad48a7f321, type: 2}
-  - {fileID: 1651426236172854, guid: 0f9852e1f6c3730428096d5f0cb08885, type: 2}
+  bossList: []
 --- !u!4 &1153233
 Transform:
   m_ObjectHideFlags: 0
