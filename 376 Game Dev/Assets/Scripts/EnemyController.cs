@@ -17,7 +17,7 @@ public class EnemyController : NetworkBehaviour {
     private int front = 1; 
     private bool test1, test2 = false;
     private float counter = 2.0f;
-    Vector2 InitialPosition;
+    private Vector2 InitialPosition;
     private Vector2 direction;
     int Health = 10; // TODO: put it on the network 
 
@@ -44,9 +44,7 @@ public class EnemyController : NetworkBehaviour {
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
-        direction = new Vector2(0, 0);
-        direction.Normalize();
-        anim.SetBool("Move", true);
+
         moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
     }
 
@@ -62,9 +60,8 @@ public class EnemyController : NetworkBehaviour {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
             if (distance > 2)
                 Follow();
-            else {
+            else
                 Attack(distance);
-            }
         }
         Orientation();
     }
@@ -75,7 +72,7 @@ public class EnemyController : NetworkBehaviour {
             Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player") 
         {
@@ -85,40 +82,48 @@ public class EnemyController : NetworkBehaviour {
 
     void Orientation()
     {
-        /*
-        if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x) && direction.y > 0)
+        anim.SetBool("Move", true);
+
+        Transform goTo;
+        if (Target == null)
+            goTo = moveSpot;
+        else
+            goTo = Target;
+
+        if (Mathf.Abs(loc.position.x - goTo.position.x) > Mathf.Abs(loc.position.y - goTo.position.y))
+        {
+            anim.SetBool("Side", true);
+            anim.SetBool("Up", false);
+            anim.SetBool("Down", false);
+
+            if ((loc.position.x - goTo.position.x) < 0)
+            {
+                rendy.flipX = false;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+            else if ((loc.position.x - goTo.position.x) > 0)
+            {
+                rendy.flipX = true;
+                // invoke the change on the Server as you already named the function
+                CmdProvideFlipStateToServer(rendy.flipX);
+            }
+        }
+        else if (Mathf.Abs((loc.position.x - goTo.position.x)) < Mathf.Abs((loc.position.y - goTo.position.y)))
         {
             anim.SetBool("Side", false);
-
-            if (direction.y > 0)
+            if ((loc.position.y - goTo.position.y) < 0)
             {
                 anim.SetBool("Up", true);
                 anim.SetBool("Down", false);
             }
+
             else
             {
                 anim.SetBool("Up", false);
                 anim.SetBool("Down", true);
             }
         }
-        else
-        {
-            anim.SetBool("Side", true);
-            anim.SetBool("Up", false);
-            anim.SetBool("Down", false);
-
-            if (direction.x > 0)
-            {
-                rendy.flipX = false;
-                CmdProvideFlipStateToServer(rendy.flipX);
-            }
-            else 
-            {
-                rendy.flipX = true;
-                CmdProvideFlipStateToServer(rendy.flipX);
-            }
-        }
-        */
     }
 
     void Patrol() 
@@ -129,6 +134,15 @@ public class EnemyController : NetworkBehaviour {
         if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
         {
             moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        }
+    }
+
+    void Follow()
+    {
+        if (Target != null && isServer)
+        {
+            direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
+            transform.position = direction;
         }
     }
 
@@ -155,7 +169,6 @@ public class EnemyController : NetworkBehaviour {
                 front = -1;
                 test1 = true;
             }
-
             transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
         }
         else 
@@ -167,7 +180,6 @@ public class EnemyController : NetworkBehaviour {
                 test2 = false;
             }
         }
-
     }
 
     void SearchForTarget()
@@ -186,54 +198,7 @@ public class EnemyController : NetworkBehaviour {
                 Target = hitColliders[randomint].transform;
             }
         }
-        
     }
-
-    void Follow()
-    {
-        if (Target!= null && isServer)
-        {
-            direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
-            transform.position = direction;
-            /*
-        if (Mathf.Abs(loc.position.x - Target.position.x) > Mathf.Abs(loc.position.y - Target.position.y))
-        {
-            anim.SetBool("Side", true);
-            anim.SetBool("Up", false);
-            anim.SetBool("Down", false);
-
-            if ((loc.position.x - Target.position.x) < 0)
-            {
-                rendy.flipX = false;
-                // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(rendy.flipX);
-            }
-            else if ((loc.position.x - Target.position.x) > 0)
-            {
-                rendy.flipX = true;
-                // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(rendy.flipX);
-            }
-        }
-        else if (Mathf.Abs((loc.position.x - Target.position.x)) < Mathf.Abs((loc.position.y - Target.position.y)))
-        {
-            anim.SetBool("Side", false);
-            if ((loc.position.y - Target.position.y) < 0)
-            {
-                anim.SetBool("Up", true);
-                anim.SetBool("Down", false);
-            }
-
-            else
-            {
-                anim.SetBool("Up", false);
-                anim.SetBool("Down", true);
-            }
-        }
-        */
-        }
-    }
-
 
     [Command]
     void CmdProvideFlipStateToServer(bool state)
@@ -244,7 +209,6 @@ public class EnemyController : NetworkBehaviour {
         // forward the change also to all clients
         RpcSendFlipState(state);
     }
-
 
     [ClientRpc]
     void RpcSendFlipState(bool state)
