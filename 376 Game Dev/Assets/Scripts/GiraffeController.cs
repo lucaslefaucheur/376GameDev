@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class EnemyController : NetworkBehaviour {
+public class GiraffeController : NetworkBehaviour {
     
     private Transform Target;
     private Transform loc;
@@ -14,9 +14,6 @@ public class EnemyController : NetworkBehaviour {
     private Animator anim;
     private SpriteRenderer rendy;
 
-    private int front = 1; 
-    private bool test1, test2 = false;
-    private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
     int Health = 10; // TODO: put it on the network 
@@ -25,6 +22,9 @@ public class EnemyController : NetworkBehaviour {
     private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
+    
+    private float counter;
+    public GameObject EnemyHitParticle;
 
     void Start()
     {
@@ -60,8 +60,10 @@ public class EnemyController : NetworkBehaviour {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
             if (distance > 2)
                 Follow();
-            else
+            else if (distance > 1)
                 Attack(distance);
+            else
+                Teleport();
         }
         Orientation();
     }
@@ -139,7 +141,11 @@ public class EnemyController : NetworkBehaviour {
 
     void Follow()
     {
-        if (Target != null && isServer)
+        if (counter > 0)
+        {
+            counter -= Time.deltaTime;
+        }
+        else if (isServer)
         {
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
@@ -148,37 +154,25 @@ public class EnemyController : NetworkBehaviour {
 
     void Attack(float distance)
     {
-        if (!test2) 
-        {
-            direction.x = Target.transform.position.x - transform.position.x;
-            direction.y = Target.transform.position.y - transform.position.y;
-            direction.Normalize();
+        direction.x = Target.transform.position.x - transform.position.x;
+        direction.y = Target.transform.position.y - transform.position.y;
+        direction.Normalize();
+        transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
+        counter = 0.2f;
+    }
 
-            if (distance >= 1.9)
-            {
-                front = 1;
-                if (test1)
-                {
-                    test2 = true;
-                    counter = 2.0f;
-                }
-            }
-
-            if (distance <= 1)
-            {
-                front = -1;
-                test1 = true;
-            }
-            transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
-        }
-        else 
+    void Teleport() {
+        if (counter > 0)
         {
             counter -= Time.deltaTime;
-            if (counter <= 0) 
-            {
-                test1 = false;
-                test2 = false;
-            }
+        }
+        else
+        {
+            Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
+            Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            teleportPosition.Normalize();
+            transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0);
+            counter = 1.0f;
         }
     }
 

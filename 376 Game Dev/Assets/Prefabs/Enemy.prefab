@@ -92,7 +92,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1814274411618584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee7aef2be18194b95a45f65a42d11ce4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d12c92c8cd4c46d69d4ad6b4e4e23ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814274411618584}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
