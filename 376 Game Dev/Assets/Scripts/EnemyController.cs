@@ -4,26 +4,26 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class EnemyController : NetworkBehaviour {
-    
+
+
+    //for internal referencing
     private Transform Target;
     private Transform loc;
     private LayerMask caster;
-    private readonly float FollowRange = 10;
-    private readonly float PatrolRange = 3;
-
     private Animator anim;
     private SpriteRenderer rendy;
+    public Transform moveSpot; 
 
+    //variables
+    private readonly float FollowRange = 10;
+    private readonly float PatrolRange = 3;
     private int front = 1; 
     private bool test1, test2 = false;
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    int Health = 10; // TODO: put it on the network 
-
-    public Transform moveSpot; 
+    public int Health = 10; // TODO: put it on the network 
     private float minX, maxX, minY, maxY;
-
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
     void Start()
@@ -44,7 +44,7 @@ public class EnemyController : NetworkBehaviour {
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
-
+        NetworkServer.Spawn(gameObject);
         moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
     }
 
@@ -66,17 +66,18 @@ public class EnemyController : NetworkBehaviour {
         Orientation();
     }
 
-    void TakeDamage() {
+    public void TakeDamage() {
         Health--;
         if (Health <= 0)
             Destroy(gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    //Colliding with the player will cause damage to the player
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.tag == "Player") 
+        if (other.gameObject.layer.Equals(8))
         {
-            // TODO: if player is attacking -> TakeDamage() 
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -9,23 +10,42 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
+    private Vector2 facing;
+
+    //Health 
+    private float maxHealth = 30f;
+    //sych health over network to know when your teammates are dead
+    [SyncVar(hook = "OnChangeHealth")]
+    public float currentHealth;
+
+    //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
+    private float armourVar = 0f;
+    private int attack = 10;
+    private float attackVar = 0f;
+    private float healthVar = 0f;
 
     //for internal referencing
     private Rigidbody2D playerRB;
     private Animator anim;
     private SpriteRenderer rendy;
+    public RectTransform healthBar;
+
 
     private void Start()
     {
+        // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         rendy = GetComponent<SpriteRenderer>();
+
+        // set initial health
+        currentHealth = maxHealth;
     }
 
     //On local player start only
     public override void OnStartLocalPlayer()
     {
-        
+
     }
 
     void FixedUpdate()
@@ -39,14 +59,73 @@ public class PlayerController : NetworkBehaviour
 
         Move();
 
+        if (Input.GetButtonDown("Melee"))
+        {
+            melee();
+        }
 
     }
 
-    void Move()
+
+
+
+    /***********************************************************
+     * 
+     * 
+     *  Functions
+     * 
+     * 
+     * 
+     * ********************************************************/
+
+    //attack function
+    private void melee()
+    {
+        RaycastHit2D hit = new RaycastHit2D();
+
+        Physics2D.Raycast(transform.position, facing, 1.5f);
+        
+             Debug.Log(hit.collider.name);
+        
+        
+           
+        
+
+    }
+
+    // to be called by the collision detector
+    public void TakeDamage(int amount)
+    {
+        if (!isServer)
+        {
+            return;
+        }
+        currentHealth -= amount * (1 - armourVar);
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Debug.Log("Dead!");
+        }
+    }
+
+    //to be used to cast an attack
+    public int smallAttack()
+    {
+        return (int)Mathf.Floor(attack * (1 + attackVar));
+    }
+
+    //to be used to cast a big attack
+    public int bigAttack(float weaponStr)
+    {
+        return (int)Mathf.Floor((attack + weaponStr) * (1 + attackVar));
+    }
+
+    //to move player + animations
+    private void Move()
     {
         float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f; ;
         float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f; ;
-        if(Mathf.Abs(moveHorizontal)> Mathf.Abs(moveVertical))
+        if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
             anim.SetBool("moveSide", true);
             anim.SetBool("moveUp", false);
@@ -55,34 +134,38 @@ public class PlayerController : NetworkBehaviour
             if (moveHorizontal < 0)
             {
                 rendy.flipX = true;
+                facing = Vector2.left;
                 // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if (moveHorizontal > 0)
             {
                 rendy.flipX = false;
+                facing = Vector2.right;
                 // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
-        else if(Mathf.Abs(moveHorizontal) < Mathf.Abs(moveVertical))
+        else if (Mathf.Abs(moveHorizontal) < Mathf.Abs(moveVertical))
         {
             anim.SetBool("moveSide", false);
             anim.SetBool("isMoving", true);
             if (moveVertical > 0)
             {
-            anim.SetBool("moveUp", true);
-            anim.SetBool("moveDown", false);
+                facing = Vector2.up;
+                anim.SetBool("moveUp", true);
+                anim.SetBool("moveDown", false);
             }
 
             else
             {
+                facing = Vector2.down;
                 anim.SetBool("moveUp", false);
                 anim.SetBool("moveDown", true);
             }
 
         }
-        else if(moveVertical == 0 && moveHorizontal == 0)
+        else if (moveVertical == 0 && moveHorizontal == 0)
         {
             anim.SetBool("isMoving", false);
         }
@@ -90,6 +173,59 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
     }
+
+    //to be called when level finishes, to up base stats
+    public void levelUp(int level)
+    {
+        //scales the attack base up with level up
+        attack = (int)Mathf.Floor(attack + (0.325f * level));
+        //takes note of the players health percentage
+        float temp = (currentHealth / maxHealth)*100;
+        //scales the health base up wih the level up
+        maxHealth = (int)Mathf.Floor(maxHealth + (0.25f * level));
+        //scales the current health of the player by using the presisting the helth precentage
+        currentHealth = maxHealth * temp;
+    }
+
+    private void OnChangeHealth(float currentHealth)
+    {
+        //sets the size of the green healthbar in relaiton to the percentage of health left
+        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
+    /***********************************************************
+     * 
+     * 
+     *  Getters and Setters
+     * 
+     * 
+     * 
+     * ********************************************************/
+
+    public float getHealth()
+    {
+        return currentHealth;
+    }
+
+    public void setArmour(float armour)
+    {
+        armourVar = armour;
+    }
+
+    public void setAttack (float attack)
+    {
+        attackVar = attack;
+    }
+
+    /***********************************************************
+     * 
+     * 
+     *  Network Methods
+     * 
+     * 
+     * 
+     * ********************************************************/
+
 
     [Command]
     void CmdProvideFlipStateToServer(bool state)
@@ -112,4 +248,14 @@ public class PlayerController : NetworkBehaviour
         //make the change local on all clients
         rendy.flipX = state;
     }
+
+
+    /***********************************************************
+    * 
+    *  Cooroutines 
+    * 
+    * 
+    * 
+    * 
+    * ********************************************************/
 }
