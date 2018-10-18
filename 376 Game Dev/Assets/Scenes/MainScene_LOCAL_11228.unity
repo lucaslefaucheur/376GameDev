@@ -172,7 +172,7 @@ MonoBehaviour:
   m_OfflineScene: 
   m_OnlineScene: 
   m_SpawnPrefabs:
-  - {fileID: 1302206315351144, guid: e2edc4f3fb482b54aa0c6b32a70840c1, type: 2}
+  - {fileID: 0}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -411,22 +411,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 226
-    i1: 237
-    i2: 196
-    i3: 243
-    i4: 251
-    i5: 72
-    i6: 43
-    i7: 84
-    i8: 170
-    i9: 12
-    i10: 107
-    i11: 50
-    i12: 167
-    i13: 8
-    i14: 64
-    i15: 193
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &1418674205
@@ -440,6 +440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee7aef2be18194b95a45f65a42d11ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpot: {fileID: 0}
+  Health: 10
 --- !u!212 &1418674206
 SpriteRenderer:
   m_ObjectHideFlags: 0
