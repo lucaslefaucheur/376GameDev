@@ -48,7 +48,7 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    void FixedUpdate()
+    void Update()
     {
         //don't touch
         if (!isLocalPlayer)
@@ -63,6 +63,13 @@ public class PlayerController : NetworkBehaviour
         {
             melee();
         }
+
+        if (Input.GetButtonDown("Weapon"))
+        {
+            Debug.Log("weapon attack");
+        }
+
+
 
     }
 
@@ -81,16 +88,14 @@ public class PlayerController : NetworkBehaviour
     //attack function
     private void melee()
     {
-        RaycastHit2D hit = new RaycastHit2D();
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
 
-        Physics2D.Raycast(transform.position, facing, 1.5f);
-        
-             Debug.Log(hit.collider.name);
-        
-        
-           
-        
-
+            //to remove
+            Debug.Log("melee attack hit for: " + smallAttack());
+        }
     }
 
     // to be called by the collision detector

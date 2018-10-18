@@ -22,7 +22,7 @@ public class EnemyController : NetworkBehaviour {
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    public int Health = 10; // TODO: put it on the network 
+    public float Health = 10; // TODO: put it on the network 
     private float minX, maxX, minY, maxY;
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
@@ -66,8 +66,8 @@ public class EnemyController : NetworkBehaviour {
         Orientation();
     }
 
-    public void TakeDamage() {
-        Health--;
+    public void TakeDamage(float damage) {
+        Health -= damage;
         if (Health <= 0)
             Destroy(gameObject);
     }
