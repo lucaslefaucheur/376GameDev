@@ -8,7 +8,7 @@ public class bowProjectile : MonoBehaviour {
 
     void Start()
     {
-        GetComponent<Rigidbody2D>().AddForce(Vector2.up * 500);
+        GetComponent<Rigidbody2D>().AddForce(transform.up * 500);
         bow = GetComponentInParent<ItemAttack>();
     }
 

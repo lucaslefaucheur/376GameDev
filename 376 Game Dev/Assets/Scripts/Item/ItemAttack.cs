@@ -14,15 +14,14 @@ public class ItemAttack : MonoBehaviour {
         StartCoroutine(delete());
     }
 
-    IEnumerator delete()
-    {
-        yield return new WaitForSeconds(5);
-        Destroy(gameObject);
-    }
-
     public int damage()
     {
         return attackDamage * level;
+    }
+
+    public void setAttackDamage(int damage)
+    {
+        attackDamage = damage;
     }
 
     public GameObject addLevel()
@@ -39,6 +38,12 @@ public class ItemAttack : MonoBehaviour {
 
     private void destroyItem()
     {
+        Destroy(gameObject);
+    }
+
+    IEnumerator delete()
+    {
+        yield return new WaitForSeconds(5);
         Destroy(gameObject);
     }
 }
