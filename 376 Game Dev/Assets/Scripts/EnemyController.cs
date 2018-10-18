@@ -14,15 +14,14 @@ public class EnemyController : NetworkBehaviour {
     private Animator anim;
     private SpriteRenderer rendy;
 
-    private int front = 1; 
+    private int front = 1;
     private bool test1, test2 = false;
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    int Health = 10; // TODO: put it on the network 
+    private int Health = 10;
 
-    public Transform moveSpot; 
-    private float minX, maxX, minY, maxY;
+    public Transform moveSpot;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
@@ -36,16 +35,12 @@ public class EnemyController : NetworkBehaviour {
 
         InitialPosition.x = transform.position.x;
         InitialPosition.y = transform.position.y;
-        minX = InitialPosition.x - PatrolRange;
-        maxX = InitialPosition.x + PatrolRange;
-        minY = InitialPosition.y - PatrolRange;
-        maxY = InitialPosition.y + PatrolRange;
 
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
 
-        moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
     }
 
     void FixedUpdate()
@@ -66,20 +61,45 @@ public class EnemyController : NetworkBehaviour {
         Orientation();
     }
 
-    void TakeDamage() {
-        Health--;
-        if (Health <= 0)
-            Destroy(gameObject);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
+    /***********************************
+     *
+     * Functions
+     *
+     ***********************************/
+    
+    /* SearchForTarget: looks for a player in the FollowRange
+     *******************************************************/
+    
+    void SearchForTarget()
     {
-        if (other.tag == "Player") 
+        if (!isServer)
+            return;
+            
+        if (Target == null)
         {
-            // TODO: if player is attacking -> TakeDamage() 
+            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            
+            if (hitColliders.Length > 0)
+            {
+                int randomint = Random.Range(0, hitColliders.Length);
+                Target = hitColliders[randomint].transform;
+            }
+        }
+    }
+    
+    /* TakeDamage: substracts a number to the enemy's health
+     ******************************************************/
+    
+    void TakeDamage(int number) {
+        Health -= number;
+        if (Health <= 0) {
+            // TODO: call a Die() method
         }
     }
 
+    /* Orientation: determines which sprite to use
+     ********************************************/
+    
     void Orientation()
     {
         anim.SetBool("Move", true);
@@ -98,14 +118,12 @@ public class EnemyController : NetworkBehaviour {
 
             if ((loc.position.x - goTo.position.x) < 0)
             {
-                rendy.flipX = false;
-                // invoke the change on the Server as you already named the function
+                rendy.flipX = false; // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if ((loc.position.x - goTo.position.x) > 0)
             {
-                rendy.flipX = true;
-                // invoke the change on the Server as you already named the function
+                rendy.flipX = true; // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
@@ -117,7 +135,6 @@ public class EnemyController : NetworkBehaviour {
                 anim.SetBool("Up", true);
                 anim.SetBool("Down", false);
             }
-
             else
             {
                 anim.SetBool("Up", false);
@@ -126,34 +143,49 @@ public class EnemyController : NetworkBehaviour {
         }
     }
 
+    /* Patrol: enemy walks towards random move spots
+     **********************************************/
+
     void Patrol() 
     {
+        // direction of the patrol: towards the 'move spot'
         direction = Vector2.MoveTowards(transform.position, moveSpot.position, PatrolSpeed * Time.deltaTime);
         transform.position = direction;
 
+        // if the enemy reaches the 'move spot'
         if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
         {
-            moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            // create a new random 'move spot'
+            moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
         }
     }
 
+    /* Follow: enemy follows a player
+     ********************************/
+    
     void Follow()
     {
         if (Target != null && isServer)
         {
+            // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
         }
     }
 
+    /* Attack: enemy attacks a player
+     *******************************/
+    
     void Attack(float distance)
     {
         if (!test2) 
         {
+            // direction of the attack: towards the position of the player
             direction.x = Target.transform.position.x - transform.position.x;
             direction.y = Target.transform.position.y - transform.position.y;
             direction.Normalize();
 
+            // enemy moves towards the player
             if (distance >= 1.9)
             {
                 front = 1;
@@ -164,16 +196,18 @@ public class EnemyController : NetworkBehaviour {
                 }
             }
 
+            // enemy moves away from the player
             if (distance <= 1)
             {
                 front = -1;
                 test1 = true;
             }
+            
             transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
         }
         else 
         {
-            counter -= Time.deltaTime;
+            counter -= Time.deltaTime; // counter between every attacks
             if (counter <= 0) 
             {
                 test1 = false;
@@ -181,43 +215,24 @@ public class EnemyController : NetworkBehaviour {
             }
         }
     }
-
-    void SearchForTarget()
-    {
-        if (!isServer)
-        {
-            return;
-        }
-        if (Target == null)
-        {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
-
-            if (hitColliders.Length > 0)
-            {
-                int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
-            }
-        }
-    }
+    
+    /***********************************
+     *
+     * Network
+     *
+     ***********************************/
 
     [Command]
     void CmdProvideFlipStateToServer(bool state)
     {
-        // make the change local on the server
-        rendy.flipX = state;
-
-        // forward the change also to all clients
-        RpcSendFlipState(state);
+        rendy.flipX = state; // make the change local on the server
+        RpcSendFlipState(state); // forward the change also to all clients
     }
 
     [ClientRpc]
     void RpcSendFlipState(bool state)
     {
-        // skip this function on the LocalPlayer 
-        // because he is the one who originally invoked this
-        if (isLocalPlayer) return;
-
-        //make the change local on all clients
-        rendy.flipX = state;
+        if (isLocalPlayer) return; // skip this function on the LocalPlayer because he is the one who originally invoked this
+        rendy.flipX = state; // make the change local on all clients
     }
 }

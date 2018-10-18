@@ -16,10 +16,9 @@ public class GiraffeController : NetworkBehaviour {
 
     private Vector2 InitialPosition;
     private Vector2 direction;
-    int Health = 10; // TODO: put it on the network 
+    int Health = 10;
 
-    public Transform moveSpot; 
-    private float minX, maxX, minY, maxY;
+    public Transform moveSpot;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
     
@@ -36,16 +35,12 @@ public class GiraffeController : NetworkBehaviour {
 
         InitialPosition.x = transform.position.x;
         InitialPosition.y = transform.position.y;
-        minX = InitialPosition.x - PatrolRange;
-        maxX = InitialPosition.x + PatrolRange;
-        minY = InitialPosition.y - PatrolRange;
-        maxY = InitialPosition.y + PatrolRange;
 
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
 
-        moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
     }
 
     void FixedUpdate()
@@ -67,20 +62,45 @@ public class GiraffeController : NetworkBehaviour {
         }
         Orientation();
     }
-
-    void TakeDamage() {
-        Health--;
-        if (Health <= 0)
-            Destroy(gameObject);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
+    
+    /***********************************
+     *
+     * Functions
+     *
+     ***********************************/
+    
+    /* SearchForTarget: looks for a player in the FollowRange
+     *******************************************************/
+    
+    void SearchForTarget()
     {
-        if (other.tag == "Player") 
+        if (!isServer)
+            return;
+        
+        if (Target == null)
         {
-            // TODO: if player is attacking -> TakeDamage() 
+            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            
+            if (hitColliders.Length > 0)
+            {
+                int randomint = Random.Range(0, hitColliders.Length);
+                Target = hitColliders[randomint].transform;
+            }
         }
     }
+    
+    /* TakeDamage: substracts a number to the enemy's health
+     ******************************************************/
+    
+    void TakeDamage(int number) {
+        Health -= number;
+        if (Health <= 0) {
+            // TODO: call a Die() method
+        }
+    }
+
+    /* Orientation: determines which sprite to use
+     ********************************************/
 
     void Orientation()
     {
@@ -100,14 +120,12 @@ public class GiraffeController : NetworkBehaviour {
 
             if ((loc.position.x - goTo.position.x) < 0)
             {
-                rendy.flipX = false;
-                // invoke the change on the Server as you already named the function
+                rendy.flipX = false; // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if ((loc.position.x - goTo.position.x) > 0)
             {
-                rendy.flipX = true;
-                // invoke the change on the Server as you already named the function
+                rendy.flipX = true; // invoke the change on the Server as you already named the function
                 CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
@@ -127,33 +145,48 @@ public class GiraffeController : NetworkBehaviour {
             }
         }
     }
-
-    void Patrol() 
+    
+    /* Patrol: enemy walks towards random move spots
+     **********************************************/
+    
+    void Patrol()
     {
+        // direction of the patrol: towards the 'move spot'
         direction = Vector2.MoveTowards(transform.position, moveSpot.position, PatrolSpeed * Time.deltaTime);
         transform.position = direction;
-
-        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
+        
+        // if the enemy reaches the 'move spot'
+        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f)
         {
-            moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            // create a new random 'move spot'
+            moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
         }
     }
+    
+    /* Follow: enemy follows a player
+     ********************************/
 
     void Follow()
     {
+        // wait before following 
         if (counter > 0)
         {
             counter -= Time.deltaTime;
         }
         else if (isServer)
         {
+            // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
         }
     }
+    
+    /* Attack: enemy attacks a player
+     *******************************/
 
     void Attack(float distance)
     {
+        // direction of the attack: towards the position of the player
         direction.x = Target.transform.position.x - transform.position.x;
         direction.y = Target.transform.position.y - transform.position.y;
         direction.Normalize();
@@ -161,7 +194,11 @@ public class GiraffeController : NetworkBehaviour {
         counter = 0.2f;
     }
 
+    /* Teleport: enemy teleports to a random position around the player
+     *****************************************************************/
+    
     void Teleport() {
+        // wait before exploding
         if (counter > 0)
         {
             counter -= Time.deltaTime;
@@ -171,47 +208,28 @@ public class GiraffeController : NetworkBehaviour {
             Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
             Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
             teleportPosition.Normalize();
-            transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0);
+            transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
             counter = 1.0f;
         }
     }
-
-    void SearchForTarget()
-    {
-        if (!isServer)
-        {
-            return;
-        }
-        if (Target == null)
-        {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
-
-            if (hitColliders.Length > 0)
-            {
-                int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
-            }
-        }
-    }
+    
+    /***********************************
+     *
+     * Network
+     *
+     ***********************************/
 
     [Command]
     void CmdProvideFlipStateToServer(bool state)
     {
-        // make the change local on the server
-        rendy.flipX = state;
-
-        // forward the change also to all clients
-        RpcSendFlipState(state);
+        rendy.flipX = state; // make the change local on the server
+        RpcSendFlipState(state); // forward the change also to all clients
     }
 
     [ClientRpc]
     void RpcSendFlipState(bool state)
     {
-        // skip this function on the LocalPlayer 
-        // because he is the one who originally invoked this
-        if (isLocalPlayer) return;
-
-        //make the change local on all clients
-        rendy.flipX = state;
+        if (isLocalPlayer) return; // skip this function on the LocalPlayer because he is the one who originally invoked this
+        rendy.flipX = state; //make the change local on all clients
     }
 }
