@@ -89,6 +89,17 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
+
+        if (Mathf.Abs(transform.position.x) > 9.8f)
+        {
+            playerRB.transform.Translate(new Vector3(-moveHorizontal, 0));
+        }
+        if (Mathf.Abs(transform.position.y) > 5.8f)
+        {
+            playerRB.transform.Translate(new Vector3(0, -moveVertical));
+        }
+
+
     }
 
     [Command]
@@ -112,4 +123,10 @@ public class PlayerController : NetworkBehaviour
         //make the change local on all clients
         rendy.flipX = state;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("col");
+    }
+
 }
