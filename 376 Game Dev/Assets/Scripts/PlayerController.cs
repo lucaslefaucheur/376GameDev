@@ -30,6 +30,9 @@ public class PlayerController : NetworkBehaviour
     private SpriteRenderer rendy;
     public RectTransform healthBar;
 
+    //item stuff
+    private GameObject equipped;
+
 
     private void Start()
     {
@@ -66,12 +69,45 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetButtonDown("Weapon"))
         {
-            Debug.Log("weapon attack");
+            if (GetComponent<Sword>() != null)
+            {
+                Debug.Log(GetComponent<Sword>().message());
+            }
+            else
+                Debug.Log("weapon attack");
         }
 
 
+        if (Input.GetButtonDown("Pickup"))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
+            {
+                if (hit.collider.tag.Equals("Sword"))
+                {
+                    Destroy(hit.collider.gameObject);
+                gameObject.AddComponent<Sword>();
+                }
 
-    }
+                if (hit.collider.tag.Equals("Bow"))
+                {
+                    //gameObject.AddComponent<Bow>();
+                }
+
+                if (hit.collider.tag.Equals("Shield"))
+                {
+                    //gameObject.AddComponent<Shield>();
+                }
+
+                if (hit.collider.tag.Equals("Staff"))
+                {
+                    //gameObject.AddComponent<Staff>();
+                }
+            }
+
+        }
+
+     }
 
 
 
@@ -210,6 +246,11 @@ public class PlayerController : NetworkBehaviour
     public float getHealth()
     {
         return currentHealth;
+    }
+
+    public int getAttack()
+    {
+        return attack;
     }
 
     public void setArmour(float armour)
