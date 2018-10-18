@@ -257,8 +257,8 @@ TextureImporter:
       name: Boss2_8
       rect:
         serializedVersion: 2
-        x: 512
-        y: 432
+        x: 511
+        y: 435
         width: 256
         height: 256
       alignment: 8
@@ -269,26 +269,6 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 10244b85eee20a24ca6dda7931843887
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Boss2_9
-      rect:
-        serializedVersion: 2
-        x: 914
-        y: 558
-        width: 286
-        height: 185
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2e651c08ddb0bfd488f02381a43f8df4
       vertices: []
       indices: 
       edges: []
