@@ -27,11 +27,9 @@ GameObject:
   - component: {fileID: 114321171359345036}
   - component: {fileID: 114292114074627272}
   - component: {fileID: 114928630134984088}
-
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
-
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,9 +44,7 @@ GameObject:
   - component: {fileID: 4493754706532904}
   - component: {fileID: 20004364819692536}
   - component: {fileID: 81216418123338962}
-
   m_Layer: 8
-
   m_Name: Camera (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +147,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

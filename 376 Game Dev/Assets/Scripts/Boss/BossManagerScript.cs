@@ -39,4 +39,9 @@ public class BossManagerScript : MonoBehaviour {
             //this.GetComponent<GameManagerScript>().BossDeath();
         }
 	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
 }
