@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class EnemyController : NetworkBehaviour {
-
-
-    //for internal referencing
+public class GiraffeController : NetworkBehaviour {
+    
     private Transform Target;
     private Transform loc;
     private LayerMask caster;
-    private Animator anim;
-    private SpriteRenderer rendy;
-    public Transform moveSpot; 
-    
-    //variables
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
-    private int front = 1; 
 
-    private bool test1, test2 = false;
-    private float counter = 2.0f;
+    private Animator anim;
+    private SpriteRenderer rendy;
+
     private Vector2 InitialPosition;
     private Vector2 direction;
-    public float Health = 10; // TODO: put it on the network 
-    private float minX, maxX, minY, maxY;
+    int Health = 10;
+
+    public Transform moveSpot;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
+    
+    private float counter;
+    public GameObject EnemyHitParticle;
 
     void Start()
     {
@@ -43,10 +40,7 @@ public class EnemyController : NetworkBehaviour {
         FollowSpeed = 2;
         AttackSpeed = 3;
 
-
-
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
-
     }
 
     void FixedUpdate()
@@ -61,12 +55,14 @@ public class EnemyController : NetworkBehaviour {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
             if (distance > 2)
                 Follow();
-            else
+            else if (distance > 1)
                 Attack(distance);
+            else
+                Teleport();
         }
         Orientation();
     }
-
+    
     /***********************************
      *
      * Functions
@@ -80,7 +76,7 @@ public class EnemyController : NetworkBehaviour {
     {
         if (!isServer)
             return;
-            
+        
         if (Target == null)
         {
             Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
@@ -96,24 +92,16 @@ public class EnemyController : NetworkBehaviour {
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
     
-   public void TakeDamage(float damage) {
-        Health -= damage;
-        if (Health <= 0)
-            Destroy(gameObject);
-    }
-
-    //Colliding with the player will cause damage to the player
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.layer.Equals(8))
-        {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+    void TakeDamage(int number) {
+        Health -= number;
+        if (Health <= 0) {
+            // TODO: call a Die() method
         }
     }
 
     /* Orientation: determines which sprite to use
      ********************************************/
-    
+
     void Orientation()
     {
         anim.SetBool("Move", true);
@@ -149,6 +137,7 @@ public class EnemyController : NetworkBehaviour {
                 anim.SetBool("Up", true);
                 anim.SetBool("Down", false);
             }
+
             else
             {
                 anim.SetBool("Up", false);
@@ -156,77 +145,71 @@ public class EnemyController : NetworkBehaviour {
             }
         }
     }
-
+    
     /* Patrol: enemy walks towards random move spots
      **********************************************/
-
-    void Patrol() 
+    
+    void Patrol()
     {
         // direction of the patrol: towards the 'move spot'
         direction = Vector2.MoveTowards(transform.position, moveSpot.position, PatrolSpeed * Time.deltaTime);
         transform.position = direction;
-
+        
         // if the enemy reaches the 'move spot'
-        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
+        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f)
         {
             // create a new random 'move spot'
             moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
         }
     }
-
+    
     /* Follow: enemy follows a player
      ********************************/
-    
+
     void Follow()
     {
-        if (Target != null && isServer)
+        // wait before following 
+        if (counter > 0)
+        {
+            counter -= Time.deltaTime;
+        }
+        else if (isServer)
         {
             // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
         }
     }
-
+    
     /* Attack: enemy attacks a player
      *******************************/
-    
+
     void Attack(float distance)
     {
-        if (!test2) 
+        // direction of the attack: towards the position of the player
+        direction.x = Target.transform.position.x - transform.position.x;
+        direction.y = Target.transform.position.y - transform.position.y;
+        direction.Normalize();
+        transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
+        counter = 0.2f;
+    }
+
+    /* Teleport: enemy teleports to a random position around the player
+     *****************************************************************/
+    
+    void Teleport() {
+        // wait before exploding
+        if (counter > 0)
         {
-            // direction of the attack: towards the position of the player
-            direction.x = Target.transform.position.x - transform.position.x;
-            direction.y = Target.transform.position.y - transform.position.y;
-            direction.Normalize();
-
-            // enemy moves towards the player
-            if (distance >= 1.9)
-            {
-                front = 1;
-                if (test1)
-                {
-                    test2 = true;
-                    counter = 2.0f;
-                }
-            }
-
-            // enemy moves away from the player
-            if (distance <= 1)
-            {
-                front = -1;
-                test1 = true;
-            }
-            
-            transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
+            counter -= Time.deltaTime;
         }
-        else 
+        else
         {
-            counter -= Time.deltaTime; // counter between every attacks
-            if (counter <= 0) 
-            {
-                test1 = false;
-                test2 = false;
-            }
+            Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
+            Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            teleportPosition.Normalize();
+            transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
+            counter = 1.0f;
         }
     }
     
@@ -247,6 +230,6 @@ public class EnemyController : NetworkBehaviour {
     void RpcSendFlipState(bool state)
     {
         if (isLocalPlayer) return; // skip this function on the LocalPlayer because he is the one who originally invoked this
-        rendy.flipX = state; // make the change local on all clients
+        rendy.flipX = state; //make the change local on all clients
     }
 }
