@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4681449497192428}
   - component: {fileID: 212585932565444154}
+  - component: {fileID: 114438808334571508}
   m_Layer: 0
   m_Name: SampleMap2
   m_TagString: Untagged
@@ -40,6 +41,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114438808334571508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1707470050644754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4517d4478a3535840bb0b036da803b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waves: []
+  spawnPoints: []
+  timeBetweenWaves: 5
 --- !u!212 &212585932565444154
 SpriteRenderer:
   m_ObjectHideFlags: 1
