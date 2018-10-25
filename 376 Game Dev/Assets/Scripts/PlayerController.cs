@@ -71,7 +71,7 @@ public class PlayerController : NetworkBehaviour
         {
             if (GetComponent<Sword>() != null)
             {
-                Debug.Log(GetComponent<Sword>().message());
+                weaponHit();
             }
             else
                 Debug.Log("weapon attack");
@@ -134,6 +134,19 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    //weapon attack function
+    private void weaponHit()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(bigAttack());
+
+            //to remove
+            Debug.Log("melee attack hit for: " + bigAttack());
+        }
+    }
+
     // to be called by the collision detector
     public void TakeDamage(int amount)
     {
@@ -156,9 +169,9 @@ public class PlayerController : NetworkBehaviour
     }
 
     //to be used to cast a big attack
-    public int bigAttack(float weaponStr)
+    public int bigAttack()
     {
-        return (int)Mathf.Floor((attack + weaponStr) * (1 + attackVar));
+        return(GetComponent<Sword>().weaponAttack(attackVar, attack));
     }
 
     //to move player + animations
