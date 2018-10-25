@@ -39,7 +39,6 @@ public class PlayerController : NetworkBehaviour
 
         Move();
 
-
     }
 
     void Move()
@@ -126,7 +125,7 @@ public class PlayerController : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("col");
+        Debug.Log("collision");
     }
 
 }
