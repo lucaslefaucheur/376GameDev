@@ -14,6 +14,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody2D playerRB;
     private Animator anim;
     private SpriteRenderer rendy;
+    private int hp;                       //Used to store the HP of the player
 
     private void Start()
     {
@@ -126,6 +127,17 @@ public class PlayerController : NetworkBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("collision");
+    }
+
+    private void CheckIfGameOver()
+    {
+        //Check if HPtotal is less than or equal to zero.
+        if (hp <= 0)
+        {
+
+            //Call the GameOver function of GameController.
+            GameController.instance.GameOver();
+        }
     }
 
 }
