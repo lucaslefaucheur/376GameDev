@@ -61,7 +61,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         Move();
-
+        
         if (Input.GetButtonDown("Melee"))
         {
             melee();
@@ -158,6 +158,7 @@ public class PlayerController : NetworkBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
+            Destroy(gameObject);
             Debug.Log("Dead!");
         }
     }
@@ -329,9 +330,5 @@ public class PlayerController : NetworkBehaviour
     * 
     * ********************************************************/
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("col");
-    }
 
 }
