@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 114443768411913634}
   - component: {fileID: 114973313595122282}
   m_Layer: 0
-  m_Name: Giraffe
+  m_Name: Boss3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
