@@ -17,31 +17,26 @@ public class BossManagerScript : MonoBehaviour {
 
         //Get all object from Boss folder
         Object[] objList = Resources.LoadAll("Boss", typeof(Object));
+
         // Add object to boss list
         foreach (Object obj in objList)
         {
             GameObject bossObject = (GameObject) obj;
             bossList.Add(bossObject);
         }
+
         //instantiate random boss
         currentBoss = Instantiate(bossList[Random.Range(0, bossList.Count)], transform.position, Quaternion.identity);
-        
+
         //send information to boss created
         currentBoss.GetComponent<BossScaleScript>().SetScale(level, players);
-
     }
-	
-	void Update () {
+
+    void Update () {
 		//check if boss is dead, if so notify game manager
         if(currentBoss == null)
         {
-            bossList.Remove(currentBoss);
             //this.GetComponent<GameManagerScript>().BossDeath();
         }
-	}
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        
     }
 }
