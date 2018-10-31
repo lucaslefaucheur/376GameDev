@@ -228,6 +228,7 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
 
+        /*
         if (Mathf.Abs(transform.position.x) > 9.8f)
         {
             playerRB.transform.Translate(new Vector3(-moveHorizontal, 0));
@@ -236,7 +237,7 @@ public class PlayerController : NetworkBehaviour
         {
             playerRB.transform.Translate(new Vector3(0, -moveVertical));
         }
-
+        */
 
     }
 
