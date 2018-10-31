@@ -41,6 +41,7 @@ public class GameController : NetworkBehaviour
         // levelTransition.SetActive(true);
         //Call the HideLevelTransition function with a delay
         Invoke("HideLevelTransition", 2f);
+        Debug.Log("You are at Level: " + level);
 
 
         //Setup level
@@ -75,8 +76,7 @@ public class GameController : NetworkBehaviour
         //make enemies move, attack, etc
     }
 
-    //This is called each time a scene is loaded
-    void OnLevelWasLoaded(int index)
+    void LevelUp()
     {
         level++;
         InitGame();
