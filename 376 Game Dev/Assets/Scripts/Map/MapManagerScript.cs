@@ -4,48 +4,160 @@ using UnityEngine;
 
 public class MapManagerScript : MonoBehaviour {
 
-    //load all the maps
-    public List<GameObject> mapList = new List<GameObject>();
+    //BOSS MAPS
+    public List<GameObject> mapBossList = new List<GameObject>();
+    private GameObject currentBossMap;
+    //BOSS
+    public List<GameObject> bossList = new List<GameObject>();
+    private GameObject currentBoss;
+    //ENEMY MAPS
+    public List<GameObject> mapEnemyList = new List<GameObject>();
+    private GameObject currentEnemyMap;
+    //ENEMY
+    public List<GameObject> enemyList = new List<GameObject>();
+    private GameObject currentEnemy;
 
-    private GameObject currentMap;
-
+    private bool hasMap = false;
+    private int mapPicker; 
 
     // Use this for initialization
-    void Start () {
-        
-        loadAllMap();
+    void Start () {    
+        loadAllBossMap();
+        loadAllBoss();
+        loadAllEnemyMap();
+        loadAllEnemy();
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if(mapList.Count == 0)
+        if (!hasMap){
+
+            mapPicker = Random.Range(0, 3);
+            Debug.Log(mapPicker);
+            if(mapPicker%2 == 0)
+            {
+                loadEnemyMap();
+            }
+            else
+            {
+                loadBossMap();
+            }
+
+            hasMap = true;
+        }
+
+        if(mapBossList.Count == 0)
         {
-            loadAllMap();
+            loadAllBossMap();
+        }
+
+        if(bossList.Count == 0)
+        {
+            loadAllBoss();
+        }
+
+        if (mapEnemyList.Count == 0)
+        {
+            loadAllBossMap();
+        }
+
+        if (enemyList.Count == 0)
+        {
+            loadAllEnemy();
         }
 		
 	}
 
-    //load all maps
-    private void loadAllMap()
+    //load all boss maps
+    private void loadAllBossMap()
     {
-        Object[] objList = Resources.LoadAll("Map", typeof(Object));
+        Object[] objList = Resources.LoadAll("BossMap", typeof(Object));
 
         // Add object to map list
         foreach (Object obj in objList)
         {
-            GameObject mapObject = (GameObject)obj;
-            mapList.Add(mapObject);
+            GameObject mapBObject = (GameObject)obj;
+            mapBossList.Add(mapBObject);
         }
     }
-    //get random map
-    public void loadMap()
+
+    //load all enemy maps
+    private void loadAllEnemyMap()
+    {
+        Object[] objList = Resources.LoadAll("EnemyMap", typeof(Object));
+
+        // Add object to map list
+        foreach (Object obj in objList)
+        {
+            GameObject mapEObject = (GameObject)obj;
+            mapEnemyList.Add(mapEObject);
+        }
+    }
+
+    //load all bosses
+    private void loadAllBoss()
+    {
+        //Get all object from Boss folder
+        Object[] objList = Resources.LoadAll("Boss", typeof(Object));
+
+        // Add object to boss list
+        foreach (Object obj in objList)
+        {
+            GameObject bossObject = (GameObject)obj;
+            bossList.Add(bossObject);
+        }
+    }
+
+    //load all enemies
+    private void loadAllEnemy()
+    {
+        //Get all object from Boss folder
+        Object[] objList = Resources.LoadAll("Enemy", typeof(Object));
+
+        // Add object to boss list
+        foreach (Object obj in objList)
+        {
+            GameObject enemyObject = (GameObject)obj;
+            enemyList.Add(enemyObject);
+        }
+    }
+
+    //get random BOSS map
+    public void loadBossMap()
     {
         //instantiate random map
-        currentMap = Instantiate(mapList[Random.Range(0, mapList.Count)], new Vector3(0.0f, 0.0f), Quaternion.identity);
+        currentBossMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         //remove map from list
-        mapList.Remove(currentMap);
+        mapBossList.Remove(currentBossMap);
 
     }
+
+    //get random ENEMY map
+    public void loadEnemyMap()
+    {
+        //instantiate random map
+        currentEnemyMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        //remove map from list
+        mapEnemyList.Remove(currentEnemyMap);
+
+    }
+
+    //return random enemy
+    public GameObject getRandomEnemy()
+    {
+        currentEnemy = enemyList[Random.Range(0, enemyList.Count)];
+        enemyList.Remove(currentEnemy);
+        return currentEnemy;
+    }
+
+    //return random boss
+    public GameObject getRandomBoss()
+    {
+        currentBoss = bossList[Random.Range(0, bossList.Count)];
+        bossList.Remove(currentBoss);
+        return currentBoss;
+    }
+
 
 }
