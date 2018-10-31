@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MapManagerScript : MonoBehaviour {
 
+    public static MapManagerScript instance = null;
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
     private GameObject currentBossMap;
@@ -18,10 +19,24 @@ public class MapManagerScript : MonoBehaviour {
     private GameObject currentEnemy;
 
     private bool hasMap = false;
-    private int mapPicker; 
+    private int mapPicker;
+
+    void Awake()
+    {
+        //Check if instance already exists, if not, set instance to this
+        if (instance == null)
+            instance = this;
+        //If instance already exists and it's not this, destroy this, enforcing the singleton pattern
+        else if (instance != this)
+            Destroy(gameObject);
+        //Sets this to not be destroyed when reloading scene
+        DontDestroyOnLoad(gameObject);
+        InitGame();
+    }
 
     // Use this for initialization
-    void Start () {    
+    void InitGame()
+    {    
         loadAllBossMap();
         loadAllBoss();
         loadAllEnemyMap();
