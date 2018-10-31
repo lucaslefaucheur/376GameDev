@@ -14,6 +14,7 @@ public class GameController : NetworkBehaviour
     private int numOfPlayers = 0;                           //Keep track of the number of players spawn
     private GameObject player;
     public float loadTime = 5.0f;
+    public Transform[] PlayerSpawn;
 
 
     //Awake is always called before any Start functions
