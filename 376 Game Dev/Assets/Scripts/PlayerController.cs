@@ -36,6 +36,10 @@ public class PlayerController : NetworkBehaviour
 
     private void Start()
     {
+
+        GameObject gameManager = GameObject.Find("Manager");
+        gameManager.GetComponent<GameController>().AddPlayer();
+
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
