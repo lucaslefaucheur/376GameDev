@@ -5,20 +5,21 @@ using UnityEngine;
 public class MapManagerScript : MonoBehaviour {
 
     public static MapManagerScript instance = null;
+    public GameObject initialMapPrefab;
+    private GameObject currentMap;
+
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
-    private GameObject currentBossMap;
     //BOSS
     public List<GameObject> bossList = new List<GameObject>();
     private GameObject currentBoss;
     //ENEMY MAPS
     public List<GameObject> mapEnemyList = new List<GameObject>();
-    private GameObject currentEnemyMap;
     //ENEMY
     public List<GameObject> enemyList = new List<GameObject>();
     private GameObject currentEnemy;
 
-    private bool hasMap = false;
+    private bool hasMap = true;
     private int mapPicker;
 
     void Awake()
@@ -36,11 +37,13 @@ public class MapManagerScript : MonoBehaviour {
 
     // Use this for initialization
     void InitGame()
-    {    
+    {
+        currentMap = Instantiate(initialMapPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         loadAllBossMap();
         loadAllBoss();
         loadAllEnemyMap();
         loadAllEnemy();
+
     }
 	
 	// Update is called once per frame
@@ -142,10 +145,10 @@ public class MapManagerScript : MonoBehaviour {
     public void loadBossMap()
     {
         //instantiate random map
-        currentBossMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        currentMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         
         //remove map from list
-        mapBossList.Remove(currentBossMap);
+        mapBossList.Remove(currentMap);
 
     }
 
@@ -153,9 +156,9 @@ public class MapManagerScript : MonoBehaviour {
     public void loadEnemyMap()
     {
         //instantiate random map
-        currentEnemyMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        currentMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         //remove map from list
-        mapEnemyList.Remove(currentEnemyMap);
+        mapEnemyList.Remove(currentMap);
 
     }
 
@@ -175,5 +178,10 @@ public class MapManagerScript : MonoBehaviour {
         return currentBoss;
     }
 
+    public void notifyEntry()
+    {
+        Destroy(currentMap);
+        hasMap = false;
+    }
 
 }
