@@ -33,7 +33,7 @@ public class MapManagerScript : MonoBehaviour {
 
         if (!hasMap){
 
-            mapPicker = Random.Range(0, 3);
+            mapPicker = Random.Range(0, 2);
             Debug.Log(mapPicker);
             if(mapPicker%2 == 0)
             {
@@ -128,6 +128,7 @@ public class MapManagerScript : MonoBehaviour {
     {
         //instantiate random map
         currentBossMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        
         //remove map from list
         mapBossList.Remove(currentBossMap);
 
