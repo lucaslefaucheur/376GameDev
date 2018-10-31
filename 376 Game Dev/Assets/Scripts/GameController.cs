@@ -36,9 +36,9 @@ public class GameController : NetworkBehaviour
         //While setting up the game, player shouldn't be able to perform actions
         settingUp = true;
         levelTransition = GameObject.Find("LevelImage");
-       // levelText = GameObject.Find("LevelText").GetComponent<Text>();
-       // levelText.text = "Level " + level;
-       // levelTransition.SetActive(true);
+        // levelText = GameObject.Find("LevelText").GetComponent<Text>();
+        // levelText.text = "Level " + level;
+        // levelTransition.SetActive(true);
         //Call the HideLevelTransition function with a delay
         Invoke("HideLevelTransition", 2f);
 
@@ -85,7 +85,7 @@ public class GameController : NetworkBehaviour
     //GameOver when the player reaches 0 HP
     public void GameOver()
     {
-       // levelText.text = "GAME OVER";
+        // levelText.text = "GAME OVER";
         //levelTransition.SetActive(true);
         //Disable GameManager
         enabled = false;

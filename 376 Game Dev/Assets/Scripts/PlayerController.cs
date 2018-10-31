@@ -39,6 +39,7 @@ public class PlayerController : NetworkBehaviour
 
         GameObject gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
+        Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
 
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
