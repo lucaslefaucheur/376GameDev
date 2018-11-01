@@ -33,9 +33,13 @@ public class PlayerController : NetworkBehaviour
     //item stuff
     private GameObject equipped;
 
-
     private void Start()
     {
+
+        GameObject gameManager = GameObject.Find("Manager");
+        gameManager.GetComponent<GameController>().AddPlayer();
+        Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
+
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -64,11 +68,13 @@ public class PlayerController : NetworkBehaviour
         
         if (Input.GetButtonDown("Melee"))
         {
+            anim.SetTrigger("attacking");
             melee();
         }
 
         if (Input.GetButtonDown("Weapon"))
         {
+            anim.SetTrigger("attacking");
             if (GetComponent<Sword>() != null)
             {
                 weaponHit();
@@ -86,7 +92,9 @@ public class PlayerController : NetworkBehaviour
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);
-                gameObject.AddComponent<Sword>();
+                    NetworkServer.UnSpawn(hit.collider.gameObject);
+                    gameObject.AddComponent<Sword>();
+                    anim.SetBool("hasSword", true);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
@@ -228,6 +236,7 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
 
+        /*
         if (Mathf.Abs(transform.position.x) > 9.8f)
         {
             playerRB.transform.Translate(new Vector3(-moveHorizontal, 0));
@@ -236,7 +245,7 @@ public class PlayerController : NetworkBehaviour
         {
             playerRB.transform.Translate(new Vector3(0, -moveVertical));
         }
-
+        */
 
     }
 

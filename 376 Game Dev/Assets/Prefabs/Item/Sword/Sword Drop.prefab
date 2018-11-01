@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4510530370247568}
   - component: {fileID: 212146163743549084}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapons_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,11 +35,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4025599702515706}
-  - component: {fileID: 114861505525939640}
   - component: {fileID: 70180941695529866}
-  m_Layer: 0
+  - component: {fileID: 114588259517738316}
+  m_Layer: 10
   m_Name: Sword Drop
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4230807156366626}
   - component: {fileID: 212342188260463536}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapons_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0.034827247, y: -0.2241441}
   m_Size: {x: 0.4541889, y: 1.4767125}
   m_Direction: 0
---- !u!114 &114861505525939640
+--- !u!114 &114588259517738316
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,12 +124,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1665216285954610}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a2797201e161bd45aa9efe7c2c69a28, type: 3}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 1032280746369904, guid: 9f8f0590032b4ca46939bec0c23745c6, type: 2}
-  weaponType: sword
-  cooldown: 2
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 136
+    i1: 90
+    i2: 145
+    i3: 253
+    i4: 90
+    i5: 255
+    i6: 53
+    i7: 244
+    i8: 171
+    i9: 135
+    i10: 135
+    i11: 47
+    i12: 255
+    i13: 185
+    i14: 120
+    i15: 167
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212146163743549084
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -162,8 +180,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1064425115
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300006, guid: fd8b51b0d8718284980cbba7ffe1f164, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -208,8 +226,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1064425115
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fd8b51b0d8718284980cbba7ffe1f164, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

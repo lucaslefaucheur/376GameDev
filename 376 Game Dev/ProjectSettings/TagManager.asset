@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Sword
+  - Enemy
+  - fire
+  - boss
   layers:
   - Default
   - TransparentFX
@@ -39,6 +42,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1580413931
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Top
+    uniqueID: 1064425115
     locked: 0
