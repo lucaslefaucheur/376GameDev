@@ -58,7 +58,6 @@ public class MapManagerScript : NetworkBehaviour
 
         if (start)
         {
-            Debug.Log(playerList.Length);
             playerList = GameObject.FindGameObjectsWithTag("Player");
             spawnPlayers(playerInitialSpawn);
             start = false;
