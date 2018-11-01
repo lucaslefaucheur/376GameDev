@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4510530370247568}
   - component: {fileID: 212146163743549084}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapons_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,9 +37,9 @@ GameObject:
   - component: {fileID: 4025599702515706}
   - component: {fileID: 70180941695529866}
   - component: {fileID: 114588259517738316}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sword Drop
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4230807156366626}
   - component: {fileID: 212342188260463536}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapons_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
