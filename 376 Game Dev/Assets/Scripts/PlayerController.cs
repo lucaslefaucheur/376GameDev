@@ -33,7 +33,6 @@ public class PlayerController : NetworkBehaviour
     //item stuff
     private GameObject equipped;
 
-
     private void Start()
     {
 
@@ -91,7 +90,8 @@ public class PlayerController : NetworkBehaviour
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);
-                gameObject.AddComponent<Sword>();
+                    gameObject.AddComponent<Sword>();
+                    anim.SetBool("hasSword", true);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
