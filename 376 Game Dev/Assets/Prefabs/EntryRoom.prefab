@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4263889789480322}
   - component: {fileID: 2569400265772277158}
+  - component: {fileID: 114481089042982660}
   m_Layer: 0
   m_Name: EntryRoom
   m_TagString: Untagged
@@ -633,6 +634,38 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1540751842635474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 218
+    i1: 156
+    i2: 110
+    i3: 161
+    i4: 207
+    i5: 195
+    i6: 156
+    i7: 228
+    i8: 250
+    i9: 162
+    i10: 190
+    i11: 89
+    i12: 26
+    i13: 255
+    i14: 12
+    i15: 51
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114481089042982660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457434663477958}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
