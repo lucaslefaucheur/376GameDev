@@ -71,6 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4573418159527564}
   - component: {fileID: 2569400266252263398}
+  - component: {fileID: 114875483318567314}
   m_Layer: 0
   m_Name: DungeonRoom
   m_TagString: Untagged
@@ -169,6 +170,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52407d48b1af44540829fec086f55e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114875483318567314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1383322790824238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 163
+    i1: 34
+    i2: 111
+    i3: 29
+    i4: 61
+    i5: 103
+    i6: 61
+    i7: 132
+    i8: 216
+    i9: 16
+    i10: 60
+    i11: 252
+    i12: 96
+    i13: 176
+    i14: 168
+    i15: 187
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212468643426121188
 SpriteRenderer:
   m_ObjectHideFlags: 1
