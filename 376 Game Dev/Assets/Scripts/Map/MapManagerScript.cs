@@ -95,7 +95,7 @@ public class MapManagerScript : NetworkBehaviour
 
         if (mapEnemyList.Count == 0)
         {
-            loadAllBossMap();
+            loadAllEnemyMap();
         }
 
         if (enemyList.Count == 0)
