@@ -59,7 +59,7 @@ public class MapManagerScript : NetworkBehaviour
         if (start)
         {
             playerList = GameObject.FindGameObjectsWithTag("Player");
-            spawnPlayers(playerInitialSpawn);
+            //spawnPlayers(playerInitialSpawn);
             start = false;
         }
 
@@ -71,13 +71,13 @@ public class MapManagerScript : NetworkBehaviour
             {
                 playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
-                spawnPlayers(playerSpawnPoint);
+                //spawnPlayers(playerSpawnPoint);
             }
             else
             {
                 playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadBossMap();
-                spawnPlayers(playerSpawnPoint);
+                //spawnPlayers(playerSpawnPoint);
             }
 
             hasMap = true;
