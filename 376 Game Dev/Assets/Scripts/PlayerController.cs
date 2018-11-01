@@ -68,13 +68,11 @@ public class PlayerController : NetworkBehaviour
         
         if (Input.GetButtonDown("Melee"))
         {
-            anim.SetTrigger("attacking");
             melee();
         }
 
         if (Input.GetButtonDown("Weapon"))
         {
-            anim.SetTrigger("attacking");
             if (GetComponent<Sword>() != null)
             {
                 weaponHit();
@@ -92,6 +90,7 @@ public class PlayerController : NetworkBehaviour
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);
+                    NetworkServer.UnSpawn(hit.collider.gameObject);
                     gameObject.AddComponent<Sword>();
                     anim.SetBool("hasSword", true);
                 }
