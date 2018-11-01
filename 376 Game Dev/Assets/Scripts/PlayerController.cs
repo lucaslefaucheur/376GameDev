@@ -68,11 +68,13 @@ public class PlayerController : NetworkBehaviour
         
         if (Input.GetButtonDown("Melee"))
         {
+            anim.SetTrigger("attacking");
             melee();
         }
 
         if (Input.GetButtonDown("Weapon"))
         {
+            anim.SetTrigger("attacking");
             if (GetComponent<Sword>() != null)
             {
                 weaponHit();
