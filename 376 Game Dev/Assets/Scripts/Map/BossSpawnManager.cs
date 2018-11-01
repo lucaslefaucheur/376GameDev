@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class BossSpawnManager : MonoBehaviour {
+public class BossSpawnManager : NetworkBehaviour {
 
     public float scale;
     public float health;
     public Vector2 spawnPoint;
 
     private GameObject bossObject;
+    private GameObject bossTemp;
 
     // Use this for initialization
     void Start () {
@@ -19,8 +21,13 @@ public class BossSpawnManager : MonoBehaviour {
         //health = scale * health;
 
         //spawn random bossObject
-        bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
-        Instantiate(bossObject, spawnPoint, Quaternion.identity);
+        if (isServer)
+        {
+            bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
+            bossTemp = Instantiate(bossObject, spawnPoint, Quaternion.identity);
+            NetworkServer.Spawn(bossTemp);
+
+        }
 	}
 	
 	// Update is called once per frame

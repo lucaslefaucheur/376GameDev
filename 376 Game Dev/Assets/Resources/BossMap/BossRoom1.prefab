@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4919042718241196}
   - component: {fileID: 2569400266531905574}
   - component: {fileID: 114284631392537168}
+  - component: {fileID: 114321464555320782}
   m_Layer: 0
   m_Name: BossRoom1
   m_TagString: Untagged
@@ -206,6 +207,38 @@ MonoBehaviour:
   scale: 0
   health: 0
   spawnPoint: {x: 3, y: -3}
+--- !u!114 &114321464555320782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1248864779812488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 203
+    i1: 68
+    i2: 29
+    i3: 156
+    i4: 201
+    i5: 148
+    i6: 254
+    i7: 164
+    i8: 73
+    i9: 45
+    i10: 54
+    i11: 63
+    i12: 183
+    i13: 244
+    i14: 41
+    i15: 179
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114992035622888790
 MonoBehaviour:
   m_ObjectHideFlags: 1

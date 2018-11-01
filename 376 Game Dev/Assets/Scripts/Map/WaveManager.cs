@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class WaveManager : MonoBehaviour {
+
+public class WaveManager : NetworkBehaviour {
 
     public enum SpawnState { spawning, counting };
+    private GameObject enemy;
 
     [System.Serializable]
     public class Wave
     {
         public string name;
-        public Transform enemy;
+        public GameObject enemy;
         public int count;
         public float rate;
     }
@@ -107,10 +110,16 @@ public class WaveManager : MonoBehaviour {
         return true;
     }
 
-    void SpawnEnemy(Transform _enemy)
+    void SpawnEnemy(GameObject _enemy)
     {
-        Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(_enemy, _sp.position, _sp.rotation);
+        if (isServer)
+        {
+             Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
+             enemy = Instantiate(_enemy, _sp.position, _sp.rotation);
+             NetworkServer.Spawn(enemy);
+
+        }
+
     }
 
 }

@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4237816724017918}
   - component: {fileID: 2569400268483960700}
   - component: {fileID: 114121418116732730}
+  - component: {fileID: 114734432591807666}
   m_Layer: 0
   m_Name: Room2
   m_TagString: Untagged
@@ -235,12 +236,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - name: 
-    enemy: {fileID: 4900867443988072, guid: ce4830e00d2248446a14bce44dbcdf65, type: 2}
+    enemy: {fileID: 1501998517732588, guid: ce4830e00d2248446a14bce44dbcdf65, type: 2}
     count: 5
     rate: 1
   spawnPoints:
   - {fileID: 4956097450563680}
   timeBetweenWaves: 5
+--- !u!114 &114734432591807666
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1241415746582604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 89
+    i1: 28
+    i2: 126
+    i3: 142
+    i4: 51
+    i5: 216
+    i6: 231
+    i7: 180
+    i8: 186
+    i9: 20
+    i10: 26
+    i11: 71
+    i12: 81
+    i13: 36
+    i14: 10
+    i15: 243
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114965076427609836
 MonoBehaviour:
   m_ObjectHideFlags: 1

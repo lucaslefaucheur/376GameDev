@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4987746342955324}
   - component: {fileID: 212317904957743984}
-  - component: {fileID: 114158218185414048}
   - component: {fileID: 114647283017980230}
-  - component: {fileID: 95556527812717106}
+  - component: {fileID: 114158218185414048}
+  - component: {fileID: 114772503486483298}
   m_Layer: 0
   m_Name: Boss2
   m_TagString: Untagged
@@ -43,24 +43,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &95556527812717106
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1934414624475004}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4da2130c0d1a6c147ac0942b2ddba1e4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114158218185414048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,6 +94,27 @@ MonoBehaviour:
   fireAttack: {fileID: 0}
   firePos: {fileID: 0}
   flag: 1
+--- !u!114 &114772503486483298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1934414624475004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!212 &212317904957743984
 SpriteRenderer:
   m_ObjectHideFlags: 1

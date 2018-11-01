@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class MapManagerScript : MonoBehaviour {
+public class MapManagerScript : NetworkBehaviour
+{
 
     public static MapManagerScript instance = null;
     public GameObject initialMapPrefab;
@@ -144,21 +146,29 @@ public class MapManagerScript : MonoBehaviour {
     //get random BOSS map
     public void loadBossMap()
     {
-        //instantiate random map
-        currentMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        
-        //remove map from list
-        mapBossList.Remove(currentMap);
+        if (isServer)
+        {
+            //instantiate random map
+            currentMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            NetworkServer.Spawn(currentMap);
+            //remove map from list
+            mapBossList.Remove(currentMap);
+        }
 
     }
 
     //get random ENEMY map
     public void loadEnemyMap()
     {
-        //instantiate random map
-        currentMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        //remove map from list
-        mapEnemyList.Remove(currentMap);
+        if (isServer)
+        {
+            //instantiate random map
+            currentMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            NetworkServer.Spawn(currentMap);
+            //remove map from list
+            mapEnemyList.Remove(currentMap);
+        }
+        
 
     }
 
