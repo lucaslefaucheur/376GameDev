@@ -9,19 +9,25 @@ public class MapManagerScript : NetworkBehaviour
     public static MapManagerScript instance = null;
     public GameObject initialMapPrefab;
     private GameObject currentMap;
+    private GameObject[] playerList;
+    private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
+    private Vector3[] playerSpawnPoint = {new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
 
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
+    private GameObject bossMapPick;
     //BOSS
     public List<GameObject> bossList = new List<GameObject>();
     private GameObject currentBoss;
     //ENEMY MAPS
     public List<GameObject> mapEnemyList = new List<GameObject>();
+    private GameObject enemyMapPick;
     //ENEMY
     public List<GameObject> enemyList = new List<GameObject>();
     private GameObject currentEnemy;
 
     private bool hasMap = true;
+    private bool start = true;
     private int mapPicker;
 
     void Awake()
@@ -45,11 +51,18 @@ public class MapManagerScript : NetworkBehaviour
         loadAllBoss();
         loadAllEnemyMap();
         loadAllEnemy();
-
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (start)
+        {
+            Debug.Log(playerList.Length);
+            playerList = GameObject.FindGameObjectsWithTag("Player");
+            spawnPlayers(playerInitialSpawn);
+            start = false;
+        }
 
         if (!hasMap){
 
@@ -57,11 +70,15 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%2 == 0)
             {
+                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
+                spawnPlayers(playerSpawnPoint);
             }
             else
             {
+                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadBossMap();
+                spawnPlayers(playerSpawnPoint);
             }
 
             hasMap = true;
@@ -149,10 +166,11 @@ public class MapManagerScript : NetworkBehaviour
         if (isServer)
         {
             //instantiate random map
-            currentMap = Instantiate(mapBossList[Random.Range(0, mapBossList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            bossMapPick = mapBossList[Random.Range(0, mapBossList.Count)];
+            currentMap = Instantiate(bossMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             NetworkServer.Spawn(currentMap);
             //remove map from list
-            mapBossList.Remove(currentMap);
+            mapBossList.Remove(bossMapPick);
         }
 
     }
@@ -163,10 +181,11 @@ public class MapManagerScript : NetworkBehaviour
         if (isServer)
         {
             //instantiate random map
-            currentMap = Instantiate(mapEnemyList[Random.Range(0, mapEnemyList.Count)], new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            enemyMapPick = mapEnemyList[Random.Range(0, mapEnemyList.Count)];
+            currentMap = Instantiate(enemyMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             NetworkServer.Spawn(currentMap);
             //remove map from list
-            mapEnemyList.Remove(currentMap);
+            mapEnemyList.Remove(enemyMapPick);
         }
         
 
@@ -192,6 +211,14 @@ public class MapManagerScript : NetworkBehaviour
     {
         Destroy(currentMap);
         hasMap = false;
+    }
+
+    public void spawnPlayers(Vector3[] spawnPoints)
+    {
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            playerList[i].transform.position = spawnPoints[i];
+        }
     }
 
 }
