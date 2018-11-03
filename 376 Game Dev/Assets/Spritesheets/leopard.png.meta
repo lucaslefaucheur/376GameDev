@@ -96,10 +96,10 @@ TextureImporter:
       name: leopard_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 203
-        width: 89
-        height: 83
+        x: 10
+        y: 393
+        width: 172
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -107,7 +107,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1478f143b5c8a4e8b82b6e9582cb1967
+      spriteID: d488f24b0a0754a44b2c409ae0bc2ecc
       vertices: []
       indices: 
       edges: []
@@ -116,10 +116,10 @@ TextureImporter:
       name: leopard_1
       rect:
         serializedVersion: 2
-        x: 111
-        y: 203
-        width: 88
-        height: 83
+        x: 215
+        y: 393
+        width: 170
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,7 +127,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d544160841d34482ad79399c4da1fd6
+      spriteID: ad66f06b6f0dc45e787436feb1a3c2b0
       vertices: []
       indices: 
       edges: []
@@ -136,10 +136,10 @@ TextureImporter:
       name: leopard_2
       rect:
         serializedVersion: 2
-        x: 216
-        y: 203
-        width: 89
-        height: 83
+        x: 418
+        y: 393
+        width: 172
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,7 +147,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c62fcd0c52d794a6b99d0551f4da664d
+      spriteID: 55ff2bff9f9534c3da78b22b8d039cc1
       vertices: []
       indices: 
       edges: []
@@ -156,10 +156,10 @@ TextureImporter:
       name: leopard_3
       rect:
         serializedVersion: 2
-        x: 5
-        y: 104
-        width: 89
-        height: 83
+        x: 10
+        y: 201
+        width: 172
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,7 +167,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9db17f25fbad4ad781e878cec254a0c
+      spriteID: 4cedcdc8fb6d34791b8ad61c383967a4
       vertices: []
       indices: 
       edges: []
@@ -176,10 +176,10 @@ TextureImporter:
       name: leopard_4
       rect:
         serializedVersion: 2
-        x: 111
-        y: 104
-        width: 88
-        height: 83
+        x: 215
+        y: 201
+        width: 170
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,7 +187,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 293fea9eea0424e4584680079526da9b
+      spriteID: edd17aa7ad7ca4a86ba848a50fa9622e
       vertices: []
       indices: 
       edges: []
@@ -196,10 +196,10 @@ TextureImporter:
       name: leopard_5
       rect:
         serializedVersion: 2
-        x: 216
-        y: 104
-        width: 89
-        height: 83
+        x: 418
+        y: 201
+        width: 172
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -207,7 +207,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 747f3270c08904d22ac4fdefe5218546
+      spriteID: b0364e11e286540d0984a2a8007d55a2
       vertices: []
       indices: 
       edges: []
@@ -216,10 +216,10 @@ TextureImporter:
       name: leopard_6
       rect:
         serializedVersion: 2
-        x: 5
-        y: 5
-        width: 89
-        height: 83
+        x: 10
+        y: 10
+        width: 172
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -227,7 +227,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7edc884387a7149d48421b6eb71bd2dd
+      spriteID: 7b93a50e8ea0b4e8abd838b6a7ee260e
       vertices: []
       indices: 
       edges: []
@@ -236,10 +236,10 @@ TextureImporter:
       name: leopard_7
       rect:
         serializedVersion: 2
-        x: 105
-        y: 5
-        width: 89
-        height: 83
+        x: 203
+        y: 10
+        width: 172
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,7 +247,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4079ae6346a214f6e902259554c6516e
+      spriteID: 0e4d09a3b801341ec8352bc495d66d40
       vertices: []
       indices: 
       edges: []
@@ -256,10 +256,10 @@ TextureImporter:
       name: leopard_8
       rect:
         serializedVersion: 2
-        x: 211
-        y: 5
-        width: 88
-        height: 83
+        x: 408
+        y: 10
+        width: 171
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -267,7 +267,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bb220d95849341dab3be4c48c0339ff
+      spriteID: 1a4745006eadf4e558b144074afdf8d7
       vertices: []
       indices: 
       edges: []
