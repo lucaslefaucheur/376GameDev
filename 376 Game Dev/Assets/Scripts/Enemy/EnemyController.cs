@@ -12,7 +12,7 @@ public class EnemyController : NetworkBehaviour {
     private LayerMask caster;
     private Animator anim;
     private SpriteRenderer rendy;
-    public Transform moveSpot; 
+    private Transform moveSpot; 
     
     //variables
     private readonly float FollowRange = 10;
@@ -42,8 +42,6 @@ public class EnemyController : NetworkBehaviour {
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
-
-
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
