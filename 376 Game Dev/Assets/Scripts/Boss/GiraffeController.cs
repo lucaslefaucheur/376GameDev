@@ -54,17 +54,14 @@ public class GiraffeController : NetworkBehaviour {
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
             if (distance > 2) {
-                anim.SetBool("Explode", false);
                 Follow();
             }
                 
             else if (distance > 1) {
-                anim.SetBool("Explode", false);
                 Attack(distance);
             }
                 
             else {
-                anim.SetBool("Explode", true);
                 Teleport();
             }
                 
@@ -184,10 +181,12 @@ public class GiraffeController : NetworkBehaviour {
         // wait before following 
         if (counter > 0)
         {
+            anim.SetBool("Appear", true);
             counter -= Time.deltaTime;
         }
         else if (isServer)
         {
+            anim.SetBool("Appear", false);
             // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
@@ -214,15 +213,19 @@ public class GiraffeController : NetworkBehaviour {
         // wait before exploding
         if (counter > 0)
         {
+            anim.SetBool("Explode", true);
             counter -= Time.deltaTime;
         }
         else
         {
+            anim.SetBool("Explode", false);
             //Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
-            Vector2 teleportPosition = new Vector2(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f));
+            Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
             teleportPosition.Normalize();
+            teleportPosition.x *= 2;
+            teleportPosition.y *= 2;
             transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
-            counter = 0.417f;
+            counter = 0.583f;
         }
     }
     
