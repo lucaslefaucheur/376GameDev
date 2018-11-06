@@ -23,7 +23,7 @@ public class GiraffeController : NetworkBehaviour {
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
     
     private float counter;
-    public GameObject EnemyHitParticle;
+    //public GameObject EnemyHitParticle;
 
     void Start()
     {
@@ -53,12 +53,21 @@ public class GiraffeController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2)
+            if (distance > 2) {
+                anim.SetBool("Explode", false);
                 Follow();
-            else if (distance > 1)
+            }
+                
+            else if (distance > 1) {
+                anim.SetBool("Explode", false);
                 Attack(distance);
-            else
+            }
+                
+            else {
+                anim.SetBool("Explode", true);
                 Teleport();
+            }
+                
         }
         Orientation();
     }
@@ -195,7 +204,7 @@ public class GiraffeController : NetworkBehaviour {
         direction.y = Target.transform.position.y - transform.position.y;
         direction.Normalize();
         transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
-        counter = 0.2f;
+        counter = 0.917f;
     }
 
     /* Teleport: enemy teleports to a random position around the player
@@ -209,11 +218,11 @@ public class GiraffeController : NetworkBehaviour {
         }
         else
         {
-            Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
-            Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            //Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
+            Vector2 teleportPosition = new Vector2(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f));
             teleportPosition.Normalize();
             transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
-            counter = 1.0f;
+            counter = 0.417f;
         }
     }
     
