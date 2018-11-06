@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 
 public class EnemyController : NetworkBehaviour {
 
-
     //for internal referencing
     private Transform Target;
     private Transform loc;
