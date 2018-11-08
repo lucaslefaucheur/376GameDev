@@ -52,12 +52,23 @@ public class NetworkManager_Custom : NetworkManager {
 
     IEnumerator setupMenuSceneButton()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         GameObject.Find("StartHostButton").GetComponent<Button>().onClick.RemoveAllListeners();
         GameObject.Find("StartHostButton").GetComponent<Button>().onClick.AddListener(startupHost);
 
         GameObject.Find("JoinGameButton").GetComponent<Button>().onClick.RemoveAllListeners();
         GameObject.Find("JoinGameButton").GetComponent<Button>().onClick.AddListener(joinGame);
+
+        GameObject[] g = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        for (int i = 0; i < g.Length; i++)
+        {
+            if (g[i].tag == "GameController")
+            {
+                Destroy(g[i]);
+                break;
+            }
+        }
     }
 
     void setupOtherSceneButton()
