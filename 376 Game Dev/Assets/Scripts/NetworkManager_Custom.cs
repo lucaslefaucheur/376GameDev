@@ -1,41 +1,72 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 
 public class NetworkManager_Custom : NetworkManager {
 
-    public void startupHost()
+    private float nextRefreshTime;
+    private bool lookForMatch = true;
+    private MatchListPanel gameList;
+
+    void Start()
     {
-        if (!NetworkClient.active && !NetworkServer.active)
+        gameList = GameObject.Find("GameList").GetComponent<MatchListPanel>();
+    }
+
+    public void StartHosting()
+    {
+        StartMatchMaker();
+        matchMaker.CreateMatch(GameObject.Find("RoomName").transform.Find("Text").GetComponent<Text>().text, 4, true, "", "", "", 0, 0, OnMatchCreated);
+    }
+
+    private void OnMatchCreated(bool success, string extendedinfo, MatchInfo responsedata)
+    {
+        base.StartHost(responsedata);
+        RefreshMatches();
+    }
+
+    private void Update()
+    {
+        if (lookForMatch && Time.time >= nextRefreshTime)
         {
-            setPort();
-            NetworkManager.singleton.StartHost();
+            RefreshMatches();
         }
     }
 
-    public void joinGame()
+    private void RefreshMatches()
     {
-        if (!NetworkClient.active && !NetworkServer.active)
+        nextRefreshTime = Time.time + 5f;
+
+        if (matchMaker == null)
+            StartMatchMaker();
+
+        matchMaker.ListMatches(0, 10, "", true, 0, 0, HandleListMatchesComplete);
+    }
+
+    private void HandleListMatchesComplete(bool success, string extendedinfo, List<MatchInfoSnapshot> responsedata)
+    {
+        if (lookForMatch)
         {
-            setIPAddress();
-            setPort();
-            NetworkManager.singleton.StartClient();
+            gameList.updateList(responsedata);
         }
     }
 
-    void setIPAddress()
+    public void JoinMatch(MatchInfoSnapshot match)
     {
-        string ipAddress = GameObject.Find("InputFieldIPAddress").transform.Find("Text").GetComponent<Text>().text;
-        Debug.Log(ipAddress);
-        NetworkManager.singleton.networkAddress = ipAddress;
+        if (matchMaker == null)
+            StartMatchMaker();
+
+        matchMaker.JoinMatch(match.networkId, "", "", "", 0, 0, HandleJoinedMatch);
     }
 
-    void setPort()
+    private void HandleJoinedMatch(bool success, string extendedinfo, MatchInfo responsedata)
     {
-        NetworkManager.singleton.networkPort = 7777;
+        StartClient(responsedata);
     }
 
     void OnLevelWasLoaded(int level)
@@ -43,21 +74,21 @@ public class NetworkManager_Custom : NetworkManager {
         if (level == 0)
         {
             StartCoroutine(setupMenuSceneButton());
+            lookForMatch = true;
         }
         else
         {
+            lookForMatch = false;
             setupOtherSceneButton();
         }
     }
 
     IEnumerator setupMenuSceneButton()
     {
+        gameList = GameObject.Find("GameList").GetComponent<MatchListPanel>();
         yield return new WaitForSeconds(0.3f);
         GameObject.Find("StartHostButton").GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.Find("StartHostButton").GetComponent<Button>().onClick.AddListener(startupHost);
-
-        GameObject.Find("JoinGameButton").GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.Find("JoinGameButton").GetComponent<Button>().onClick.AddListener(joinGame);
+        GameObject.Find("StartHostButton").GetComponent<Button>().onClick.AddListener(StartHosting);
 
         GameObject[] g = Resources.FindObjectsOfTypeAll<GameObject>();
 
@@ -74,6 +105,6 @@ public class NetworkManager_Custom : NetworkManager {
     void setupOtherSceneButton()
     {
         GameObject.Find("DisconnectButton").GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.Find("DisconnectButton").GetComponent<Button>().onClick.AddListener(NetworkManager.singleton.StopHost);
+        GameObject.Find("DisconnectButton").GetComponent<Button>().onClick.AddListener(base.StopHost);
     }
 }
