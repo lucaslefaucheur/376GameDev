@@ -56,10 +56,14 @@ public class EnemyController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2)
+            if (distance > 2.0f) {
                 Follow();
-            else
+            }
+            else {
+                print("-----------------------attacks");
                 Attack(distance);
+            }
+                
         }
         Orientation();
     }
@@ -94,9 +98,10 @@ public class EnemyController : NetworkBehaviour {
      ******************************************************/
     
    public void TakeDamage(float damage) {
+        anim.SetBool("Hurt", true);
         Health -= damage;
         if (Health <= 0)
-            Destroy(gameObject);
+            Destroy(gameObject, 1.0f);
     }
 
     //Colliding with the player will cause damage to the player
