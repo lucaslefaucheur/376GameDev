@@ -62,9 +62,9 @@ public class MapManagerScript : NetworkBehaviour
 
         if (!hasMap){
 
-            mapPicker = Random.Range(0, 2);
+            mapPicker = Random.Range(0, 5);
             Debug.Log(mapPicker);
-            if(mapPicker%2 == 0)
+            if(mapPicker%5 != 0)
             {
                 playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
