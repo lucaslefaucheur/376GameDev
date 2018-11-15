@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - fire
   - boss
+  - RhinoBoss
   layers:
   - Default
   - TransparentFX

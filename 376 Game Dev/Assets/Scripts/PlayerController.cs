@@ -33,6 +33,8 @@ public class PlayerController : NetworkBehaviour
     //item stuff
     private GameObject equipped;
 
+    public bool grounded;
+
     private void Start()
     {
 
@@ -136,6 +138,13 @@ public class PlayerController : NetworkBehaviour
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
+
+            //to remove
+            Debug.Log("melee attack hit for: " + smallAttack());
+        }
+        else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
+        {
+            hit.collider.gameObject.GetComponent<RhinoController>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -248,6 +257,33 @@ public class PlayerController : NetworkBehaviour
         */
 
     }
+
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //If contact with RhinoBoss
+        if (collision.gameObject.tag == "RhinoBoss")
+        {
+            if (collision.gameObject.transform.position.x <= transform.position.x)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(20, 0) * 1500);
+            }
+            else if (collision.gameObject.transform.position.y <= transform.position.y)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 20) * 1500);
+            }
+            else if (collision.gameObject.transform.position.y > transform.position.y)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -20) * 1500);
+            }
+            else if (collision.gameObject.transform.position.x > transform.position.x)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(-20, 0) * 1500);
+            }
+
+        }
+    }
+
 
     //to be called when level finishes, to up base stats
     public void levelUp(int level)
