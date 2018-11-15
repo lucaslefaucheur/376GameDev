@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: 376 Game Dev
   productName: 376 Game Dev
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -619,9 +619,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 417da664-f684-4ff7-9745-9a924b2c4da3
+  cloudProjectId: 78c25fee-32f2-40f1-91b8-ae170d9fdb6a
   projectName: 376 Game Dev
-  organizationId: ricklig
+  organizationId: lamonfly
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

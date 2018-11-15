@@ -10,8 +10,6 @@ public class MapManagerScript : NetworkBehaviour
     public GameObject initialMapPrefab;
     private GameObject currentMap;
     private GameObject[] playerList;
-    private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
-    private Vector3[] playerSpawnPoint = {new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
 
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
@@ -59,7 +57,6 @@ public class MapManagerScript : NetworkBehaviour
         if (start)
         {
             playerList = GameObject.FindGameObjectsWithTag("Player");
-            //spawnPlayers(playerInitialSpawn);
             start = false;
         }
 
@@ -71,13 +68,13 @@ public class MapManagerScript : NetworkBehaviour
             {
                 playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
-                //spawnPlayers(playerSpawnPoint);
+                notifySpawn();
             }
             else
             {
                 playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadBossMap();
-                //spawnPlayers(playerSpawnPoint);
+                notifySpawn();
             }
 
             hasMap = true;
@@ -212,11 +209,11 @@ public class MapManagerScript : NetworkBehaviour
         hasMap = false;
     }
 
-    public void spawnPlayers(Vector3[] spawnPoints)
+    private void notifySpawn()
     {
-        for (int i = 0; i < playerList.Length; i++)
+        for(int i = 0; i<playerList.Length; i++)
         {
-            playerList[i].transform.position = spawnPoints[i];
+            playerList[i].GetComponent<PlayerController>().setRespawn();
         }
     }
 
