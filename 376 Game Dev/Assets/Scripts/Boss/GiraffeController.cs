@@ -23,7 +23,7 @@ public class GiraffeController : NetworkBehaviour {
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
     
     private float counter;
-    public GameObject EnemyHitParticle;
+    //public GameObject EnemyHitParticle;
 
     void Start()
     {
@@ -53,12 +53,18 @@ public class GiraffeController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2)
+            if (distance > 2) {
                 Follow();
-            else if (distance > 1)
+            }
+                
+            else if (distance > 1) {
                 Attack(distance);
-            else
+            }
+                
+            else {
                 Teleport();
+            }
+                
         }
         Orientation();
     }
@@ -175,10 +181,12 @@ public class GiraffeController : NetworkBehaviour {
         // wait before following 
         if (counter > 0)
         {
+            anim.SetBool("Appear", true);
             counter -= Time.deltaTime;
         }
         else if (isServer)
         {
+            anim.SetBool("Appear", false);
             // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
@@ -195,7 +203,7 @@ public class GiraffeController : NetworkBehaviour {
         direction.y = Target.transform.position.y - transform.position.y;
         direction.Normalize();
         transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
-        counter = 0.2f;
+        counter = 0.917f;
     }
 
     /* Teleport: enemy teleports to a random position around the player
@@ -205,15 +213,19 @@ public class GiraffeController : NetworkBehaviour {
         // wait before exploding
         if (counter > 0)
         {
+            anim.SetBool("Explode", true);
             counter -= Time.deltaTime;
         }
         else
         {
-            Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
+            anim.SetBool("Explode", false);
+            //Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
             Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
             teleportPosition.Normalize();
+            teleportPosition.x *= 2;
+            teleportPosition.y *= 2;
             transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
-            counter = 1.0f;
+            counter = 0.583f;
         }
     }
     

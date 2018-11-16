@@ -12,6 +12,9 @@ public class PlayerController : NetworkBehaviour
     public float speed;
     private Vector2 facing;
 
+    //Player Number
+    private int playerNumber;
+
     //Health 
     private float maxHealth = 30f;
     //sych health over network to know when your teammates are dead
@@ -33,13 +36,21 @@ public class PlayerController : NetworkBehaviour
     //item stuff
     private GameObject equipped;
 
+    public bool grounded;
+    //spawn point
+    private bool respawn = false;
+    private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
+    private Vector3[] playerSpawnPoint = { new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
+
     private void Start()
     {
 
         GameObject gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
+        playerNumber = gameManager.GetComponent<GameController>().getNumOfPLayers();
         Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
 
+        this.transform.position = playerInitialSpawn[playerNumber-1];
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -115,6 +126,12 @@ public class PlayerController : NetworkBehaviour
 
         }
 
+        if (respawn)
+        {
+            transform.position = playerSpawnPoint[playerNumber - 1];
+            respawn = false;
+        }
+
      }
 
 
@@ -136,6 +153,13 @@ public class PlayerController : NetworkBehaviour
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
+
+            //to remove
+            Debug.Log("melee attack hit for: " + smallAttack());
+        }
+        else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
+        {
+            hit.collider.gameObject.GetComponent<RhinoController>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -249,6 +273,33 @@ public class PlayerController : NetworkBehaviour
 
     }
 
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //If contact with RhinoBoss
+        if (collision.gameObject.tag == "RhinoBoss")
+        {
+            if (collision.gameObject.transform.position.x <= transform.position.x)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(20, 0) * 1500);
+            }
+            else if (collision.gameObject.transform.position.y <= transform.position.y)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 20) * 1500);
+            }
+            else if (collision.gameObject.transform.position.y > transform.position.y)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -20) * 1500);
+            }
+            else if (collision.gameObject.transform.position.x > transform.position.x)
+            {
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(-20, 0) * 1500);
+            }
+
+        }
+    }
+
+
     //to be called when level finishes, to up base stats
     public void levelUp(int level)
     {
@@ -266,6 +317,11 @@ public class PlayerController : NetworkBehaviour
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
         healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
+    public void setRespawn()
+    {
+        respawn = true;
     }
 
     /***********************************************************

@@ -5,14 +5,13 @@ using UnityEngine.Networking;
 
 public class EnemyController : NetworkBehaviour {
 
-
     //for internal referencing
     private Transform Target;
     private Transform loc;
     private LayerMask caster;
     private Animator anim;
     private SpriteRenderer rendy;
-    public Transform moveSpot; 
+    private Transform moveSpot; 
     
     //variables
     private readonly float FollowRange = 10;
@@ -43,8 +42,6 @@ public class EnemyController : NetworkBehaviour {
         FollowSpeed = 2;
         AttackSpeed = 3;
 
-
-
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
     }
@@ -59,10 +56,14 @@ public class EnemyController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2)
+            if (distance > 2.0f) {
                 Follow();
-            else
+            }
+            else {
+                print("-----------------------attacks");
                 Attack(distance);
+            }
+                
         }
         Orientation();
     }
@@ -97,9 +98,10 @@ public class EnemyController : NetworkBehaviour {
      ******************************************************/
     
    public void TakeDamage(float damage) {
+        anim.SetBool("Hurt", true);
         Health -= damage;
         if (Health <= 0)
-            Destroy(gameObject);
+            Destroy(gameObject, 1.0f);
     }
 
     //Colliding with the player will cause damage to the player
