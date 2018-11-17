@@ -8,6 +8,7 @@ public class MapManagerScript : NetworkBehaviour
 
     public static MapManagerScript instance = null;
     public GameObject initialMapPrefab;
+    public GameObject doorPrefab;
     private GameObject currentMap;
     private GameObject[] playerList;
 
@@ -214,6 +215,16 @@ public class MapManagerScript : NetworkBehaviour
         for(int i = 0; i<playerList.Length; i++)
         {
             playerList[i].GetComponent<PlayerController>().setRespawn();
+        }
+    }
+
+    public void spawnDoor()
+    {
+        if (isServer)
+        {
+            //instantiate door
+            GameObject door = Instantiate(doorPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            NetworkServer.Spawn(door);
         }
     }
 

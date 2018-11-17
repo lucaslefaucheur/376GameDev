@@ -192,7 +192,7 @@ public class BossController : NetworkBehaviour
     /**
      *  TODO
      **/
-    public void reduceHp(float num)//boss 收到 num的伤害 然后检查是否死亡 player can use this function outside class
+    public void TakeDamage(float num)//boss 收到 num的伤害 然后检查是否死亡 player can use this function outside class
     {
         bossHp = bossHp - num;
         bossHPObj.transform.localScale = new Vector3(bossHPLength * (bossHp / statsBossHp), bossHPObj.transform.localScale.y, bossHPObj.transform.localScale.z);

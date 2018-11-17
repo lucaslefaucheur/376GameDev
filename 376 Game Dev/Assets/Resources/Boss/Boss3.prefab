@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 61778266438304504}
   - component: {fileID: 114443768411913634}
   - component: {fileID: 114973313595122282}
+  - component: {fileID: 114445499067997184}
   m_Layer: 0
   m_Name: Boss3
   m_TagString: Untagged
@@ -160,6 +161,17 @@ MonoBehaviour:
   param3: 
   param4: 
   param5: 
+--- !u!114 &114445499067997184
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1566136390549110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5284cb0abed08224494bd8f7fb710d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114526599869827244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,7 +216,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
-  EnemyHitParticle: {fileID: 1995662964306324}
 --- !u!114 &114973313595122282
 MonoBehaviour:
   m_ObjectHideFlags: 1

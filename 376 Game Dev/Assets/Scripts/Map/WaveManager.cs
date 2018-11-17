@@ -64,7 +64,7 @@ public class WaveManager : NetworkBehaviour {
             if (!EnemyIsAlive())
             {
                 //NO ENEMIES ARE REMAINING
-                
+                mapManager.spawnDoor();
             }
         }
 
