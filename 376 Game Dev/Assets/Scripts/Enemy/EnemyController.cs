@@ -11,7 +11,7 @@ public class EnemyController : NetworkBehaviour {
     private LayerMask caster;
     private Animator anim;
     private SpriteRenderer rendy;
-    private Transform moveSpot; 
+    public Transform moveSpot; 
     
     //variables
     private readonly float FollowRange = 10;
@@ -26,6 +26,8 @@ public class EnemyController : NetworkBehaviour {
     private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
+
+    private Rigidbody rb;
 
     void Start()
     {
@@ -44,6 +46,7 @@ public class EnemyController : NetworkBehaviour {
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
+        rb = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
@@ -56,11 +59,10 @@ public class EnemyController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2.0f) {
+            if (distance > 2.5f) {
                 Follow();
             }
             else {
-                print("-----------------------attacks");
                 Attack(distance);
             }
                 
@@ -96,12 +98,21 @@ public class EnemyController : NetworkBehaviour {
     
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
-   public void TakeDamage(float damage) {
-        anim.SetBool("Hurt", true);
-        Health -= damage;
+
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+
+    public void TakeDamage(float damage) 
+    {
+        //Health -= damage;
         if (Health <= 0)
-            Destroy(gameObject, 1.0f);
+            Destroy(gameObject);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
+
+        Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
+        pushbackdirection.Normalize();
+        rb.AddForce(transform.forward * 100);
+
     }
 
     //Colliding with the player will cause damage to the player
@@ -110,6 +121,10 @@ public class EnemyController : NetworkBehaviour {
         if (other.gameObject.layer.Equals(8))
         {
             other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+
+            // changes direction if it touches the player
+            front = -1;
+            test1 = true;
         }
     }
 
@@ -202,7 +217,7 @@ public class EnemyController : NetworkBehaviour {
             direction.Normalize();
 
             // enemy moves towards the player
-            if (distance >= 1.9)
+            if (distance >= 2.4)
             {
                 front = 1;
                 if (test1)
@@ -210,13 +225,6 @@ public class EnemyController : NetworkBehaviour {
                     test2 = true;
                     counter = 2.0f;
                 }
-            }
-
-            // enemy moves away from the player
-            if (distance <= 1)
-            {
-                front = -1;
-                test1 = true;
             }
             
             transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);

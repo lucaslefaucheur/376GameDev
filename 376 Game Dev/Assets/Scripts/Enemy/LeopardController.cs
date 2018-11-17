@@ -89,11 +89,15 @@ public class LeopardController : NetworkBehaviour
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
 
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+
     public void TakeDamage(float damage)
     {
         Health -= damage;
         if (Health <= 0)
             Destroy(gameObject);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
     }
 
     //Colliding with the player will cause damage to the player
