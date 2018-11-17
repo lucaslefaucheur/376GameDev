@@ -18,6 +18,7 @@ public class CatController : NetworkBehaviour
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
     private float counter = 5.0f;
+    private float counter2 = 0.0f; 
 
     private Vector2 InitialPosition;
     private Vector2 direction;
@@ -52,7 +53,14 @@ public class CatController : NetworkBehaviour
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            Follow();
+            if (distance > 1.2) {
+                counter2 = 0;
+                Follow();
+            }
+            else {
+                Attack();
+            }
+
         }
         Orientation();
     }
@@ -102,7 +110,7 @@ public class CatController : NetworkBehaviour
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+
         }
     }
 
@@ -180,6 +188,22 @@ public class CatController : NetworkBehaviour
             transform.position = direction;
 
             counter -= Time.deltaTime;
+        }
+    }
+
+    /* Attack: enemy cause damage every second
+     ****************************************/
+
+    void Attack()
+    {
+        if (counter2 > 0)
+        {
+            counter2 -= Time.deltaTime;
+        }
+        else
+        {
+            Target.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            counter2 = 1.0f;
         }
     }
 
