@@ -25,9 +25,14 @@ public class BossDrop : NetworkBehaviour
         if (isServer)
         {
             //instantiate a single random item
-            GameObject itemPick = items[Random.Range(0, items.Count)];
-            GameObject itemDrop = Instantiate(itemPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            NetworkServer.Spawn(itemDrop);
+            int numOfPlayers = GameObject.FindGameObjectsWithTag("Player").Length;
+
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                GameObject itemPick = items[Random.Range(0, items.Count)];
+                GameObject itemDrop = Instantiate(itemPick, transform.position, Quaternion.identity);
+                NetworkServer.Spawn(itemDrop);
+            }
         }
     }
 }

@@ -5,23 +5,37 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
 
-    // Use this for initialization
-    void Start()
+    private bool ScanForPlayer()
     {
+        int playerInCol = 0;
+        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity);
+        int numOfPlayers = GameObject.FindGameObjectsWithTag("Player").Length;
 
-    }
+        for (int i = 0; i < hitColliders.Length; i++)
+        {
+            if (hitColliders[i].tag == "Player")
+            {
+                playerInCol++;
+            }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        return playerInCol == numOfPlayers;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+
         if (collision.tag.Equals("Player"))
         {
-            GameObject.Find("Manager").GetComponent<MapManagerScript>().notifyEntry();
+            if (ScanForPlayer())
+            {
+                GameObject.Find("Manager").GetComponent<MapManagerScript>().notifyEntry();
+            }
+            else
+            {
+                //Display Waiting
+                Debug.Log("Waiting for all players to be ready!");
+            }
         }
 
     }
