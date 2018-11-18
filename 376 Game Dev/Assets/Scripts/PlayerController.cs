@@ -153,14 +153,14 @@ public class PlayerController : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
-            hit.collider.gameObject.GetComponent<RhinoController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -173,7 +173,7 @@ public class PlayerController : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(bigAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + bigAttack());

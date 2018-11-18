@@ -91,7 +91,7 @@ public class RhinoController : NetworkBehaviour
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
 
-    public void TakeDamage(int number)
+    /*public void TakeDamage(int number)
     {
         Debug.Log("Boss health is now at : " + Health);
         Health -= number;
@@ -99,7 +99,7 @@ public class RhinoController : NetworkBehaviour
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 
     /* Orientation: determines which sprite to use
      ********************************************/

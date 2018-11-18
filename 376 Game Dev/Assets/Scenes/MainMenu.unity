@@ -829,7 +829,7 @@ MonoBehaviour:
   m_OfflineScene: MainMenu
   m_OnlineScene: MainScene
   m_SpawnPrefabs:
-  - {fileID: 1501998517732588, guid: ce4830e00d2248446a14bce44dbcdf65, type: 2}
+  - {fileID: 1467592652403766, guid: 9080754556e1c19499dcb74a9fbeaabe, type: 2}
   - {fileID: 1248864779812488, guid: cb441d9cc994fea4492d363fb7f429b3, type: 2}
   - {fileID: 1241415746582604, guid: 591c7e8e33d8e7b4ba141a4751240af3, type: 2}
   - {fileID: 1699751899208450, guid: abdf578aeac95da409e9476020d6a68e, type: 2}
