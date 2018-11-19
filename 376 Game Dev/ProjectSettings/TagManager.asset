@@ -12,6 +12,7 @@ TagManager:
   - Bow
   - Staff
   - Shield
+  - chest
   layers:
   - Default
   - TransparentFX

@@ -113,6 +113,12 @@ public class PlayerController : NetworkBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
             {
+                if (hit.collider.tag.Equals("chest"))
+                {
+                    Destroy(hit.collider.gameObject);
+                    GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+                }
+
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);
@@ -214,11 +220,8 @@ public class PlayerController : NetworkBehaviour
        
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
-        if (hit != null)
-        {
-            GameObject arrow = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
-            NetworkServer.Spawn(arrow);
-        }
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
+        NetworkServer.Spawn(arrow);
     }
 
     private void shieldHit()
@@ -229,7 +232,6 @@ public class PlayerController : NetworkBehaviour
             //hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
-            Debug.Log("sword attack hit for: " + bigAttack());
         }
     }
 
@@ -447,6 +449,11 @@ public class PlayerController : NetworkBehaviour
     public void setAttack (float attack)
     {
         attackVar = attack;
+    }
+
+    public int getNumber()
+    {
+        return playerNumber;
     }
 
     /***********************************************************
