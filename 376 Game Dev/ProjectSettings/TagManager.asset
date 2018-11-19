@@ -9,6 +9,7 @@ TagManager:
   - fire
   - boss
   - RhinoBoss
+  - crystal
   layers:
   - Default
   - TransparentFX

@@ -10,6 +10,7 @@ public class Health : NetworkBehaviour {
     public int startingHealth;
     public int currentHealth;
     public RectTransform healthBar;
+    public GameObject deathFX;
 
 
     void Awake()
@@ -41,7 +42,8 @@ public class Health : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Destroy(gameObject, 1.0f);
+            Instantiate(deathFX, transform.position, transform.rotation);
+            Destroy(gameObject);
         }
 
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
