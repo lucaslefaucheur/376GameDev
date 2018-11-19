@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bow : MonoBehaviour {
+public class Staff : MonoBehaviour {
     float weaponStr = 10f;
     int durability;
 
