@@ -100,6 +100,12 @@ public class PlayerController : NetworkBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
             {
+                if (hit.collider.tag.Equals("chest"))
+                {
+                    Destroy(hit.collider.gameObject);
+                    GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+                }
+
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);

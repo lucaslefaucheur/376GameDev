@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 212887058772785426}
   - component: {fileID: 61702206297672148}
   - component: {fileID: 114944296117950204}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: chest
-  m_TagString: Untagged
+  m_TagString: chest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

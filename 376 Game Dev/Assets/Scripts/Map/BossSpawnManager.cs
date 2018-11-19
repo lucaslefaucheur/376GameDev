@@ -12,7 +12,6 @@ public class BossSpawnManager : NetworkBehaviour {
     private GameObject bossObject;
     private GameObject bossTemp;
 
-    private List<GameObject> items = new List<GameObject>();
     bool loot = false;
 
     // Use this for initialization
@@ -32,14 +31,6 @@ public class BossSpawnManager : NetworkBehaviour {
 
         }
 
-        Object[] objList = Resources.LoadAll("Item", typeof(Object));
-
-        // Add object to map list
-        foreach (Object obj in objList)
-        {
-            GameObject item = (GameObject)obj;
-            items.Add(item);
-        }
     }
 	
 	// Update is called once per frame
@@ -56,12 +47,7 @@ public class BossSpawnManager : NetworkBehaviour {
         if (isServer && bossTemp == null && !loot)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnDoor();
-            //instantiate a single random item
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest();
-            GameObject itemPick = items[Random.Range(0, items.Count)];             
-            GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
-            NetworkServer.Spawn(itemDrop);
-
             loot = true;
         }
 	}

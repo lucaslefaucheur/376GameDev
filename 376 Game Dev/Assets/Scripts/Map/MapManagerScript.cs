@@ -30,6 +30,7 @@ public class MapManagerScript : NetworkBehaviour
     private int mapPicker;
 
     public GameObject chest;
+    private List<GameObject> items = new List<GameObject>();
 
     void Awake()
     {
@@ -52,6 +53,7 @@ public class MapManagerScript : NetworkBehaviour
         loadAllBoss();
         loadAllEnemyMap();
         loadAllEnemy();
+        loadAllWeapons();
     }
 	
 	// Update is called once per frame
@@ -96,6 +98,11 @@ public class MapManagerScript : NetworkBehaviour
         if (enemyList.Count == 0)
         {
             loadAllEnemy();
+        }
+
+        if(items.Count == 0)
+        {
+            loadAllWeapons();
         }
 		
 	}
@@ -151,6 +158,18 @@ public class MapManagerScript : NetworkBehaviour
         {
             GameObject enemyObject = (GameObject)obj;
             enemyList.Add(enemyObject);
+        }
+    }
+
+    private void loadAllWeapons()
+    {
+        Object[] objList = Resources.LoadAll("Item", typeof(Object));
+
+        // Add object to map list
+        foreach (Object obj in objList)
+        {
+            GameObject item = (GameObject)obj;
+            items.Add(item);
         }
     }
 
@@ -219,7 +238,6 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
-            //instantiate door
             GameObject door = Instantiate(doorPrefab, new Vector3(3.6f, 0.1f, -0.5f), Quaternion.identity);
             NetworkServer.Spawn(door);
         }
@@ -229,9 +247,18 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
-            //instantiate door
             GameObject spawnedChest = Instantiate(chest, new Vector3(3.6f, -5f, -1f), Quaternion.identity);
             NetworkServer.Spawn(spawnedChest);
+        }
+    }
+
+    public void spawnWeapon()
+    {
+        if (isServer)
+        {
+            GameObject itemPick = items[Random.Range(0, items.Count)];
+            GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
+            NetworkServer.Spawn(itemDrop);
         }
     }
 

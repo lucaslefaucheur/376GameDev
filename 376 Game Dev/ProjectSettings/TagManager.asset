@@ -9,6 +9,7 @@ TagManager:
   - fire
   - boss
   - RhinoBoss
+  - chest
   layers:
   - Default
   - TransparentFX
