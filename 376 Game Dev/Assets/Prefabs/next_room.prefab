@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212370009599575820}
   - component: {fileID: 61258349374301088}
   - component: {fileID: 114236164182967066}
+  - component: {fileID: 114141439539866346}
   m_Layer: 0
   m_Name: next_room
   m_TagString: Untagged
@@ -67,6 +68,38 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.72, y: 2.8}
   m_EdgeRadius: 0
+--- !u!114 &114141439539866346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1273164223681910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 100
+    i1: 199
+    i2: 5
+    i3: 183
+    i4: 17
+    i5: 215
+    i6: 194
+    i7: 132
+    i8: 153
+    i9: 42
+    i10: 135
+    i11: 246
+    i12: 189
+    i13: 197
+    i14: 230
+    i15: 220
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114236164182967066
 MonoBehaviour:
   m_ObjectHideFlags: 1
