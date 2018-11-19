@@ -180,7 +180,7 @@ MonoBehaviour:
   waves:
   - name: 
     enemy: []
-    count: 5
+    count: 3
     rate: 1
   spawnPoints:
   - {fileID: 4781618265605222}

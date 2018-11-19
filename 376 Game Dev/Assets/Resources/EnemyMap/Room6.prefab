@@ -320,18 +320,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - name: Wav1
+  - name: 
     enemy: []
     count: 3
-    rate: 0
-  - name: Wav2
-    enemy: []
-    count: 3
-    rate: 0
-  - name: Wav3
-    enemy: []
-    count: 3
-    rate: 0
+    rate: 1
   spawnPoints:
   - {fileID: 4298782233917056}
   - {fileID: 4237111767281624}

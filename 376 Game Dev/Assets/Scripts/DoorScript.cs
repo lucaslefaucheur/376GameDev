@@ -8,7 +8,7 @@ public class DoorScript : MonoBehaviour
     private bool ScanForPlayer()
     {
         int playerInCol = 0;
-        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity);
+        Collider2D[] hitColliders = Physics2D.OverlapAreaAll(new Vector2(transform.position.x + 1, transform.position.y + 1), new Vector2(transform.position.x - 1, transform.position.y - 1));
         int numOfPlayers = GameObject.FindGameObjectsWithTag("Player").Length;
 
         for (int i = 0; i < hitColliders.Length; i++)
@@ -18,7 +18,6 @@ public class DoorScript : MonoBehaviour
                 playerInCol++;
             }
         }
-
         return playerInCol == numOfPlayers;
     }
 
@@ -30,6 +29,7 @@ public class DoorScript : MonoBehaviour
             if (ScanForPlayer())
             {
                 GameObject.Find("Manager").GetComponent<MapManagerScript>().notifyEntry();
+                Destroy(gameObject);
             }
             else
             {

@@ -32,6 +32,7 @@ public class WaveManager : NetworkBehaviour {
 
     private int numberOfPlayer = 1;
     private MapManagerScript mapManager;
+    private bool doorSpawned = false;
 
     void Start()
     {
@@ -64,7 +65,11 @@ public class WaveManager : NetworkBehaviour {
             if (!EnemyIsAlive())
             {
                 //NO ENEMIES ARE REMAINING
-                mapManager.spawnDoor();
+                if (!doorSpawned)
+                {
+                    mapManager.spawnDoor();
+                    doorSpawned = true;
+                }
             }
         }
 
@@ -100,10 +105,12 @@ public class WaveManager : NetworkBehaviour {
                 // Else spawn a random enemy from the map manager script
                 else
                 {
+                    Debug.Log("Random Enemy Spawned");
                     SpawnEnemy(mapManager.getRandomEnemy());
                 }
             }
             yield return new WaitForSeconds(1f / _wave.rate);
+            Debug.Log("Next");
         }
 
         WaveCompleted();

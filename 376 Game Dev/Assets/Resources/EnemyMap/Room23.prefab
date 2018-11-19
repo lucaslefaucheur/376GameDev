@@ -294,15 +294,7 @@ MonoBehaviour:
   - name: Wav1
     enemy: []
     count: 3
-    rate: 0
-  - name: Wav2
-    enemy: []
-    count: 3
-    rate: 0
-  - name: Wav3
-    enemy: []
-    count: 3
-    rate: 0
+    rate: 1
   spawnPoints:
   - {fileID: 4699863920800646}
   - {fileID: 4990197275078786}

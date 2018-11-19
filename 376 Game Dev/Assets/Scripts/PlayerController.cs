@@ -42,6 +42,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
     private Vector3[] playerSpawnPoint = { new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
 
+
     private void Start()
     {
 
@@ -152,14 +153,14 @@ public class PlayerController : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
-            hit.collider.gameObject.GetComponent<RhinoController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -172,7 +173,7 @@ public class PlayerController : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(bigAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + bigAttack());

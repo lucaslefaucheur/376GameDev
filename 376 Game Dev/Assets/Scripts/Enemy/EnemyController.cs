@@ -11,7 +11,7 @@ public class EnemyController : NetworkBehaviour {
     private LayerMask caster;
     private Animator anim;
     private SpriteRenderer rendy;
-    private Transform moveSpot; 
+    private Transform moveSpot;
     
     //variables
     private readonly float FollowRange = 10;
@@ -93,29 +93,29 @@ public class EnemyController : NetworkBehaviour {
             }
         }
     }
-    
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
-   public void TakeDamage(float damage) {
-        anim.SetBool("Hurt", true);
-        Health -= damage;
-        if (Health <= 0)
-            Destroy(gameObject, 1.0f);
-    }
+
+    /* public void TakeDamage(float damage) {
+          anim.SetBool("Hurt", true);
+          Health -= damage;
+          if (Health <= 0)
+              Destroy(gameObject, 1.0f);
+      }*/
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.layer.Equals(8))
-        {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
-        }
-    }
+      {
+          if (other.gameObject.layer.Equals(8))
+          {
+              other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+          }
+      }
 
-    /* Orientation: determines which sprite to use
-     ********************************************/
-    
+      /* Orientation: determines which sprite to use
+       ********************************************/
+
     void Orientation()
     {
         anim.SetBool("Move", true);
