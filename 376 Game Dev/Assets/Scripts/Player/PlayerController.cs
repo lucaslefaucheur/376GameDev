@@ -365,8 +365,13 @@ public class PlayerController : NetworkBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //If contact with RhinoBoss
-        if (collision.gameObject.tag == "RhinoBoss")
+
+        if (collision.gameObject.tag == "crystal") {
+            Debug.Log("Got a crystal");
+            Destroy(collision.gameObject);
+        }
+            //If contact with RhinoBoss
+            if (collision.gameObject.tag == "RhinoBoss")
         {
             if (collision.gameObject.transform.position.x <= transform.position.x)
             {

@@ -13,6 +13,7 @@ TagManager:
   - Staff
   - Shield
   - chest
+  - crystal
   layers:
   - Default
   - TransparentFX
