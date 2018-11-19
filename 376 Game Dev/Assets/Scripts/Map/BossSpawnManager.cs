@@ -55,15 +55,12 @@ public class BossSpawnManager : NetworkBehaviour {
 
         if (isServer && bossTemp == null && !loot)
         {
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnDoor();
             //instantiate a single random item
-            int numOfPlayers = GameObject.FindGameObjectsWithTag("Player").Length;
-            
-            for (int i = 0; i < numOfPlayers; i++)
-            {
-                GameObject itemPick = items[Random.Range(0, items.Count)];
-                GameObject itemDrop = Instantiate(itemPick, transform.position, Quaternion.identity);
-                NetworkServer.Spawn(itemDrop);
-            }
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest();
+            GameObject itemPick = items[Random.Range(0, items.Count)];             
+            GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
+            NetworkServer.Spawn(itemDrop);
 
             loot = true;
         }

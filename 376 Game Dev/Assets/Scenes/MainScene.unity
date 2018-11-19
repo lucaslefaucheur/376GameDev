@@ -178,6 +178,7 @@ MonoBehaviour:
   bossList: []
   mapEnemyList: []
   enemyList: []
+  chest: {fileID: 1528717624304014, guid: e9a4ad197ec292b4db3a94647b441439, type: 2}
 --- !u!114 &1153235
 MonoBehaviour:
   m_ObjectHideFlags: 0
