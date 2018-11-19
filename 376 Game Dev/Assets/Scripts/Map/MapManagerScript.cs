@@ -29,6 +29,9 @@ public class MapManagerScript : NetworkBehaviour
     private bool start = true;
     private int mapPicker;
 
+    public GameObject spawnDoor;
+    private GameObject spawnedDoor;
+
     void Awake()
     {
         //Check if instance already exists, if not, set instance to this
@@ -57,7 +60,6 @@ public class MapManagerScript : NetworkBehaviour
 
         if (start)
         {
-            playerList = GameObject.FindGameObjectsWithTag("Player");
             start = false;
         }
 
@@ -67,15 +69,11 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%5 != 0)
             {
-                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
-                notifySpawn();
             }
             else
             {
-                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadBossMap();
-                notifySpawn();
             }
 
             hasMap = true;
@@ -226,6 +224,12 @@ public class MapManagerScript : NetworkBehaviour
             GameObject door = Instantiate(doorPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             NetworkServer.Spawn(door);
         }
+    }
+
+    public void SpawnDoor()
+    {
+        spawnedDoor = Instantiate(spawnDoor, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        NetworkServer.Spawn(spawnedDoor);
     }
 
 }

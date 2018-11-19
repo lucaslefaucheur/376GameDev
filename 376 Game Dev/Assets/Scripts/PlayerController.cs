@@ -40,7 +40,6 @@ public class PlayerController : NetworkBehaviour
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
-    private Vector3[] playerSpawnPoint = { new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
 
 
     private void Start()
@@ -127,15 +126,7 @@ public class PlayerController : NetworkBehaviour
 
         }
 
-        if (respawn)
-        {
-            transform.position = playerSpawnPoint[playerNumber - 1];
-            respawn = false;
-        }
-
      }
-
-
 
 
     /***********************************************************
