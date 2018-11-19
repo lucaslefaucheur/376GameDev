@@ -5,29 +5,23 @@ using UnityEngine;
 public class bow : MonoBehaviour {
     float weaponStr = 10f;
     int durability;
-    public Object arrow;
 
     private void Start()
     {
-        durability = Random.Range(30, 50);
-        arrow = Resources.Load("Arrow", typeof(GameObject));
-        if (arrow == null)
-        {
-            Debug.Log("fail");
-        }
+        durability = Random.Range(15, 25);
         
     }
 
-    public void weaponAttack(float attackVar, int attack)
+    public int weaponAttack(float attackVar, int attack)
     {
+        weaponStr = Random.Range(10, 25);
         durability--;
         Debug.Log(durability);
         if (durability == 0)
         {
             gameObject.GetComponent<PlayerController>().unequip();
         }
-
-        Instantiate(arrow, transform.position, transform.rotation);
+        return (int)Mathf.Floor((attack + weaponStr) * (1 + attackVar));
 
 
     }

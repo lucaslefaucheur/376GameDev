@@ -36,6 +36,8 @@ public class PlayerController : NetworkBehaviour
     //item stuff
     private GameObject equipped;
     public bool grounded;
+    public GameObject arrow;
+
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
@@ -185,7 +187,7 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, facing * Vector2FromAngle(90) * 1.5f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, facing *Vector2FromAngle(-90) * 1.5f, Color.green, 5.5f);
-        int temp = bigAttack();
+        int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
         if (hit != null)
         {
             for (int i = 0; i < hit.Length; i++)
@@ -209,7 +211,14 @@ public class PlayerController : NetworkBehaviour
 
     private void bowHit()
     {
-        GetComponent<bow>().weaponAttack(attackVar, attack);
+       
+        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
+        if (hit != null)
+        {
+            GameObject arrow = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
+            NetworkServer.Spawn(arrow);
+        }
     }
 
     private void shieldHit()
@@ -217,7 +226,7 @@ public class PlayerController : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+            //hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
             Debug.Log("sword attack hit for: " + bigAttack());
@@ -232,7 +241,7 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.down * 2f, Color.green, 5.5f);
 
-        int temp = bigAttack();
+        int temp = GetComponent<Staff>().weaponAttack(attackVar, attack); ;
         if (hit != null)
         {
             for (int i = 0; i< hit.Length; i++)
@@ -277,20 +286,6 @@ public class PlayerController : NetworkBehaviour
     public int smallAttack()
     {
         return (int)Mathf.Floor(attack * (1 + attackVar));
-    }
-
-    //to be used to cast a big attack
-    public int bigAttack()
-    {
-        if (GetComponent<Sword>() != null)
-            return (GetComponent<Sword>().weaponAttack(attackVar, attack));
-        else if (GetComponent<Staff>() != null)
-           return (GetComponent<Staff>().weaponAttack(attackVar, attack));
-        else if (GetComponent<Shield>() != null)
-            return (GetComponent<Sword>().weaponAttack(attackVar, attack));
-        else
-            return 0;
-
     }
 
     public void unequip()
@@ -362,17 +357,6 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
-
-        /*
-        if (Mathf.Abs(transform.position.x) > 9.8f)
-        {
-            playerRB.transform.Translate(new Vector3(-moveHorizontal, 0));
-        }
-        if (Mathf.Abs(transform.position.y) > 5.8f)
-        {
-            playerRB.transform.Translate(new Vector3(0, -moveVertical));
-        }
-        */
 
     }
 

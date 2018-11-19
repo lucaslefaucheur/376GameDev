@@ -14,7 +14,12 @@ public class bowProjectile : MonoBehaviour {
     {
         mRigidBody2D = GetComponent<Rigidbody2D>();
         rotation = gameObject.transform.rotation;
-        angle = rotation * new Vector2(0,0);
+        angle = rotation * new Vector2(1,0);
         mRigidBody2D.velocity = angle * 1;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
     }
 }
