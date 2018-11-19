@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 1153233}
   - component: {fileID: 1153235}
   - component: {fileID: 1153232}
-  - component: {fileID: 1153236}
   - component: {fileID: 1153234}
   m_Layer: 0
   m_Name: Manager
@@ -211,17 +210,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &1153236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1153231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30250c4d117f1354890c2911616ff6b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &78205314
 GameObject:
   m_ObjectHideFlags: 0
