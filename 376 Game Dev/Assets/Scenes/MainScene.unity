@@ -179,6 +179,11 @@ MonoBehaviour:
   mapEnemyList: []
   enemyList: []
   chest: {fileID: 1528717624304014, guid: e9a4ad197ec292b4db3a94647b441439, type: 2}
+  items:
+  - {fileID: 1665216285954610, guid: 885a91fd5aff35f4ab87872fffb978a7, type: 2}
+  - {fileID: 1092483715728250, guid: 5c2ac09182241d849ad6f1894dce6023, type: 2}
+  - {fileID: 1665216285954610, guid: 464e18d857e37074c897e22f9923850c, type: 2}
+  - {fileID: 1665216285954610, guid: f82c41b011a6af84f870a64490ba69fc, type: 2}
 --- !u!114 &1153235
 MonoBehaviour:
   m_ObjectHideFlags: 0
