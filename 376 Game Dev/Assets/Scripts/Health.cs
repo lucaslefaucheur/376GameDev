@@ -43,6 +43,8 @@ public class Health : NetworkBehaviour {
             currentHealth = 0;
             Destroy(gameObject, 1.0f);
         }
+
+        healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
     }
 
     public void GainHealth(int heal)
