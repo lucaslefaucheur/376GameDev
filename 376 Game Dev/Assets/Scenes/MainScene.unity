@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialMapPrefab: {fileID: 1944200717794766, guid: da9c6ea1cfc39ce4faa2be591aff0c33,
     type: 2}
-  doorPrefab: {fileID: 1839798954761680, guid: f8247bd088442ba40848858b7f12dcf9, type: 2}
+  doorPrefab: {fileID: 1273164223681910, guid: 64c705b711d7c284992a87f6bdc5e6dc, type: 2}
   mapBossList: []
   bossList: []
   mapEnemyList: []

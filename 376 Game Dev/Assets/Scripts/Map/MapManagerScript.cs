@@ -29,9 +29,6 @@ public class MapManagerScript : NetworkBehaviour
     private bool start = true;
     private int mapPicker;
 
-    public GameObject spawnDoor;
-    private GameObject spawnedDoor;
-
     void Awake()
     {
         //Check if instance already exists, if not, set instance to this
@@ -221,15 +218,9 @@ public class MapManagerScript : NetworkBehaviour
         if (isServer)
         {
             //instantiate door
-            GameObject door = Instantiate(doorPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            GameObject door = Instantiate(doorPrefab, new Vector3(3.6f, 0.1f, 0.5f), Quaternion.identity);
             NetworkServer.Spawn(door);
         }
-    }
-
-    public void SpawnDoor()
-    {
-        spawnedDoor = Instantiate(spawnDoor, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        NetworkServer.Spawn(spawnedDoor);
     }
 
 }

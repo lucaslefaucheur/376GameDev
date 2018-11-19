@@ -29,7 +29,8 @@ public class DoorScript : MonoBehaviour
             if (ScanForPlayer())
             {
                 GameObject.Find("Manager").GetComponent<MapManagerScript>().notifyEntry();
-                Destroy(gameObject);
+                Destroy(this.gameObject);
+
             }
             else
             {
