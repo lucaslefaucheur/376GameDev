@@ -351,6 +351,11 @@ public class PlayerController : NetworkBehaviour
         attackVar = attack;
     }
 
+    public int getNumber()
+    {
+        return playerNumber;
+    }
+
     /***********************************************************
      * 
      * 
