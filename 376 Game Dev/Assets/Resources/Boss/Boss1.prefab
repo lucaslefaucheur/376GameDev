@@ -182,8 +182,8 @@ MonoBehaviour:
   ASPD: 25
   ATK2Spd: 8
   bossHPObj: {fileID: 0}
-  player: {fileID: 0}
-  fireAttack: {fileID: 0}
+  player: {fileID: 1279971828661606, guid: 3bcdf269d41dbee4f91beec6133644c4, type: 2}
+  fireAttack: {fileID: 1137656978701404, guid: a603d58bc5399b44c939927a60b1fded, type: 2}
   firePos: {fileID: 0}
   flag: 1
 --- !u!212 &212666665089819536
