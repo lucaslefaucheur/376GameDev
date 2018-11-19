@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4207373300679808}
   - component: {fileID: 212145545779094164}
   - component: {fileID: 61755168242773910}
-  - component: {fileID: 50730366694097716}
+  - component: {fileID: 50703581884637464}
   - component: {fileID: 114670571627947236}
   m_Layer: 0
   m_Name: Arrow
@@ -43,7 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50730366694097716
+--- !u!50 &50703581884637464
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1

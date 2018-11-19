@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 2569400267195301200}
   - component: {fileID: 114922203414995550}
   m_Layer: 0
-  m_Name: EntryRoom
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -594,22 +594,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 218
-    i1: 156
-    i2: 110
-    i3: 161
-    i4: 207
-    i5: 195
-    i6: 156
-    i7: 228
-    i8: 250
-    i9: 162
-    i10: 190
-    i11: 89
-    i12: 26
-    i13: 255
-    i14: 12
-    i15: 51
+    i0: 226
+    i1: 237
+    i2: 196
+    i3: 243
+    i4: 251
+    i5: 72
+    i6: 43
+    i7: 84
+    i8: 170
+    i9: 12
+    i10: 107
+    i11: 50
+    i12: 167
+    i13: 8
+    i14: 64
+    i15: 193
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114101880281107416
@@ -626,22 +626,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 218
-    i1: 156
-    i2: 110
-    i3: 161
-    i4: 207
-    i5: 195
-    i6: 156
-    i7: 228
-    i8: 250
-    i9: 162
-    i10: 190
-    i11: 89
-    i12: 26
-    i13: 255
-    i14: 12
-    i15: 51
+    i0: 226
+    i1: 237
+    i2: 196
+    i3: 243
+    i4: 251
+    i5: 72
+    i6: 43
+    i7: 84
+    i8: 170
+    i9: 12
+    i10: 107
+    i11: 50
+    i12: 167
+    i13: 8
+    i14: 64
+    i15: 193
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114282825096233748
@@ -669,22 +669,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 218
-    i1: 156
-    i2: 110
-    i3: 161
-    i4: 207
-    i5: 195
-    i6: 156
-    i7: 228
-    i8: 250
-    i9: 162
-    i10: 190
-    i11: 89
-    i12: 26
-    i13: 255
-    i14: 12
-    i15: 51
+    i0: 226
+    i1: 237
+    i2: 196
+    i3: 243
+    i4: 251
+    i5: 72
+    i6: 43
+    i7: 84
+    i8: 170
+    i9: 12
+    i10: 107
+    i11: 50
+    i12: 167
+    i13: 8
+    i14: 64
+    i15: 193
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!212 &212100020112130072
