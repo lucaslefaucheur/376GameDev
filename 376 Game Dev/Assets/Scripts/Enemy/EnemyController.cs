@@ -27,7 +27,7 @@ public class EnemyController : NetworkBehaviour {
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
-    private Rigidbody rb;
+    private Rigidbody2D rb;
 
     void Start()
     {
@@ -46,7 +46,7 @@ public class EnemyController : NetworkBehaviour {
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -103,15 +103,16 @@ public class EnemyController : NetworkBehaviour {
 
     public void TakeDamage(float damage) 
     {
-        //Health -= damage;
+        Health -= damage;
         if (Health <= 0)
             Destroy(gameObject);
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
 
+        // pushed back
         Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
         pushbackdirection.Normalize();
-        rb.AddForce(transform.forward * 100);
+        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
 
     }
 

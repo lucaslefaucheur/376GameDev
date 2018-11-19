@@ -26,6 +26,8 @@ public class CatController : NetworkBehaviour
 
     private float PatrolSpeed, FollowSpeed;
 
+    private Rigidbody2D rb;
+
     void Start()
     {
         loc = transform;
@@ -41,6 +43,8 @@ public class CatController : NetworkBehaviour
         FollowSpeed = 1;
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -103,6 +107,11 @@ public class CatController : NetworkBehaviour
             Destroy(gameObject);
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
+
+        // pushed back
+        Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
+        pushbackdirection.Normalize();
+        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
     }
 
     //Colliding with the player will cause damage to the player
