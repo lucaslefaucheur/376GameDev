@@ -35,16 +35,13 @@ public class Health : NetworkBehaviour {
      ******************************************************/
     
    public void TakeDamage(int damage) {
-        Debug.Log("Enemy's current health is: " + currentHealth);
         currentHealth -= damage;
        // healthBar.sizeDelta = new Vector2((currentHealth / startingHealth) * 100, healthBar.sizeDelta.y);
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Debug.Log("Dead!");
             Destroy(gameObject, 1.0f);
-            //die
         }
     }
 

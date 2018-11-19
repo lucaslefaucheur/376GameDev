@@ -21,7 +21,6 @@ public class LeopardController : NetworkBehaviour
 
     private Vector2 InitialPosition;
     private Vector2 direction;
-    public float Health = 10; // TODO: put it on the network 
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
@@ -85,16 +84,6 @@ public class LeopardController : NetworkBehaviour
             }
         }
     }
-
-    /* TakeDamage: substracts a number to the enemy's health
-     *****************************************************
-
-    public void TakeDamage(float damage)
-    {
-        Health -= damage;
-        if (Health <= 0)
-            Destroy(gameObject);
-    }*/
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)

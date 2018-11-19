@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
     private int playerNumber;
 
     //Health 
-    private float maxHealth = 30f;
+    private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
