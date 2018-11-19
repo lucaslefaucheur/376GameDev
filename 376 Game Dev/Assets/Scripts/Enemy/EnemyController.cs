@@ -11,8 +11,8 @@ public class EnemyController : NetworkBehaviour {
     private LayerMask caster;
     private Animator anim;
     private SpriteRenderer rendy;
-    private Transform moveSpot;
-    
+    public Transform moveSpot;
+
     //variables
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
@@ -22,7 +22,6 @@ public class EnemyController : NetworkBehaviour {
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    public float Health = 10; // TODO: put it on the network 
     private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
@@ -93,16 +92,6 @@ public class EnemyController : NetworkBehaviour {
             }
         }
     }
-
-    /* TakeDamage: substracts a number to the enemy's health
-     ******************************************************/
-
-    /* public void TakeDamage(float damage) {
-          anim.SetBool("Hurt", true);
-          Health -= damage;
-          if (Health <= 0)
-              Destroy(gameObject, 1.0f);
-      }*/
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)

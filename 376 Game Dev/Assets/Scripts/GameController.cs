@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -16,6 +18,7 @@ public class GameController : NetworkBehaviour
     public float loadTime = 5.0f;
     public Transform[] PlayerSpawn;
 
+    private List<GameObject> playersList;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -48,6 +51,13 @@ public class GameController : NetworkBehaviour
         //Setup level
     }
 
+    //Update is called every frame
+    void Update()
+    {
+        
+    }
+
+
     public void AddPlayer()
     {
         numOfPlayers++;
@@ -69,12 +79,6 @@ public class GameController : NetworkBehaviour
     {
         //levelTransition.SetActive(false);
         settingUp = false;
-    }
-
-    //Update is called every frame
-    void Update()
-    {
-        //make enemies move, attack, etc
     }
 
     void LevelUp()
