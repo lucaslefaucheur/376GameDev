@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sword : MonoBehaviour {
-    float weaponStr = 10f;
+    float weaponStr;
     int durability;
 
     private void Start()
@@ -13,7 +13,9 @@ public class Sword : MonoBehaviour {
 
     public int weaponAttack(float attackVar, int attack)
     {
+        weaponStr = Random.Range(10, 25);
         durability--;
+        Debug.Log(durability);
         if (durability == 0)
         {
             gameObject.GetComponent<PlayerController>().unequip();

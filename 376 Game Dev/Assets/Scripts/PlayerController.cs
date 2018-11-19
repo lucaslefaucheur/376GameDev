@@ -35,7 +35,6 @@ public class PlayerController : NetworkBehaviour
 
     //item stuff
     private GameObject equipped;
-
     public bool grounded;
     //spawn point
     private bool respawn = false;
@@ -182,27 +181,35 @@ public class PlayerController : NetworkBehaviour
     //weapon attack function
     private void swordHit()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        RaycastHit2D[] hit = new RaycastHit2D[] { Physics2D.Raycast(transform.position, facing, 1.5f), Physics2D.Raycast(transform.position, facing + new Vector2(transform.right.x, transform.right.y), .75f), Physics2D.Raycast(transform.position, facing + new Vector2(-transform.right.x, -transform.right.y), .75f) };
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        Debug.DrawRay(transform.position, facing * Vector2FromAngle(90) * 1.5f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, facing *Vector2FromAngle(-90) * 1.5f, Color.green, 5.5f);
+        int temp = bigAttack();
+        if (hit != null)
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+            for (int i = 0; i < hit.Length; i++)
+            {
+                if (hit[i].collider != null && hit[i].collider.gameObject.layer.Equals(9))
+                {
+                    hit[i].collider.gameObject.GetComponent<Health>().TakeDamage(temp);
 
-            //to remove
-            Debug.Log("sword attack hit for: " + bigAttack());
+                    //to remove
+                    Debug.Log("sword attack hit for: " + temp);
+                }
+            }
         }
+    }
+
+    public Vector2 Vector2FromAngle(float a)
+    {
+        a *= Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(a), Mathf.Sin(a));
     }
 
     private void bowHit()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
-        {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
-
-            //to remove
-            Debug.Log("sword attack hit for: " + bigAttack());
-        }
+        GetComponent<bow>().weaponAttack(attackVar, attack);
     }
 
     private void shieldHit()
@@ -217,24 +224,36 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-
     private void staffHit()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
-        {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+        Collider2D [] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
+        Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.down * 2f, Color.green, 5.5f);
 
-            //to remove
-            Debug.Log("staff attack hit for: " + bigAttack());
-        }
-        else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
+        int temp = bigAttack();
+        if (hit != null)
         {
-            //heal
-            hit.collider.gameObject.GetComponent<PlayerController>().setHealth(bigAttack());
-            //to remove
-            Debug.Log("staff attack heal for: " + bigAttack());
+            for (int i = 0; i< hit.Length; i++)
+            {
 
+                if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
+                {
+                    hit[i].gameObject.GetComponent<Health>().TakeDamage(temp);
+
+                    //to remove
+                    Debug.Log("staff attack hit for: " + temp);
+                }
+                else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
+                {
+                    //heal
+                    hit[i].gameObject.GetComponent<PlayerController>().setHealth(temp);
+                    //to remove
+                    Debug.Log("staff attack heal for: " + temp);
+
+                }
+            }
         }
     }
 
@@ -265,10 +284,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (GetComponent<Sword>() != null)
             return (GetComponent<Sword>().weaponAttack(attackVar, attack));
-        else if (GetComponent<bow>() != null)
-            return (GetComponent<bow>().weaponAttack(attackVar, attack));
         else if (GetComponent<Staff>() != null)
-           return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+           return (GetComponent<Staff>().weaponAttack(attackVar, attack));
         else if (GetComponent<Shield>() != null)
             return (GetComponent<Sword>().weaponAttack(attackVar, attack));
         else
@@ -279,7 +296,17 @@ public class PlayerController : NetworkBehaviour
     public void unequip()
     {
         if (GetComponent<Sword>() != null)
+        {
             Destroy(gameObject.GetComponent<Sword>());
+            anim.SetBool("hasSword", false);
+        }
+        else if (GetComponent<bow>() != null)
+            Destroy(gameObject.GetComponent<bow>());
+        else if (GetComponent<Staff>() != null)
+            Destroy(gameObject.GetComponent<Staff>());
+        else if (GetComponent<Shield>() != null)
+            Destroy(gameObject.GetComponent<Shield>());
+
         Debug.Log("unequipped");
     }
 
@@ -417,6 +444,10 @@ public class PlayerController : NetworkBehaviour
     public void setHealth( int hp)
     {
         currentHealth += hp;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public int getAttack()
