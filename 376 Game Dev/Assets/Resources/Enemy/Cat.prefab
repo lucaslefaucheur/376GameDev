@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae048442e2eaee24cb9dd1b0da06a794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 40
-  currentHealth: 40
+  startingHealth: 10
+  currentHealth: 10
   healthBar: {fileID: 0}
 --- !u!114 &114498210834735756
 MonoBehaviour:
@@ -200,8 +200,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1064425115
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300006, guid: fd164f38e3d3d4ae9b97de4d751dd98e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
