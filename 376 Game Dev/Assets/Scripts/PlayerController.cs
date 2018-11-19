@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
     private int playerNumber;
 
     //Health 
-    private float maxHealth = 30f;
+    private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
@@ -40,7 +40,6 @@ public class PlayerController : NetworkBehaviour
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
-    private Vector3[] playerSpawnPoint = { new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
 
 
     private void Start()
@@ -147,15 +146,7 @@ public class PlayerController : NetworkBehaviour
 
         }
 
-        if (respawn)
-        {
-            transform.position = playerSpawnPoint[playerNumber - 1];
-            respawn = false;
-        }
-
      }
-
-
 
 
     /***********************************************************
@@ -170,7 +161,8 @@ public class PlayerController : NetworkBehaviour
     //attack function
     private void melee()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing , 1.5f);
+        Debug.DrawRay(transform.position, facing* 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
@@ -191,6 +183,7 @@ public class PlayerController : NetworkBehaviour
     private void swordHit()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
@@ -274,10 +267,10 @@ public class PlayerController : NetworkBehaviour
             return (GetComponent<Sword>().weaponAttack(attackVar, attack));
         else if (GetComponent<bow>() != null)
             return (GetComponent<bow>().weaponAttack(attackVar, attack));
-        //else if (GetComponent<Staff>() != null)
-        //   return (GetComponent<Sword>().weaponAttack(attackVar, attack));
-        //else if (GetComponent<Tank>() != null)
-        //    return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+        else if (GetComponent<Staff>() != null)
+           return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+        else if (GetComponent<Shield>() != null)
+            return (GetComponent<Sword>().weaponAttack(attackVar, attack));
         else
             return 0;
 
