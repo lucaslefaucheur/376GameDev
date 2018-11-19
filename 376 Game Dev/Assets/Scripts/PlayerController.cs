@@ -85,14 +85,26 @@ public class PlayerController : NetworkBehaviour
         }
 
         if (Input.GetButtonDown("Weapon"))
-        {
-            anim.SetTrigger("attacking");
+        {           
             if (GetComponent<Sword>() != null)
             {
-                weaponHit();
+                anim.SetTrigger("attacking");
+                swordHit();
+            }
+            else if (GetComponent<Staff>() != null)
+            {
+                staffHit();
+            }
+            else if (GetComponent<bow>() != null)
+            {
+                bowHit();
+            }
+            else if (GetComponent<Shield>() != null)
+            {
+                shieldHit();
             }
             else
-                Debug.Log("weapon attack");
+                Debug.Log("no weapon attached");
         }
 
 
@@ -105,23 +117,31 @@ public class PlayerController : NetworkBehaviour
                 {
                     Destroy(hit.collider.gameObject);
                     NetworkServer.UnSpawn(hit.collider.gameObject);
+                    unequip();
                     gameObject.AddComponent<Sword>();
+                    Debug.Log("has sword");
                     anim.SetBool("hasSword", true);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
                 {
-                    //gameObject.AddComponent<Bow>();
+                    unequip();
+                    gameObject.AddComponent<bow>();
+                    Debug.Log("has bow");
                 }
 
                 if (hit.collider.tag.Equals("Shield"))
                 {
-                    //gameObject.AddComponent<Shield>();
+                    unequip();
+                    gameObject.AddComponent<Shield>();
+                    Debug.Log("has shield");
                 }
 
                 if (hit.collider.tag.Equals("Staff"))
                 {
-                    //gameObject.AddComponent<Staff>();
+                    unequip();
+                    gameObject.AddComponent<Staff>();
+                    Debug.Log("has staff");
                 }
             }
 
@@ -168,7 +188,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     //weapon attack function
-    private void weaponHit()
+    private void swordHit()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
@@ -176,7 +196,52 @@ public class PlayerController : NetworkBehaviour
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
-            Debug.Log("melee attack hit for: " + bigAttack());
+            Debug.Log("sword attack hit for: " + bigAttack());
+        }
+    }
+
+    private void bowHit()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+
+            //to remove
+            Debug.Log("sword attack hit for: " + bigAttack());
+        }
+    }
+
+    private void shieldHit()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+
+            //to remove
+            Debug.Log("sword attack hit for: " + bigAttack());
+        }
+    }
+
+
+    private void staffHit()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
+
+            //to remove
+            Debug.Log("staff attack hit for: " + bigAttack());
+        }
+        else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
+        {
+            //heal
+            hit.collider.gameObject.GetComponent<PlayerController>().setHealth(bigAttack());
+            //to remove
+            Debug.Log("staff attack heal for: " + bigAttack());
+
         }
     }
 
@@ -205,7 +270,24 @@ public class PlayerController : NetworkBehaviour
     //to be used to cast a big attack
     public int bigAttack()
     {
-        return(GetComponent<Sword>().weaponAttack(attackVar, attack));
+        if (GetComponent<Sword>() != null)
+            return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+        else if (GetComponent<bow>() != null)
+            return (GetComponent<bow>().weaponAttack(attackVar, attack));
+        //else if (GetComponent<Staff>() != null)
+        //   return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+        //else if (GetComponent<Tank>() != null)
+        //    return (GetComponent<Sword>().weaponAttack(attackVar, attack));
+        else
+            return 0;
+
+    }
+
+    public void unequip()
+    {
+        if (GetComponent<Sword>() != null)
+            Destroy(gameObject.GetComponent<Sword>());
+        Debug.Log("unequipped");
     }
 
     //to move player + animations
@@ -337,6 +419,11 @@ public class PlayerController : NetworkBehaviour
     public float getHealth()
     {
         return currentHealth;
+    }
+
+    public void setHealth( int hp)
+    {
+        currentHealth += hp;
     }
 
     public int getAttack()

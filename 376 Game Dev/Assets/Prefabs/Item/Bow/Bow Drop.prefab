@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4574133918886878}
   - component: {fileID: 212213867742127996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapons_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,9 +37,9 @@ GameObject:
   - component: {fileID: 4919705074823562}
   - component: {fileID: 114626359202889334}
   - component: {fileID: 58454649980957796}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bow Drop
-  m_TagString: Untagged
+  m_TagString: Bow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
