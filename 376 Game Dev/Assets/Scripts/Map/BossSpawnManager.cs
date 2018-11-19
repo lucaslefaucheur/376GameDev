@@ -53,18 +53,19 @@ public class BossSpawnManager : NetworkBehaviour {
         }
         */
 
-        if (isServer && bossTemp && !loot)
+        if (isServer && bossTemp == null && !loot)
         {
             //instantiate a single random item
             int numOfPlayers = GameObject.FindGameObjectsWithTag("Player").Length;
-
+            
             for (int i = 0; i < numOfPlayers; i++)
             {
-                Debug.Log("Spawning Item");
                 GameObject itemPick = items[Random.Range(0, items.Count)];
                 GameObject itemDrop = Instantiate(itemPick, transform.position, Quaternion.identity);
                 NetworkServer.Spawn(itemDrop);
             }
+
+            loot = true;
         }
 	}
 }
