@@ -9,7 +9,8 @@ public class PlayerController : NetworkBehaviour
     public Camera cam;
 
     //variable set up
-    public float speed;
+    public float speedH = 5.0001f;
+    public float speedV = 5f;
     private Vector2 facing;
 
     //Player Number
@@ -298,9 +299,25 @@ public class PlayerController : NetworkBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Destroy(gameObject);
+            freezePlayer();
+            anim.SetBool("playerDeath", true);
+            //player disappear after 10 sec from death
+            Destroy(gameObject, 10f);
             Debug.Log("Dead!");
         }
+    }
+
+    //freeze player
+    public void freezePlayer()
+    {
+        speedH = 0;
+        speedV = 0;
+    }
+
+    public void unFreezePlayer()
+    {
+        speedH = 5.0001f;
+        speedV = 5f;
     }
 
     //to be used to cast an attack
@@ -329,8 +346,8 @@ public class PlayerController : NetworkBehaviour
     //to move player + animations
     private void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f; ;
-        float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f; ;
+        float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * speedH ;
+        float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * speedV ;
         if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
             anim.SetBool("moveSide", true);
