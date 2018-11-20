@@ -128,6 +128,7 @@ public class PlayerController : NetworkBehaviour
                     gameObject.AddComponent<Sword>();
                     Debug.Log("has sword");
                     anim.SetBool("hasSword", true);
+                    anim.SetLayerWeight (1, 1f);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
@@ -155,6 +156,8 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<Staff>();
                     Debug.Log("has staff");
+                    anim.SetBool("hasStaff", true);
+                    anim.SetLayerWeight (2, 1f);
                 }
             }
 
@@ -238,7 +241,7 @@ public class PlayerController : NetworkBehaviour
     {
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); 
+        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
         GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
         arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
         NetworkServer.Spawn(arrowSpawn);
