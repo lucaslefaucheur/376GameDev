@@ -11,13 +11,14 @@ public class fireController : MonoBehaviour {
     private float angle;
     private Vector2 centre;
     private Vector2 fireDirection;
+    Vector2 playerPosition;
 
 
     // Use this for initialization
     void Start () {
 
-        Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-        fireDirection = (playerPosition - transform.position).normalized;
+        playerPosition = gameObject.GetComponent<BearController>().getTarget();
+        fireDirection = (playerPosition - new Vector2 (transform.position.x, transform.position.y)).normalized;
 
         timer = Time.time + 8;
         freezeTimer = Time.time + 1;

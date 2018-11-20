@@ -63,6 +63,7 @@ public class BearController : NetworkBehaviour
             else{
                 if(Time.time > fireTimer)
                 Attack();
+                Target = null;
             }
 
         }
@@ -89,15 +90,36 @@ public class BearController : NetworkBehaviour
             
             if (hitColliders.Length > 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                int randomint = FindRandomTarget(hitColliders);
                 Target = hitColliders[randomint].transform;
             }
         }
     }
-    
+
+    public Vector2 getTarget()
+    {
+        return new Vector2(Target.transform.position.x, Target.transform.position.y);
+    }
+
+    private int FindRandomTarget(Collider2D[] hitList)
+    {
+        int targetnumber = -1;
+        int temp;
+        while (targetnumber < 0)
+        {
+            temp = Random.Range(0, hitList.Length);
+            if (hitList[temp].GetComponent<PlayerController>().getHealth() <= 0)
+            {
+                targetnumber = temp;
+            }
+        }
+        return targetnumber;
+    }
+
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
+
     void TakeDamage(int number) {
         Health -= number;
         if (Health <= 0) {
