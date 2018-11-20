@@ -37,6 +37,7 @@ public class PlayerController : NetworkBehaviour
     private GameObject equipped;
     public bool grounded;
     public GameObject arrow;
+    public GameObject bubble;
 
     //spawn point
     private bool respawn = false;
@@ -245,13 +246,15 @@ public class PlayerController : NetworkBehaviour
 
     private void shieldHit()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
-        {
-            //hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
-
-            //to remove
-        }
+        int temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
+        Debug.Log("radius = " + temp);
+        GameObject shieldBubble = Instantiate(bubble, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        shieldBubble.transform.SetParent(transform);
+        NetworkServer.Spawn(shieldBubble);
+        Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.down * 2f, Color.green, 5.5f);
     }
 
     private void staffHit()
