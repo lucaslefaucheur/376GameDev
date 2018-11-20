@@ -100,6 +100,7 @@ public class CatController : NetworkBehaviour
 
     public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
 
+    /*
     public void TakeDamage(float damage)
     {
         Health -= damage;
@@ -113,6 +114,7 @@ public class CatController : NetworkBehaviour
         pushbackdirection.Normalize();
         rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
     }
+    */
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)
