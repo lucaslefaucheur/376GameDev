@@ -126,7 +126,6 @@ public class WaveManager : NetworkBehaviour {
         if (nextWave + 1 > waves.Length - 1)
         {
             wavesCompleted = true;
-            GameObject.Find("Manager").GetComponent<MapManagerScript>().SpawnDoor();
             Debug.Log("WAVES COMPLETED");
         }
         else

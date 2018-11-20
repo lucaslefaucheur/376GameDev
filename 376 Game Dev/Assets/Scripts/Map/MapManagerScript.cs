@@ -30,7 +30,7 @@ public class MapManagerScript : NetworkBehaviour
     private int mapPicker;
 
     public GameObject chest;
-    private List<GameObject> items = new List<GameObject>();
+    public List<GameObject> items = new List<GameObject>();
 
     void Awake()
     {
@@ -53,7 +53,6 @@ public class MapManagerScript : NetworkBehaviour
         loadAllBoss();
         loadAllEnemyMap();
         loadAllEnemy();
-        loadAllWeapons();
     }
 	
 	// Update is called once per frame
@@ -100,10 +99,6 @@ public class MapManagerScript : NetworkBehaviour
             loadAllEnemy();
         }
 
-        if(items.Count == 0)
-        {
-            loadAllWeapons();
-        }
 		
 	}
 
@@ -158,18 +153,6 @@ public class MapManagerScript : NetworkBehaviour
         {
             GameObject enemyObject = (GameObject)obj;
             enemyList.Add(enemyObject);
-        }
-    }
-
-    private void loadAllWeapons()
-    {
-        Object[] objList = Resources.LoadAll("Item", typeof(Object));
-
-        // Add object to map list
-        foreach (Object obj in objList)
-        {
-            GameObject item = (GameObject)obj;
-            items.Add(item);
         }
     }
 
