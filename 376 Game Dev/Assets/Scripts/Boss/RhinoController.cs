@@ -56,7 +56,7 @@ public class RhinoController : NetworkBehaviour
             else
             {
                 Attack(distance);
-                Target == null;
+                Target = null;
             }
         }
         Orientation();
