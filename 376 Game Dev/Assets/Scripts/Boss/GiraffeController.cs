@@ -109,7 +109,7 @@ public class GiraffeController : NetworkBehaviour {
         while (targetnumber < 0)
         {
             temp = Random.Range(0, hitList.Length);
-            if (hitList[temp].GetComponent<PlayerController>().getHealth() <= 0)
+            if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
             {
                 targetnumber = temp;
             }

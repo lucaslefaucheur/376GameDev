@@ -300,7 +300,7 @@ public class PlayerController : NetworkBehaviour
         {
             currentHealth = 0;
             freezePlayer();
-            anim.SetBool("playerDeath", true);
+            //anim.SetBool("playerDeath", true);
             //player disappear after 10 sec from death
             Destroy(gameObject, 10f);
             Debug.Log("Dead!");
