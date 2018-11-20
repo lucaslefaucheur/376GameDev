@@ -67,7 +67,7 @@ public class MapManagerScript : NetworkBehaviour
 
             mapPicker = Random.Range(0, 5);
             Debug.Log(mapPicker);
-            if(mapPicker%5 != 0)
+            if(mapPicker%4 != 0)
             {
                 loadEnemyMap();
             }
