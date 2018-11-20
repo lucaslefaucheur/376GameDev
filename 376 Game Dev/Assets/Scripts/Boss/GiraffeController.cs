@@ -24,6 +24,7 @@ public class GiraffeController : NetworkBehaviour {
     
     private float counter;
     //public GameObject EnemyHitParticle;
+    private int attackCounter = 0;
 
     void Start()
     {
@@ -59,10 +60,16 @@ public class GiraffeController : NetworkBehaviour {
                 
             else if (distance > 1) {
                 Attack(distance);
+                attackCounter++;
             }
                 
             else {
                 Teleport();
+            }
+
+            if(attackCounter == 3)
+            {
+                Target = null;
             }
                 
         }
@@ -89,15 +96,30 @@ public class GiraffeController : NetworkBehaviour {
             
             if (hitColliders.Length > 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                int randomint = FindRandomTarget(hitColliders);
                 Target = hitColliders[randomint].transform;
             }
         }
     }
-    
+
+    private int FindRandomTarget(Collider2D[] hitList)
+    {
+        int targetnumber = -1;
+        int temp;
+        while (targetnumber < 0)
+        {
+            temp = Random.Range(0, hitList.Length);
+            if (hitList[temp].GetComponent<PlayerController>().getHealth() <= 0)
+            {
+                targetnumber = temp;
+            }
+        }
+        return targetnumber;
+    }
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
+
     void TakeDamage(int number) {
         Health -= number;
         if (Health <= 0) {
