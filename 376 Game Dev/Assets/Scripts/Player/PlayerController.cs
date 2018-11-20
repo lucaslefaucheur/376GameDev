@@ -194,7 +194,7 @@ public class PlayerController : NetworkBehaviour
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
 
         Vector2 startPos = transform.position; // umm, start position !
-        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + facing; // variable for calculated end position
+        Vector2 targetPos = (new Vector2(transform.position.x, transform.position.y) + facing); // variable for calculated end position
 
 
         float angle = Vector2.Angle(startPos, targetPos) + 90;
@@ -209,9 +209,9 @@ public class PlayerController : NetworkBehaviour
         // step through and find each target point
         for (int i = startAngle; i < finishAngle; i += inc) // Angle from forward
         {
-            targetPos = ((Quaternion.Euler(0, 0, i) * facing).normalized + transform.position);
+            targetPos = (Quaternion.Euler(0, 0, i) * facing).normalized * 1.5f + transform.position;
 
-            RaycastHit2D hit = Physics2D.Raycast(startPos, targetPos);
+            RaycastHit2D hit = Physics2D.Linecast(startPos, targetPos);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
             {
                 hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
