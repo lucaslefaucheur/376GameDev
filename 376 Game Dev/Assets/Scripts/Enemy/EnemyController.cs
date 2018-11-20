@@ -28,6 +28,8 @@ public class EnemyController : NetworkBehaviour {
 
     private Rigidbody2D rb;
 
+    private int attackCounter=0;
+
     void Start()
     {
         loc = transform;
@@ -63,6 +65,12 @@ public class EnemyController : NetworkBehaviour {
             }
             else {
                 Attack(distance);
+                attackCounter++;
+            }
+
+            if(attackCounter == 3)
+            {
+                Target = null;
             }
 
         }

@@ -63,6 +63,7 @@ public class CatController : NetworkBehaviour
             }
             else {
                 Attack();
+                Target = null;
             }
 
         }
