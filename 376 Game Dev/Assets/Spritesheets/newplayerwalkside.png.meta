@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 89444c5e1ee1db64f8446b6e98180361
+guid: b2e2b1bfa8299ff4f822add7af5f4d83
 TextureImporter:
   fileIDToRecycleName:
-    21300000: side swing_0
-    21300002: side swing_1
-    21300004: side swing_2
-    21300006: side swing_3
+    21300000: newplayerwalkside_0
+    21300002: newplayerwalkside_1
+    21300004: newplayerwalkside_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -88,7 +87,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: side swing_0
+      name: newplayerwalkside_0
       rect:
         serializedVersion: 2
         x: 0
@@ -102,13 +101,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d586b038874c9645a7bbdfc8488b0b0
+      spriteID: 4a214b04a308a1c4e908d5979031771b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: side swing_1
+      name: newplayerwalkside_1
       rect:
         serializedVersion: 2
         x: 0
@@ -122,13 +121,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c784d658b133ec647ab3c0fddd11d434
+      spriteID: 43a0b1245de8696408af5020292f461b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: side swing_2
+      name: newplayerwalkside_2
       rect:
         serializedVersion: 2
         x: 0
@@ -142,27 +141,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c5d7e7b29826ea468588f578082110c
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: side swing_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 200
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e13eded8ee77508449d12db7b1afe894
+      spriteID: ae0b40252759ce7458fa14a1b812eccd
       vertices: []
       indices: 
       edges: []
@@ -170,7 +149,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 58c762b35ccb64c409c952e1bbd1b0ad
+    spriteID: b6a2013ce262f444d8fbdcc8fc55c1e2
     vertices: []
     indices: 
     edges: []
