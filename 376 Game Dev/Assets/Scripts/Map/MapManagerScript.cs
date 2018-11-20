@@ -69,7 +69,8 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%5 != 0)
             {
-                loadEnemyMap();
+                //loadEnemyMap();
+                loadBossMap();
             }
             else
             {

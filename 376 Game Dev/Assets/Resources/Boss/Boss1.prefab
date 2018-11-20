@@ -72,11 +72,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4423328800328698}
   - component: {fileID: 212666665089819536}
-  - component: {fileID: 114722894549955466}
   - component: {fileID: 50065346529310354}
   - component: {fileID: 114174984308985420}
   - component: {fileID: 114203826869350034}
   - component: {fileID: 95836007104433060}
+  - component: {fileID: 114552846332890046}
   - component: {fileID: 114292555708849644}
   - component: {fileID: 58305903590938814}
   m_Layer: 9
@@ -274,7 +274,20 @@ MonoBehaviour:
   startingHealth: 100
   currentHealth: 100
   healthBar: {fileID: 224733182390496034}
-  deathFX: {fileID: 0}
+  deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+--- !u!114 &114552846332890046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1988242727864354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8798ab638000e49874c1c01c15faea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
+  fire: {fileID: 1683898205209182, guid: 8535b9c3130f7c94d95831ddffc3057f, type: 2}
 --- !u!114 &114618179960226424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -291,25 +304,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114722894549955466
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1988242727864354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bf92e58db3ba5144850f1585b4e7432, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossHp: 50
-  ASPD: 25
-  ATK2Spd: 8
-  bossHPObj: {fileID: 0}
-  player: {fileID: 1279971828661606, guid: 3bcdf269d41dbee4f91beec6133644c4, type: 2}
-  fireAttack: {fileID: 1137656978701404, guid: a603d58bc5399b44c939927a60b1fded, type: 2}
-  firePos: {fileID: 0}
-  flag: 1
 --- !u!114 &114960937890140414
 MonoBehaviour:
   m_ObjectHideFlags: 1
