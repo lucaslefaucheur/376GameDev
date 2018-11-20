@@ -189,31 +189,41 @@ public class PlayerController : NetworkBehaviour
     //weapon attack function
     private void swordHit()
     {
-        RaycastHit2D[] hit = new RaycastHit2D[] { Physics2D.Raycast(transform.position, facing, 1.5f), Physics2D.Raycast(transform.position, facing + new Vector2(transform.right.x, transform.right.y), .75f), Physics2D.Raycast(transform.position, facing + new Vector2(-transform.right.x, -transform.right.y), .75f) };
-        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        Debug.DrawRay(transform.position, facing * Vector2FromAngle(90) * 1.5f, Color.green, 5.5f);
-        Debug.DrawRay(transform.position, facing *Vector2FromAngle(-90) * 1.5f, Color.green, 5.5f);
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
-        if (hit != null)
-        {
-            for (int i = 0; i < hit.Length; i++)
-            {
-                if (hit[i].collider != null && hit[i].collider.gameObject.layer.Equals(9))
-                {
-                    hit[i].collider.gameObject.GetComponent<Health>().TakeDamage(temp);
 
-                    //to remove
-                    Debug.Log("sword attack hit for: " + temp);
-                }
+        Vector2 startPos = transform.position; // umm, start position !
+        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + facing; // variable for calculated end position
+
+
+        float angle = Vector2.Angle(startPos, targetPos) + 90;
+
+        int startAngle = (int)(-angle * 0.5); // half the angle to the Left of the forward
+        int finishAngle = (int)(angle * 0.5); // half the angle to the Right of the forward
+
+        // the gap between each ray (increment)
+        int inc = (int)(90 / 5);
+
+
+        // step through and find each target point
+        for (int i = startAngle; i < finishAngle; i += inc) // Angle from forward
+        {
+            targetPos = ((Quaternion.Euler(0, 0, i) * facing).normalized + transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(startPos, targetPos);
+            if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+            {
+                hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
+
+                //to remove
+                Debug.Log("sword attack hit for: " + temp);
             }
+
+
+            // to show ray just for testing
+            Debug.DrawLine(startPos, targetPos, Color.green, 5.5f);
         }
     }
 
-    public Vector2 Vector2FromAngle(float a)
-    {
-        a *= Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(a), Mathf.Sin(a));
-    }
 
     private void bowHit()
     {
