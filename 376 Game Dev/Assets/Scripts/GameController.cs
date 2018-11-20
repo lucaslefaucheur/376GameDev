@@ -57,7 +57,7 @@ public class GameController : NetworkBehaviour
         
     }
 
-
+    
     public void AddPlayer()
     {
         numOfPlayers = FindPlayerNumber();
@@ -81,7 +81,7 @@ public class GameController : NetworkBehaviour
 
     private bool InList(int n)
     {
-        playersList = GameObject.FindGameObjectsWithTag("Respawn");
+        playersList = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < playersList.Length; i++)
         {
             if (n == playersList[i].GetComponent<PlayerController>().getNumber())
@@ -90,6 +90,12 @@ public class GameController : NetworkBehaviour
             }
         }
         return false;
+    }
+
+    public int getPlayerCount()
+    {
+        playersList = GameObject.FindGameObjectsWithTag("Player");
+        return playersList.Length;
     }
 
     public int getNumOfPLayers()
