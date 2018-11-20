@@ -11,6 +11,7 @@ public class Health : NetworkBehaviour {
     public int currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
+    private Transform Target;
 
 
     void Awake()
@@ -30,14 +31,13 @@ public class Health : NetworkBehaviour {
      * Functions
      *
      ***********************************/
-  
-    
+
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
+
    public void TakeDamage(int damage) {
         currentHealth -= damage;
-       // healthBar.sizeDelta = new Vector2((currentHealth / startingHealth) * 100, healthBar.sizeDelta.y);
 
         if (currentHealth <= 0)
         {
@@ -45,8 +45,13 @@ public class Health : NetworkBehaviour {
             Instantiate(deathFX, transform.position, transform.rotation);
             Destroy(gameObject);
         }
-
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
+        // pushed back
+      /*  Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
+        pushbackdirection.Normalize();
+        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);*/
     }
 
     public void GainHealth(int heal)
