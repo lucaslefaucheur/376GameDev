@@ -6,7 +6,7 @@ public class bowProjectile : MonoBehaviour {
 
    
     Rigidbody2D mRigidBody2D;
-    Vector2 attack;
+    int temp;
     Quaternion rotation;
     Vector2 angle;
 
@@ -14,12 +14,26 @@ public class bowProjectile : MonoBehaviour {
     {
         mRigidBody2D = GetComponent<Rigidbody2D>();
         rotation = gameObject.transform.rotation;
-        angle = rotation * new Vector2(1,0);
-        mRigidBody2D.velocity = angle * 1;
+        angle = rotation * Vector2.up;
+        mRigidBody2D.velocity = angle * 5;
+
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D hit)
     {
+        if ( hit.collider.gameObject.layer.Equals(9))
+        {
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
+
+            //to remove
+            Debug.Log("sword attack hit for: " + temp);
+        }
         Destroy(gameObject);
     }
+
+    public void setTemp(int val)
+    {
+        temp = val;
+    }
+
 }

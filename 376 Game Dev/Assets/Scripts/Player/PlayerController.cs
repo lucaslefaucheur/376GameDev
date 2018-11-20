@@ -131,6 +131,8 @@ public class PlayerController : NetworkBehaviour
 
                 if (hit.collider.tag.Equals("Bow"))
                 {
+                    Destroy(hit.collider.gameObject);
+                    NetworkServer.UnSpawn(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<bow>();
                     Debug.Log("has bow");
@@ -138,6 +140,8 @@ public class PlayerController : NetworkBehaviour
 
                 if (hit.collider.tag.Equals("Shield"))
                 {
+                    Destroy(hit.collider.gameObject);
+                    NetworkServer.UnSpawn(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<Shield>();
                     Debug.Log("has shield");
@@ -145,6 +149,8 @@ public class PlayerController : NetworkBehaviour
 
                 if (hit.collider.tag.Equals("Staff"))
                 {
+                    Destroy(hit.collider.gameObject);
+                    NetworkServer.UnSpawn(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<Staff>();
                     Debug.Log("has staff");
@@ -229,9 +235,10 @@ public class PlayerController : NetworkBehaviour
     {
        
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
-        NetworkServer.Spawn(arrow);
+        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); 
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
+        NetworkServer.Spawn(arrowSpawn);
     }
 
     private void shieldHit()
