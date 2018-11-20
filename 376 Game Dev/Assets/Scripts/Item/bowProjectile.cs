@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class bowProjectile : MonoBehaviour {
 
-    private ItemAttack bow;
+   
+    Rigidbody2D mRigidBody2D;
+    Vector2 attack;
+    Quaternion rotation;
+    Vector2 angle;
 
-    void Start()
+    private void Start()
     {
-        GetComponent<Rigidbody2D>().AddForce(transform.up * 500);
-        bow = GetComponentInParent<ItemAttack>();
+        mRigidBody2D = GetComponent<Rigidbody2D>();
+        rotation = gameObject.transform.rotation;
+        angle = rotation * new Vector2(1,0);
+        mRigidBody2D.velocity = angle * 1;
     }
 
-    public int damage()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        return bow.damage();
+        Destroy(gameObject);
     }
 }

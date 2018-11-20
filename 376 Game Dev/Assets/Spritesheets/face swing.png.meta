@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: 8bba53a128e7da34e9f8da8df96cbdc8
+guid: 2c0eed10d0ed36c4da449e097b80b054
 TextureImporter:
   fileIDToRecycleName:
-    21300000: BossSpaceHolder0000_0
-    21300002: BossSpaceHolder0000_1
-    21300004: BossSpaceHolder0000_2
+    21300000: face swing_0
+    21300002: face swing_1
+    21300004: face swing_2
+    21300006: face swing_3
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -87,13 +88,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BossSpaceHolder0000_0
+      name: face swing_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 100
-        height: 130
+        width: 200
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -101,19 +102,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ec454de7ca34bac49be02539d515f0ed
+      spriteID: 76ffaf2889af665448c82bdca506af19
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BossSpaceHolder0000_1
+      name: face swing_1
       rect:
         serializedVersion: 2
-        x: 106
+        x: 200
         y: 0
-        width: 100
-        height: 130
+        width: 200
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,19 +122,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 34b06350f2bc3154fa5872e8386c301d
+      spriteID: 620414f3790a95e40971365ba1c3a71e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BossSpaceHolder0000_2
+      name: face swing_2
       rect:
         serializedVersion: 2
-        x: 213
+        x: 400
         y: 0
-        width: 100
-        height: 130
+        width: 200
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,7 +142,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33214b8cc0728ea4c800ed34a0a7f5bc
+      spriteID: b30c6fe48ecbe3b4399a9fe633ba02ef
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: face swing_3
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e50c3c12fd460c4468f693815459f142
       vertices: []
       indices: 
       edges: []
@@ -149,7 +170,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b1e422debb90d5d45a84007c61f1753b
+    spriteID: de431a23edc459145a17519bf05034a4
     vertices: []
     indices: 
     edges: []

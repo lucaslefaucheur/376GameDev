@@ -12,6 +12,8 @@ public class BossSpawnManager : NetworkBehaviour {
     private GameObject bossObject;
     private GameObject bossTemp;
 
+    bool loot = false;
+
     // Use this for initialization
     void Start () {
         //set a scale for the boss' health
@@ -28,7 +30,8 @@ public class BossSpawnManager : NetworkBehaviour {
             NetworkServer.Spawn(bossTemp);
 
         }
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -40,6 +43,12 @@ public class BossSpawnManager : NetworkBehaviour {
             Destroy(bossObject);
         }
         */
-		
+
+        if (isServer && bossTemp == null && !loot)
+        {
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().SpawnDoor();
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest();
+            loot = true;
+        }
 	}
 }

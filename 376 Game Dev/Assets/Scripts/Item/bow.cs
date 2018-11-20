@@ -3,8 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class bow : MonoBehaviour {
-    private void delete()
+    float weaponStr = 10f;
+    int durability;
+
+    private void Start()
     {
-        Destroy(gameObject);
+        durability = Random.Range(15, 25);
+        
+    }
+
+    public int weaponAttack(float attackVar, int attack)
+    {
+        weaponStr = Random.Range(10, 25);
+        durability--;
+        Debug.Log(durability);
+        if (durability == 0)
+        {
+            gameObject.GetComponent<PlayerController>().unequip();
+        }
+        return (int)Mathf.Floor((attack + weaponStr) * (1 + attackVar));
+
+
     }
 }

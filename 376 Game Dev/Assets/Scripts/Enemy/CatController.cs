@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class CatController : NetworkBehaviour
 {
@@ -18,12 +19,14 @@ public class CatController : NetworkBehaviour
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
     private float counter = 5.0f;
+    private float counter2 = 0.0f;
 
     private Vector2 InitialPosition;
     private Vector2 direction;
-    public float Health = 10; // TODO: put it on the network 
 
     private float PatrolSpeed, FollowSpeed;
+
+    private Rigidbody2D rb;
 
     void Start()
     {
@@ -40,6 +43,8 @@ public class CatController : NetworkBehaviour
         FollowSpeed = 1;
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -52,7 +57,14 @@ public class CatController : NetworkBehaviour
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            Follow();
+            if (distance > 1.2) {
+                counter2 = 0;
+                Follow();
+            }
+            else {
+                Attack();
+            }
+
         }
         Orientation();
     }
@@ -86,19 +98,30 @@ public class CatController : NetworkBehaviour
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
 
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+
+    /*
     public void TakeDamage(float damage)
     {
         Health -= damage;
         if (Health <= 0)
             Destroy(gameObject);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
+
+        // pushed back
+        Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
+        pushbackdirection.Normalize();
+        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
     }
+    */
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+
         }
     }
 
@@ -176,6 +199,22 @@ public class CatController : NetworkBehaviour
             transform.position = direction;
 
             counter -= Time.deltaTime;
+        }
+    }
+
+    /* Attack: enemy cause damage every second
+     ****************************************/
+
+    void Attack()
+    {
+        if (counter2 > 0)
+        {
+            counter2 -= Time.deltaTime;
+        }
+        else
+        {
+            Target.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            counter2 = 1.0f;
         }
     }
 

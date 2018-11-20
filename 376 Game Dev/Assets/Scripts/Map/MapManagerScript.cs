@@ -8,6 +8,7 @@ public class MapManagerScript : NetworkBehaviour
 
     public static MapManagerScript instance = null;
     public GameObject initialMapPrefab;
+    public GameObject doorPrefab;
     private GameObject currentMap;
     private GameObject[] playerList;
 
@@ -27,6 +28,9 @@ public class MapManagerScript : NetworkBehaviour
     private bool hasMap = true;
     private bool start = true;
     private int mapPicker;
+
+    public GameObject chest;
+    public List<GameObject> items = new List<GameObject>();
 
     void Awake()
     {
@@ -56,7 +60,6 @@ public class MapManagerScript : NetworkBehaviour
 
         if (start)
         {
-            playerList = GameObject.FindGameObjectsWithTag("Player");
             start = false;
         }
 
@@ -66,15 +69,11 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%5 != 0)
             {
-                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadEnemyMap();
-                notifySpawn();
             }
             else
             {
-                playerList = GameObject.FindGameObjectsWithTag("Player");
                 loadBossMap();
-                notifySpawn();
             }
 
             hasMap = true;
@@ -99,6 +98,7 @@ public class MapManagerScript : NetworkBehaviour
         {
             loadAllEnemy();
         }
+
 		
 	}
 
@@ -214,6 +214,34 @@ public class MapManagerScript : NetworkBehaviour
         for(int i = 0; i<playerList.Length; i++)
         {
             playerList[i].GetComponent<PlayerController>().setRespawn();
+        }
+    }
+
+    public void SpawnDoor()
+    {
+        if (isServer)
+        {
+            GameObject door = Instantiate(doorPrefab, new Vector3(3.6f, 0.1f, -0.5f), Quaternion.identity);
+            NetworkServer.Spawn(door);
+        }
+    }
+
+    public void spawnChest()
+    {
+        if (isServer)
+        {
+            GameObject spawnedChest = Instantiate(chest, new Vector3(3.6f, -5f, -1f), Quaternion.identity);
+            NetworkServer.Spawn(spawnedChest);
+        }
+    }
+
+    public void spawnWeapon()
+    {
+        if (isServer)
+        {
+            GameObject itemPick = items[Random.Range(0, items.Count)];
+            GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
+            NetworkServer.Spawn(itemDrop);
         }
     }
 

@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
     private int playerNumber;
 
     //Health 
-    private float maxHealth = 30f;
+    private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
@@ -35,12 +35,13 @@ public class PlayerController : NetworkBehaviour
 
     //item stuff
     private GameObject equipped;
-
     public bool grounded;
+    public GameObject arrow;
+
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
-    private Vector3[] playerSpawnPoint = { new Vector3(-6.0f, -3.0f, 0.0f), new Vector3(-7.0f, -5.0f, 0.0f), new Vector3(-6.0f, -5.0f, 0.0f), new Vector3(-7.0f, -3.0f, 0.0f) };
+
 
     private void Start()
     {
@@ -84,14 +85,26 @@ public class PlayerController : NetworkBehaviour
         }
 
         if (Input.GetButtonDown("Weapon"))
-        {
-            anim.SetTrigger("attacking");
+        {           
             if (GetComponent<Sword>() != null)
             {
-                weaponHit();
+                anim.SetTrigger("attacking");
+                swordHit();
+            }
+            else if (GetComponent<Staff>() != null)
+            {
+                staffHit();
+            }
+            else if (GetComponent<bow>() != null)
+            {
+                bowHit();
+            }
+            else if (GetComponent<Shield>() != null)
+            {
+                shieldHit();
             }
             else
-                Debug.Log("weapon attack");
+                Debug.Log("no weapon attached");
         }
 
 
@@ -100,41 +113,47 @@ public class PlayerController : NetworkBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
             {
+                if (hit.collider.tag.Equals("chest"))
+                {
+                    Destroy(hit.collider.gameObject);
+                    GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+                }
+
                 if (hit.collider.tag.Equals("Sword"))
                 {
                     Destroy(hit.collider.gameObject);
                     NetworkServer.UnSpawn(hit.collider.gameObject);
+                    unequip();
                     gameObject.AddComponent<Sword>();
+                    Debug.Log("has sword");
                     anim.SetBool("hasSword", true);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
                 {
-                    //gameObject.AddComponent<Bow>();
+                    unequip();
+                    gameObject.AddComponent<bow>();
+                    Debug.Log("has bow");
                 }
 
                 if (hit.collider.tag.Equals("Shield"))
                 {
-                    //gameObject.AddComponent<Shield>();
+                    unequip();
+                    gameObject.AddComponent<Shield>();
+                    Debug.Log("has shield");
                 }
 
                 if (hit.collider.tag.Equals("Staff"))
                 {
-                    //gameObject.AddComponent<Staff>();
+                    unequip();
+                    gameObject.AddComponent<Staff>();
+                    Debug.Log("has staff");
                 }
             }
 
         }
 
-        if (respawn)
-        {
-            transform.position = playerSpawnPoint[playerNumber - 1];
-            respawn = false;
-        }
-
      }
-
-
 
 
     /***********************************************************
@@ -149,17 +168,18 @@ public class PlayerController : NetworkBehaviour
     //attack function
     private void melee()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing , 1.5f);
+        Debug.DrawRay(transform.position, facing* 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
-            hit.collider.gameObject.GetComponent<RhinoController>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -167,15 +187,94 @@ public class PlayerController : NetworkBehaviour
     }
 
     //weapon attack function
-    private void weaponHit()
+    private void swordHit()
+    {
+        int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
+
+        Vector2 startPos = transform.position; // umm, start position !
+        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + facing; // variable for calculated end position
+
+
+        float angle = Vector2.Angle(startPos, targetPos) + 90;
+
+        int startAngle = (int)(-angle * 0.5); // half the angle to the Left of the forward
+        int finishAngle = (int)(angle * 0.5); // half the angle to the Right of the forward
+
+        // the gap between each ray (increment)
+        int inc = (int)(90 / 5);
+
+
+        // step through and find each target point
+        for (int i = startAngle; i < finishAngle; i += inc) // Angle from forward
+        {
+            targetPos = ((Quaternion.Euler(0, 0, i) * facing).normalized + transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(startPos, targetPos);
+            if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
+            {
+                hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
+
+                //to remove
+                Debug.Log("sword attack hit for: " + temp);
+            }
+
+
+            // to show ray just for testing
+            Debug.DrawLine(startPos, targetPos, Color.green, 5.5f);
+        }
+    }
+
+
+    private void bowHit()
+    {
+       
+        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
+        NetworkServer.Spawn(arrow);
+    }
+
+    private void shieldHit()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(bigAttack());
+            //hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
 
             //to remove
-            Debug.Log("melee attack hit for: " + bigAttack());
+        }
+    }
+
+    private void staffHit()
+    {
+        Collider2D [] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
+        Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.down * 2f, Color.green, 5.5f);
+
+        int temp = GetComponent<Staff>().weaponAttack(attackVar, attack); ;
+        if (hit != null)
+        {
+            for (int i = 0; i< hit.Length; i++)
+            {
+
+                if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
+                {
+                    hit[i].gameObject.GetComponent<Health>().TakeDamage(temp);
+
+                    //to remove
+                    Debug.Log("staff attack hit for: " + temp);
+                }
+                else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
+                {
+                    //heal
+                    hit[i].gameObject.GetComponent<PlayerController>().setHealth(temp);
+                    //to remove
+                    Debug.Log("staff attack heal for: " + temp);
+
+                }
+            }
         }
     }
 
@@ -201,10 +300,21 @@ public class PlayerController : NetworkBehaviour
         return (int)Mathf.Floor(attack * (1 + attackVar));
     }
 
-    //to be used to cast a big attack
-    public int bigAttack()
+    public void unequip()
     {
-        return(GetComponent<Sword>().weaponAttack(attackVar, attack));
+        if (GetComponent<Sword>() != null)
+        {
+            Destroy(gameObject.GetComponent<Sword>());
+            anim.SetBool("hasSword", false);
+        }
+        else if (GetComponent<bow>() != null)
+            Destroy(gameObject.GetComponent<bow>());
+        else if (GetComponent<Staff>() != null)
+            Destroy(gameObject.GetComponent<Staff>());
+        else if (GetComponent<Shield>() != null)
+            Destroy(gameObject.GetComponent<Shield>());
+
+        Debug.Log("unequipped");
     }
 
     //to move player + animations
@@ -260,24 +370,18 @@ public class PlayerController : NetworkBehaviour
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
 
-        /*
-        if (Mathf.Abs(transform.position.x) > 9.8f)
-        {
-            playerRB.transform.Translate(new Vector3(-moveHorizontal, 0));
-        }
-        if (Mathf.Abs(transform.position.y) > 5.8f)
-        {
-            playerRB.transform.Translate(new Vector3(0, -moveVertical));
-        }
-        */
-
     }
 
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //If contact with RhinoBoss
-        if (collision.gameObject.tag == "RhinoBoss")
+
+        if (collision.gameObject.tag == "crystal") {
+            Debug.Log("Got a crystal");
+            Destroy(collision.gameObject);
+        }
+            //If contact with RhinoBoss
+            if (collision.gameObject.tag == "RhinoBoss")
         {
             if (collision.gameObject.transform.position.x <= transform.position.x)
             {
@@ -338,6 +442,15 @@ public class PlayerController : NetworkBehaviour
         return currentHealth;
     }
 
+    public void setHealth( int hp)
+    {
+        currentHealth += hp;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
     public int getAttack()
     {
         return attack;
@@ -351,6 +464,11 @@ public class PlayerController : NetworkBehaviour
     public void setAttack (float attack)
     {
         attackVar = attack;
+    }
+
+    public int getNumber()
+    {
+        return playerNumber;
     }
 
     /***********************************************************

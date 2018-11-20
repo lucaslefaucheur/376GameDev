@@ -9,6 +9,11 @@ TagManager:
   - fire
   - boss
   - RhinoBoss
+  - Bow
+  - Staff
+  - Shield
+  - chest
+  - crystal
   layers:
   - Default
   - TransparentFX

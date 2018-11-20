@@ -16,7 +16,6 @@ public class RhinoController : NetworkBehaviour
 
     private Vector2 InitialPosition;
     private Vector2 direction;
-    int Health = 50;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
     public bool knockedBack;
@@ -85,19 +84,6 @@ public class RhinoController : NetworkBehaviour
                 int randomint = Random.Range(0, hitColliders.Length);
                 Target = hitColliders[randomint].transform;
             }
-        }
-    }
-
-    /* TakeDamage: substracts a number to the enemy's health
-     ******************************************************/
-
-    public void TakeDamage(int number)
-    {
-        Debug.Log("Boss health is now at : " + Health);
-        Health -= number;
-        if (Health <= 0)
-        {
-            Destroy(gameObject);
         }
     }
 
