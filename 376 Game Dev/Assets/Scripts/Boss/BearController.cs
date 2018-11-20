@@ -105,7 +105,7 @@ public class BearController : NetworkBehaviour
     {
         int targetnumber = -1;
         int temp;
-        while (targetnumber < 0)
+        while (targetnumber < 0 && hitList.Length > 0)
         {
             temp = Random.Range(0, hitList.Length);
             if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
