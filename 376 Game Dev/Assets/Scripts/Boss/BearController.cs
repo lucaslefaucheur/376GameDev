@@ -210,7 +210,8 @@ public class BearController : NetworkBehaviour
     {
         for(int i = 0; i<7; i++)
         {
-            Instantiate(fire, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+            GameObject insFire = Instantiate(fire, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+            NetworkServer.Spawn(insFire);
             yield return new WaitForSeconds(0.8f);
         }
         WalkSpeed = 2;
