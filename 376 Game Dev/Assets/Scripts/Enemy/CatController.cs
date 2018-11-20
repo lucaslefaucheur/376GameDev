@@ -213,7 +213,7 @@ public class CatController : NetworkBehaviour
         }
         else
         {
-            Target.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            Target.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
             counter2 = 1.0f;
         }
     }

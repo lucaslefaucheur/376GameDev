@@ -122,7 +122,7 @@ public class EnemyController : NetworkBehaviour {
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
 
             // changes direction if it touches the player
             front = -1;

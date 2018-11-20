@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SphereController : MonoBehaviour {
+    public int damage;
 
     void Update()
     {
@@ -14,7 +15,7 @@ public class SphereController : MonoBehaviour {
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
         }
     }
 }

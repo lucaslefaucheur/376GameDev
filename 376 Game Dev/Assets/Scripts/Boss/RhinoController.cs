@@ -167,7 +167,7 @@ public class RhinoController : NetworkBehaviour
         if (other.gameObject.layer.Equals(8))
         {
             Debug.Log("Collision with player");
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(1);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
         }
     }
 

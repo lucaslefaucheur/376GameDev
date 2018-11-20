@@ -69,7 +69,7 @@ public class GameController : NetworkBehaviour
         return numOfPlayers;
     }
 
-    private int getLevel()
+    public int getLevel()
     {
         return level;
     }
