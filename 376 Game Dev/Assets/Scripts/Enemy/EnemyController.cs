@@ -16,7 +16,7 @@ public class EnemyController : NetworkBehaviour {
     //variables
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
-    private int front = 1; 
+    private int front = 1;
 
     private bool test1, test2 = false;
     private float counter = 2.0f;
@@ -25,6 +25,8 @@ public class EnemyController : NetworkBehaviour {
     private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
+
+    private Rigidbody2D rb;
 
     void Start()
     {
@@ -43,26 +45,26 @@ public class EnemyController : NetworkBehaviour {
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
     {
         SearchForTarget();
-        if (Target == null) 
+        if (Target == null)
         {
             Patrol();
         }
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2.0f) {
+            if (distance > 2.5f) {
                 Follow();
             }
             else {
-                print("-----------------------attacks");
                 Attack(distance);
             }
-                
+
         }
         Orientation();
     }
@@ -72,19 +74,19 @@ public class EnemyController : NetworkBehaviour {
      * Functions
      *
      ***********************************/
-    
+
     /* SearchForTarget: looks for a player in the FollowRange
      *******************************************************/
-    
+
     void SearchForTarget()
     {
         if (!isServer)
             return;
-            
+
         if (Target == null)
         {
             Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
-            
+
             if (hitColliders.Length > 0)
             {
                 int randomint = Random.Range(0, hitColliders.Length);
@@ -93,17 +95,38 @@ public class EnemyController : NetworkBehaviour {
         }
     }
 
+    /* TakeDamage: substracts a number to the enemy's health
+     ******************************************************/
+
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+
+    public void TakeDamage(float damage)
+    {
+        Health -= damage;
+        if (Health <= 0)
+            Destroy(gameObject);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
+
+        // pushed back
+        Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
+        pushbackdirection.Normalize();
+        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
+
+    }
+
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)
-      {
-          if (other.gameObject.layer.Equals(8))
-          {
-              other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
-          }
-      }
+    {
+        if (other.gameObject.layer.Equals(8))
+        {
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
 
-      /* Orientation: determines which sprite to use
-       ********************************************/
+            // changes direction if it touches the player
+            front = -1;
+            test1 = true;
+        }
+    }
 
     void Orientation()
     {
@@ -151,14 +174,14 @@ public class EnemyController : NetworkBehaviour {
     /* Patrol: enemy walks towards random move spots
      **********************************************/
 
-    void Patrol() 
+    void Patrol()
     {
         // direction of the patrol: towards the 'move spot'
         direction = Vector2.MoveTowards(transform.position, moveSpot.position, PatrolSpeed * Time.deltaTime);
         transform.position = direction;
 
         // if the enemy reaches the 'move spot'
-        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f) 
+        if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f)
         {
             // create a new random 'move spot'
             moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
@@ -167,7 +190,7 @@ public class EnemyController : NetworkBehaviour {
 
     /* Follow: enemy follows a player
      ********************************/
-    
+
     void Follow()
     {
         if (Target != null && isServer)
@@ -180,10 +203,10 @@ public class EnemyController : NetworkBehaviour {
 
     /* Attack: enemy attacks a player
      *******************************/
-    
+
     void Attack(float distance)
     {
-        if (!test2) 
+        if (!test2)
         {
             // direction of the attack: towards the position of the player
             direction.x = Target.transform.position.x - transform.position.x;
@@ -191,7 +214,7 @@ public class EnemyController : NetworkBehaviour {
             direction.Normalize();
 
             // enemy moves towards the player
-            if (distance >= 1.9)
+            if (distance >= 2.4)
             {
                 front = 1;
                 if (test1)
@@ -201,26 +224,19 @@ public class EnemyController : NetworkBehaviour {
                 }
             }
 
-            // enemy moves away from the player
-            if (distance <= 1)
-            {
-                front = -1;
-                test1 = true;
-            }
-            
             transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
         }
-        else 
+        else
         {
             counter -= Time.deltaTime; // counter between every attacks
-            if (counter <= 0) 
+            if (counter <= 0)
             {
                 test1 = false;
                 test2 = false;
             }
         }
     }
-    
+
     /***********************************
      *
      * Network
