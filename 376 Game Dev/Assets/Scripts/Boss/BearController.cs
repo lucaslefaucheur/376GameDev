@@ -98,9 +98,9 @@ public class BearController : NetworkBehaviour
         }
     }
 
-    public Vector2 getTarget()
+    public Vector3 getTarget()
     {
-        return new Vector2(Target.transform.position.x, Target.transform.position.y);
+        return Target.transform.position;
     }
 
     private int FindRandomTarget(Collider2D[] hitList)
