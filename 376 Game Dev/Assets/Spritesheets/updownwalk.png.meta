@@ -1,11 +1,13 @@
 fileFormatVersion: 2
-guid: 89444c5e1ee1db64f8446b6e98180361
+guid: 88b358f66deba0c4f9106706cac29d43
 TextureImporter:
   fileIDToRecycleName:
-    21300000: side swing_0
-    21300002: side swing_1
-    21300004: side swing_2
-    21300006: side swing_3
+    21300000: updownwalk_0
+    21300002: updownwalk_1
+    21300004: updownwalk_2
+    21300006: updownwalk_3
+    21300008: updownwalk_4
+    21300010: updownwalk_5
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -88,7 +90,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: side swing_0
+      name: updownwalk_0
       rect:
         serializedVersion: 2
         x: 0
@@ -102,13 +104,33 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d586b038874c9645a7bbdfc8488b0b0
+      spriteID: d8c554b997ccb47409ad6f148d7942d1
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: side swing_1
+      name: updownwalk_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 800
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8884a4956831dff408f8b2a5e57d13f4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: updownwalk_2
       rect:
         serializedVersion: 2
         x: 0
@@ -122,13 +144,33 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c784d658b133ec647ab3c0fddd11d434
+      spriteID: 34cb6d4ba495c0143a1972d06c76a564
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: side swing_2
+      name: updownwalk_3
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 600
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be1709001d439624a84e12e2759a0f85
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: updownwalk_4
       rect:
         serializedVersion: 2
         x: 0
@@ -142,17 +184,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c5d7e7b29826ea468588f578082110c
+      spriteID: 566480788aa6efc4990759e3b7056912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: side swing_3
+      name: updownwalk_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 200
+        x: 200
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -162,7 +204,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e13eded8ee77508449d12db7b1afe894
+      spriteID: 4fe53cf33cd108f43bf286557251fd80
       vertices: []
       indices: 
       edges: []
@@ -170,7 +212,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 58c762b35ccb64c409c952e1bbd1b0ad
+    spriteID: 5e2f9629e72bd5f4a815f9aab91aef72
     vertices: []
     indices: 
     edges: []

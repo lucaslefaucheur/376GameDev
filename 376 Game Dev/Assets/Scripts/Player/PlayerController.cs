@@ -15,7 +15,7 @@ public class PlayerController : NetworkBehaviour
     //Player Number
     private int playerNumber;
 
-    //Health 
+    //Health
     private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
@@ -77,7 +77,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         Move();
-        
+
         if (Input.GetButtonDown("Melee"))
         {
             anim.SetTrigger("attacking");
@@ -85,7 +85,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         if (Input.GetButtonDown("Weapon"))
-        {           
+        {
             if (GetComponent<Sword>() != null)
             {
                 anim.SetTrigger("attacking");
@@ -111,7 +111,7 @@ public class PlayerController : NetworkBehaviour
         if (Input.GetButtonDown("Pickup"))
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
+            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
             {
                 if (hit.collider.tag.Equals("chest"))
                 {
@@ -157,12 +157,12 @@ public class PlayerController : NetworkBehaviour
 
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Functions
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
 
     //attack function
@@ -173,6 +173,7 @@ public class PlayerController : NetworkBehaviour
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -180,6 +181,7 @@ public class PlayerController : NetworkBehaviour
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
+            hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -227,7 +229,7 @@ public class PlayerController : NetworkBehaviour
 
     private void bowHit()
     {
-       
+
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
         GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
@@ -429,12 +431,12 @@ public class PlayerController : NetworkBehaviour
     }
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Getters and Setters
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
 
     public float getHealth()
@@ -472,12 +474,12 @@ public class PlayerController : NetworkBehaviour
     }
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Network Methods
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
 
 
@@ -495,7 +497,7 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc]
     void RpcSendFlipState(bool state)
     {
-        // skip this function on the LocalPlayer 
+        // skip this function on the LocalPlayer
         // because he is the one who originally invoked this
         if (isLocalPlayer) return;
 
@@ -505,12 +507,12 @@ public class PlayerController : NetworkBehaviour
 
 
     /***********************************************************
-    * 
-    *  Cooroutines 
-    * 
-    * 
-    * 
-    * 
+    *
+    *  Cooroutines
+    *
+    *
+    *
+    *
     * ********************************************************/
 
 

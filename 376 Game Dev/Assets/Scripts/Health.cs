@@ -25,6 +25,7 @@ public class Health : NetworkBehaviour {
 
     }
 
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
 
     /***********************************
      *
@@ -36,7 +37,7 @@ public class Health : NetworkBehaviour {
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
 
-   public void TakeDamage(int damage) {
+    public void TakeDamage(int damage) {
         currentHealth -= damage;
 
         if (currentHealth <= 0)
@@ -48,10 +49,6 @@ public class Health : NetworkBehaviour {
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
-        // pushed back
-      /*  Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
-        pushbackdirection.Normalize();
-        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);*/
     }
 
     public void GainHealth(int heal)
