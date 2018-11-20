@@ -386,7 +386,8 @@ public class PlayerController : NetworkBehaviour
     {
 
         if (collision.gameObject.tag == "crystal") {
-            Debug.Log("Got a crystal");
+            GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
+            Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
             Destroy(collision.gameObject);
         }
             //If contact with RhinoBoss
