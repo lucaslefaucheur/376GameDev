@@ -56,7 +56,6 @@ public class RhinoController : NetworkBehaviour
             else
             {
                 Attack(distance);
-                Target = null;
             }
         }
         Orientation();
@@ -83,7 +82,10 @@ public class RhinoController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = FindRandomTarget(hitColliders);
-                Target = hitColliders[randomint].transform;
+                if (randomint >= 0)
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
@@ -92,12 +94,17 @@ public class RhinoController : NetworkBehaviour
     {
         int targetnumber = -1;
         int temp;
-        while (targetnumber < 0 && hitList.Length > 0)
+
+        temp = Random.Range(0, hitList.Length);
+        for (int i = 0; i < hitList.Length; i++)
         {
-            temp = Random.Range(0, hitList.Length);
             if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
             {
-                targetnumber = temp;
+                return temp;
+            }
+            else
+            {
+                temp = (temp + 1) % hitList.Length;
             }
         }
         return targetnumber;
@@ -175,6 +182,7 @@ public class RhinoController : NetworkBehaviour
         direction.Normalize();
         transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
         counter = 0.2f;
+        Target = null;
     }
 
     //Colliding with the player will cause damage to the player

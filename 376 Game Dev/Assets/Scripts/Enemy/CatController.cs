@@ -63,7 +63,6 @@ public class CatController : NetworkBehaviour
             }
             else {
                 Attack();
-                Target = null;
             }
 
         }
@@ -91,7 +90,10 @@ public class CatController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = FindRandomTarget(hitColliders);
-                Target = hitColliders[randomint].transform;
+                if(randomint >= 0)
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
@@ -100,12 +102,17 @@ public class CatController : NetworkBehaviour
     {
         int targetnumber = -1;
         int temp;
-        while (targetnumber < 0 && hitList.Length > 0)
+
+        temp = Random.Range(0, hitList.Length);
+        for(int i = 0; i < hitList.Length; i++)
         {
-            temp = Random.Range(0, hitList.Length);
             if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
             {
-                targetnumber = temp;
+                return temp;
+            }
+            else
+            {
+                temp = (temp + 1) % hitList.Length; 
             }
         }
         return targetnumber;
@@ -220,6 +227,7 @@ public class CatController : NetworkBehaviour
             Target.gameObject.GetComponent<PlayerController>().TakeDamage(5);
             counter2 = 1.0f;
         }
+        Target = null;
     }
 
     /***********************************

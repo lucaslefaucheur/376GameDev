@@ -84,7 +84,10 @@ public class LeopardController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = FindRandomTarget(hitColliders);
-                Target = hitColliders[randomint].transform;
+                if (randomint >= 0)
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
@@ -93,12 +96,17 @@ public class LeopardController : NetworkBehaviour
     {
         int targetnumber = -1;
         int temp;
-        while (targetnumber < 0 && hitList.Length > 0)
+
+        temp = Random.Range(0, hitList.Length);
+        for (int i = 0; i < hitList.Length; i++)
         {
-            temp = Random.Range(0, hitList.Length);
             if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
             {
-                targetnumber = temp;
+                return temp;
+            }
+            else
+            {
+                temp = (temp + 1) % hitList.Length;
             }
         }
         return targetnumber;
