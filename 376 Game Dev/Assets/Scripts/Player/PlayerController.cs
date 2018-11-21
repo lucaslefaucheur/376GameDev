@@ -94,14 +94,17 @@ public class PlayerController : NetworkBehaviour
             }
             else if (GetComponent<Staff>() != null)
             {
-                staffHit();
-            }
+               anim.SetTrigger("attacking");
+               staffHit();
+             }
             else if (GetComponent<bow>() != null)
             {
+                anim.SetTrigger("attacking");
                 bowHit();
             }
             else if (GetComponent<Shield>() != null)
             {
+                anim.SetTrigger("attacking");
                 shieldHit();
             }
             else
@@ -147,6 +150,8 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<Shield>();
                     Debug.Log("has shield");
+                    anim.SetBool("hasShield", true);
+                    anim.SetLayerWeight (3, 1f);
                 }
 
                 if (hit.collider.tag.Equals("Staff"))
@@ -183,7 +188,7 @@ public class PlayerController : NetworkBehaviour
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
-            hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
+            //hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -191,7 +196,6 @@ public class PlayerController : NetworkBehaviour
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
             hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
-            hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
