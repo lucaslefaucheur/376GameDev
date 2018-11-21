@@ -65,8 +65,26 @@ public class PlayerController : NetworkBehaviour
     //On local player start only
     public override void OnStartLocalPlayer()
     {
+      NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
 
-    }
+      netAnim.SetParameterAutoSend(0, true);
+      netAnim.SetParameterAutoSend(1, true);
+      netAnim.SetParameterAutoSend(2, true);
+      netAnim.SetParameterAutoSend(3, true);
+      netAnim.SetParameterAutoSend(4, true);
+      netAnim.SetParameterAutoSend(5, true);
+  }
+
+  public override void PreStartClient()
+  {
+      NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
+      netAnim.SetParameterAutoSend(0, true);
+      netAnim.SetParameterAutoSend(1, true);
+      netAnim.SetParameterAutoSend(2, true);
+      netAnim.SetParameterAutoSend(3, true);
+      netAnim.SetParameterAutoSend(4, true);
+      netAnim.SetParameterAutoSend(5, true);
+  }
 
     void Update()
     {
