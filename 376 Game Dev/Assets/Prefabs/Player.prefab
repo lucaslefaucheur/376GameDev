@@ -352,6 +352,7 @@ MonoBehaviour:
   healthBar: {fileID: 224953432941844594}
   grounded: 0
   arrow: {fileID: 1703805394234736, guid: a05c7d6fbd7fdde448d0ca956c69eb06, type: 2}
+  bubble: {fileID: 1258235230722250, guid: 76cea1a00b4314648a9067a117aa3a7a, type: 2}
 --- !u!114 &114730287807954692
 MonoBehaviour:
   m_ObjectHideFlags: 1
