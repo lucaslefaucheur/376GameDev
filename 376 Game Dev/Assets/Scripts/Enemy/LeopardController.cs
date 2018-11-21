@@ -196,9 +196,13 @@ public class LeopardController : NetworkBehaviour
             // if the enemy reaches the 'move spot'
             if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f || counter <= 0)
             {
-                GameObject tempSphere = Instantiate(Sphere, transform.position, transform.rotation);
-                moveSpot.position = new Vector2(Random.Range(Target.position.x - 2.0f, Target.position.x + 2.0f), Random.Range(Target.position.y - 2.0f, Target.position.y + 2.0f));
-                tempSphere.GetComponent<SphereController>().damage = GetComponent<Health>().currentAttackDamage;
+                if (isServer)
+                {
+                    GameObject tempSphere = Instantiate(Sphere, transform.position, transform.rotation);
+                    moveSpot.position = new Vector2(Random.Range(Target.position.x - 2.0f, Target.position.x + 2.0f), Random.Range(Target.position.y - 2.0f, Target.position.y + 2.0f));
+                    tempSphere.GetComponent<SphereController>().damage = GetComponent<Health>().currentAttackDamage / 5;
+                    NetworkServer.Spawn(tempSphere);
+                }
                 counter = 5.0f;
             }
         }

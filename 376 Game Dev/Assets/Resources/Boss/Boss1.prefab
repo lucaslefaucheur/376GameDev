@@ -275,6 +275,8 @@ MonoBehaviour:
   currentHealth: 100
   healthBar: {fileID: 224733182390496034}
   deathFX: {fileID: 0}
+  startingAttackDamage: 10
+  currentAttackDamage: 10
 --- !u!114 &114618179960226424
 MonoBehaviour:
   m_ObjectHideFlags: 1

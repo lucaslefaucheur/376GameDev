@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 114682825999612718}
   - component: {fileID: 114418044994563572}
   - component: {fileID: 114178504298024080}
-  - component: {fileID: 114334804837879658}
   m_Layer: 9
   m_Name: Leopard
   m_TagString: Enemy
@@ -199,6 +198,8 @@ MonoBehaviour:
   currentHealth: 10
   healthBar: {fileID: 224457077580736086}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+  startingAttackDamage: 5
+  currentAttackDamage: 5
 --- !u!114 &114418044994563572
 MonoBehaviour:
   m_ObjectHideFlags: 1

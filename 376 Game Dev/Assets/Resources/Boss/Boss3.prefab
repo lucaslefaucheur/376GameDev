@@ -227,10 +227,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae048442e2eaee24cb9dd1b0da06a794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 0
-  currentHealth: 0
+  startingHealth: 100
+  currentHealth: 100
   healthBar: {fileID: 224251045304870096}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+  startingAttackDamage: 10
+  currentAttackDamage: 10
 --- !u!114 &114226435542729422
 MonoBehaviour:
   m_ObjectHideFlags: 1

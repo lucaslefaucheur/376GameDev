@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 114498210834735756}
   - component: {fileID: 114225786564484480}
   - component: {fileID: 114279786381102340}
-  - component: {fileID: 114643799372999824}
   m_Layer: 9
   m_Name: Cat
   m_TagString: Enemy
@@ -210,6 +209,8 @@ MonoBehaviour:
   currentHealth: 10
   healthBar: {fileID: 224801028938815120}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+  startingAttackDamage: 5
+  currentAttackDamage: 5
 --- !u!114 &114347085019246662
 MonoBehaviour:
   m_ObjectHideFlags: 1
