@@ -131,7 +131,11 @@ public class PlayerController : NetworkBehaviour
                     gameObject.AddComponent<Sword>();
                     Debug.Log("has sword");
                     anim.SetBool("hasSword", true);
+                    anim.SetBool("hasStaff", false);
+                    anim.SetBool("hasShield", false);
                     anim.SetLayerWeight (1, 1f);
+                    anim.SetLayerWeight (2, 0f);
+                    anim.SetLayerWeight (3, 0f);
                 }
 
                 if (hit.collider.tag.Equals("Bow"))
@@ -141,6 +145,12 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<bow>();
                     Debug.Log("has bow");
+                    anim.SetBool("hasStaff", false);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasShield", false);
+                    anim.SetLayerWeight (1, 0f);
+                    anim.SetLayerWeight (2, 0f);
+                    anim.SetLayerWeight (3, 0f);
                 }
 
                 if (hit.collider.tag.Equals("Shield"))
@@ -151,7 +161,11 @@ public class PlayerController : NetworkBehaviour
                     gameObject.AddComponent<Shield>();
                     Debug.Log("has shield");
                     anim.SetBool("hasShield", true);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasStaff", false);
                     anim.SetLayerWeight (3, 1f);
+                    anim.SetLayerWeight (1, 0f);
+                    anim.SetLayerWeight (2, 0f);
                 }
 
                 if (hit.collider.tag.Equals("Staff"))
@@ -162,7 +176,11 @@ public class PlayerController : NetworkBehaviour
                     gameObject.AddComponent<Staff>();
                     Debug.Log("has staff");
                     anim.SetBool("hasStaff", true);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasShield", false);
                     anim.SetLayerWeight (2, 1f);
+                    anim.SetLayerWeight (1, 0f);
+                    anim.SetLayerWeight (3, 0f);
                 }
             }
 
