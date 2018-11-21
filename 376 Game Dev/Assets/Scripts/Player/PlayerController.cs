@@ -81,6 +81,7 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetButtonDown("Melee"))
         {
+            GetComponent<NetworkAnimator>().SetTrigger("attacking");
             anim.SetTrigger("attacking");
             melee();
         }
@@ -89,21 +90,25 @@ public class PlayerController : NetworkBehaviour
         {
             if (GetComponent<Sword>() != null)
             {
+                GetComponent<NetworkAnimator>().SetTrigger("attacking");
                 anim.SetTrigger("attacking");
                 swordHit();
             }
             else if (GetComponent<Staff>() != null)
             {
+              GetComponent<NetworkAnimator>().SetTrigger("attacking");
                anim.SetTrigger("attacking");
                staffHit();
              }
             else if (GetComponent<bow>() != null)
             {
+              GetComponent<NetworkAnimator>().SetTrigger("attacking");
                 anim.SetTrigger("attacking");
                 bowHit();
             }
             else if (GetComponent<Shield>() != null)
             {
+              GetComponent<NetworkAnimator>().SetTrigger("attacking");
                 anim.SetTrigger("attacking");
                 shieldHit();
             }
@@ -130,6 +135,7 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<Sword>();
                     Debug.Log("has sword");
+
                     anim.SetBool("hasSword", true);
                     anim.SetBool("hasStaff", false);
                     anim.SetBool("hasShield", false);
