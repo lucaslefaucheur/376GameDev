@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 95612860695909230}
   - component: {fileID: 61367770314060952}
   - component: {fileID: 50060328067033122}
+  - component: {fileID: 114840300333328686}
   m_Layer: 0
   m_Name: crystal
   m_TagString: crystal
@@ -106,6 +107,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114840300333328686
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1837547153435240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a03ca8b698dbe46800861689529542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 5
 --- !u!212 &212575409771185338
 SpriteRenderer:
   m_ObjectHideFlags: 1
