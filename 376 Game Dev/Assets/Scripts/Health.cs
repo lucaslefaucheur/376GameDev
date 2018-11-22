@@ -8,6 +8,8 @@ public class Health : NetworkBehaviour {
 
     //variables
     public int startingHealth;
+    
+    [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
@@ -57,6 +59,12 @@ public class Health : NetworkBehaviour {
         {
             currentHealth += heal;
         }
+    }
+
+    private void OnChangeHealth(float currentHealth)
+    {
+        //sets the size of the green healthbar in relaiton to the percentage of health left
+        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
     }
 
     [Command]
