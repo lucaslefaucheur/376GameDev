@@ -15,7 +15,7 @@ public class PlayerController : NetworkBehaviour
     //Player Number
     private int playerNumber;
 
-    //Health 
+    //Health
     private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
@@ -26,6 +26,7 @@ public class PlayerController : NetworkBehaviour
     private int attack = 10;
     private float attackVar = 0f;
     private float healthVar = 0f;
+    private float moveVar = 0f;
 
     //for internal referencing
     private Rigidbody2D playerRB;
@@ -37,6 +38,7 @@ public class PlayerController : NetworkBehaviour
     private GameObject equipped;
     public bool grounded;
     public GameObject arrow;
+    public GameObject bubble;
 
     //spawn point
     private bool respawn = false;
@@ -51,7 +53,7 @@ public class PlayerController : NetworkBehaviour
         playerNumber = gameManager.GetComponent<GameController>().getNumOfPLayers();
         Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
 
-        this.transform.position = playerInitialSpawn[playerNumber-1];
+        this.transform.position = playerInitialSpawn[playerNumber - 1];
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -64,7 +66,25 @@ public class PlayerController : NetworkBehaviour
     //On local player start only
     public override void OnStartLocalPlayer()
     {
+        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
 
+        netAnim.SetParameterAutoSend(0, true);
+        netAnim.SetParameterAutoSend(1, true);
+        netAnim.SetParameterAutoSend(2, true);
+        netAnim.SetParameterAutoSend(3, true);
+        netAnim.SetParameterAutoSend(4, true);
+        netAnim.SetParameterAutoSend(5, true);
+    }
+
+    public override void PreStartClient()
+    {
+        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
+        netAnim.SetParameterAutoSend(0, true);
+        netAnim.SetParameterAutoSend(1, true);
+        netAnim.SetParameterAutoSend(2, true);
+        netAnim.SetParameterAutoSend(3, true);
+        netAnim.SetParameterAutoSend(4, true);
+        netAnim.SetParameterAutoSend(5, true);
     }
 
     void Update()
@@ -77,30 +97,37 @@ public class PlayerController : NetworkBehaviour
         }
 
         Move();
-        
+
         if (Input.GetButtonDown("Melee"))
         {
-            anim.SetTrigger("attacking");
+            //Should be different animation anim.SetTrigger("attacking");
             melee();
         }
 
         if (Input.GetButtonDown("Weapon"))
-        {           
+        {
             if (GetComponent<Sword>() != null)
             {
+                GetComponent<NetworkAnimator>().SetTrigger("attacking");
                 anim.SetTrigger("attacking");
                 swordHit();
             }
             else if (GetComponent<Staff>() != null)
             {
+                GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                anim.SetTrigger("attacking");
                 staffHit();
             }
             else if (GetComponent<bow>() != null)
             {
+                GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                anim.SetTrigger("attacking");
                 bowHit();
             }
             else if (GetComponent<Shield>() != null)
             {
+                GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                anim.SetTrigger("attacking");
                 shieldHit();
             }
             else
@@ -111,75 +138,114 @@ public class PlayerController : NetworkBehaviour
         if (Input.GetButtonDown("Pickup"))
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))           
+            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
             {
                 if (hit.collider.tag.Equals("chest"))
                 {
-                    Destroy(hit.collider.gameObject);
-                    GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+                    CmdDestroy(hit.collider.gameObject);
+                    CmdChest();
                 }
 
-                if (hit.collider.tag.Equals("Sword"))
+                else if (hit.collider.tag.Equals("Sword"))
                 {
-                    Destroy(hit.collider.gameObject);
-                    NetworkServer.UnSpawn(hit.collider.gameObject);
+                    moveVar = -0.25f;
+                    armourVar = 0.25f;
+                    CmdDestroy(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<Sword>();
                     Debug.Log("has sword");
+
                     anim.SetBool("hasSword", true);
+                    anim.SetBool("hasStaff", false);
+                    anim.SetBool("hasShield", false);
+                    anim.SetLayerWeight(1, 1f);
+                    anim.SetLayerWeight(2, 0f);
+                    anim.SetLayerWeight(3, 0f);
                 }
 
-                if (hit.collider.tag.Equals("Bow"))
+                else if (hit.collider.tag.Equals("Bow"))
                 {
+                    moveVar = 0.3f;
+                    armourVar = -0.25f;
+                    CmdDestroy(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<bow>();
                     Debug.Log("has bow");
+                    anim.SetBool("hasStaff", false);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasShield", false);
+                    anim.SetLayerWeight(1, 0f);
+                    anim.SetLayerWeight(2, 0f);
+                    anim.SetLayerWeight(3, 0f);
                 }
 
-                if (hit.collider.tag.Equals("Shield"))
+                else if (hit.collider.tag.Equals("Shield"))
                 {
+                    moveVar = -0.5f;
+                    armourVar = 0.5f;
+                    CmdDestroy(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<Shield>();
                     Debug.Log("has shield");
+                    anim.SetBool("hasShield", true);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasStaff", false);
+                    anim.SetLayerWeight(3, 1f);
+                    anim.SetLayerWeight(1, 0f);
+                    anim.SetLayerWeight(2, 0f);
                 }
 
-                if (hit.collider.tag.Equals("Staff"))
+                else if (hit.collider.tag.Equals("Staff"))
                 {
+                    moveVar = -0.25f;
+                    armourVar = -0.25f;
+                    CmdDestroy(hit.collider.gameObject);
                     unequip();
                     gameObject.AddComponent<Staff>();
                     Debug.Log("has staff");
+                    anim.SetBool("hasStaff", true);
+                    anim.SetBool("hasSword", false);
+                    anim.SetBool("hasShield", false);
+                    anim.SetLayerWeight(2, 1f);
+                    anim.SetLayerWeight(1, 0f);
+                    anim.SetLayerWeight(3, 0f);
                 }
+            }
+            else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
+            {
+                //revive
             }
 
         }
 
-     }
+    }
 
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Functions
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
 
     //attack function
     private void melee()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing , 1.5f);
-        Debug.DrawRay(transform.position, facing* 1.5f, Color.green, 5.5f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
-
+            
+            //hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
+            CmdDealDamage(hit.collider.gameObject, smallAttack());
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
+            CmdDealDamage(hit.collider.gameObject, smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -192,7 +258,7 @@ public class PlayerController : NetworkBehaviour
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
 
         Vector2 startPos = transform.position; // umm, start position !
-        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + facing; // variable for calculated end position
+        Vector2 targetPos = (new Vector2(transform.position.x, transform.position.y) + facing); // variable for calculated end position
 
 
         float angle = Vector2.Angle(startPos, targetPos) + 90;
@@ -207,12 +273,12 @@ public class PlayerController : NetworkBehaviour
         // step through and find each target point
         for (int i = startAngle; i < finishAngle; i += inc) // Angle from forward
         {
-            targetPos = ((Quaternion.Euler(0, 0, i) * facing).normalized + transform.position);
+            targetPos = (Quaternion.Euler(0, 0, i) * facing).normalized * 1.5f + transform.position;
 
-            RaycastHit2D hit = Physics2D.Raycast(startPos, targetPos);
+            RaycastHit2D hit = Physics2D.Linecast(startPos, targetPos);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
             {
-                hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
+                CmdDealDamage(hit.collider.gameObject, temp);
 
                 //to remove
                 Debug.Log("sword attack hit for: " + temp);
@@ -227,27 +293,28 @@ public class PlayerController : NetworkBehaviour
 
     private void bowHit()
     {
-       
+
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack)); ;
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.LookRotation(transform.position, facing));
-        NetworkServer.Spawn(arrow);
+        int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
+        CmdSpawnArrow(temp);
+
+
     }
 
     private void shieldHit()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-        if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
-        {
-            //hit.collider.gameObject.GetComponent<Health>().TakeDamage(bigAttack());
-
-            //to remove
-        }
+        float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
+        Debug.Log("radius = " + temp);
+        CmdSpawnBubble(temp);
+        Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
+        Debug.DrawRay(transform.position, Vector2.down * 2f, Color.green, 5.5f);
     }
 
     private void staffHit()
     {
-        Collider2D [] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
+        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
@@ -256,12 +323,12 @@ public class PlayerController : NetworkBehaviour
         int temp = GetComponent<Staff>().weaponAttack(attackVar, attack); ;
         if (hit != null)
         {
-            for (int i = 0; i< hit.Length; i++)
+            for (int i = 0; i < hit.Length; i++)
             {
 
                 if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
                 {
-                    hit[i].gameObject.GetComponent<Health>().TakeDamage(temp);
+                    CmdDealDamage(hit[i].gameObject, temp);
 
                     //to remove
                     Debug.Log("staff attack hit for: " + temp);
@@ -269,7 +336,7 @@ public class PlayerController : NetworkBehaviour
                 else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
                 {
                     //heal
-                    hit[i].gameObject.GetComponent<PlayerController>().setHealth(temp);
+                    CmdHeal(hit[i].gameObject, temp);
                     //to remove
                     Debug.Log("staff attack heal for: " + temp);
 
@@ -302,6 +369,9 @@ public class PlayerController : NetworkBehaviour
 
     public void unequip()
     {
+        moveVar = 0;
+        armourVar = 0;
+        
         if (GetComponent<Sword>() != null)
         {
             Destroy(gameObject.GetComponent<Sword>());
@@ -320,8 +390,8 @@ public class PlayerController : NetworkBehaviour
     //to move player + animations
     private void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f; ;
-        float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f; ;
+        float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f * (1 + moveVar); ;
+        float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f * (1 + moveVar); ;
         if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
             anim.SetBool("moveSide", true);
@@ -376,12 +446,14 @@ public class PlayerController : NetworkBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
 
-        if (collision.gameObject.tag == "crystal") {
-            Debug.Log("Got a crystal");
+        if (collision.gameObject.tag == "crystal")
+        {
+            GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
+            Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
             Destroy(collision.gameObject);
         }
-            //If contact with RhinoBoss
-            if (collision.gameObject.tag == "RhinoBoss")
+        //If contact with RhinoBoss
+        if (collision.gameObject.tag == "RhinoBoss")
         {
             if (collision.gameObject.transform.position.x <= transform.position.x)
             {
@@ -410,7 +482,7 @@ public class PlayerController : NetworkBehaviour
         //scales the attack base up with level up
         attack = (int)Mathf.Floor(attack + (0.325f * level));
         //takes note of the players health percentage
-        float temp = (currentHealth / maxHealth)*100;
+        float temp = (currentHealth / maxHealth) * 100;
         //scales the health base up wih the level up
         maxHealth = (int)Mathf.Floor(maxHealth + (0.25f * level));
         //scales the current health of the player by using the presisting the helth precentage
@@ -429,12 +501,12 @@ public class PlayerController : NetworkBehaviour
     }
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Getters and Setters
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
 
     public float getHealth()
@@ -442,7 +514,7 @@ public class PlayerController : NetworkBehaviour
         return currentHealth;
     }
 
-    public void setHealth( int hp)
+    public void setHealth(int hp)
     {
         currentHealth += hp;
         if (currentHealth > maxHealth)
@@ -461,7 +533,7 @@ public class PlayerController : NetworkBehaviour
         armourVar = armour;
     }
 
-    public void setAttack (float attack)
+    public void setAttack(float attack)
     {
         attackVar = attack;
     }
@@ -472,14 +544,65 @@ public class PlayerController : NetworkBehaviour
     }
 
     /***********************************************************
-     * 
-     * 
+     *
+     *
      *  Network Methods
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ********************************************************/
+    [Command]
+    void CmdDealDamage(GameObject hit, int dmg)
+    {
+        // make the change local on the server
+        hit.GetComponent<Health>().TakeDamage(dmg);
 
+    }
+
+    [Command]
+    void CmdHeal(GameObject hit, int dmg)
+    {
+        // make the change local on the server
+        hit.GetComponent<PlayerController>().setHealth(dmg);
+
+    }
+
+    [Command]
+    void CmdChest()
+    {
+        // make the change local on the server
+        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+
+    }
+
+    [Command]
+    void CmdDestroy(GameObject state)
+    {
+        // make the change local on the server
+        NetworkServer.Destroy(state);
+
+    }
+
+    [Command]
+    void CmdSpawnArrow(int temp)
+    {
+        // make the change local on the server
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
+        NetworkServer.Spawn(arrowSpawn);
+
+    }
+
+    [Command]
+    void CmdSpawnBubble(float temp)
+    {
+        // make the change local on the server
+        GameObject shieldBubble = Instantiate(bubble, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        shieldBubble.GetComponent<Bubble>().setLife(Random.Range(5, 10));
+        shieldBubble.transform.localScale = shieldBubble.transform.localScale * temp;
+        NetworkServer.Spawn(shieldBubble);
+
+    }
 
     [Command]
     void CmdProvideFlipStateToServer(bool state)
@@ -495,7 +618,7 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc]
     void RpcSendFlipState(bool state)
     {
-        // skip this function on the LocalPlayer 
+        // skip this function on the LocalPlayer
         // because he is the one who originally invoked this
         if (isLocalPlayer) return;
 
@@ -505,13 +628,14 @@ public class PlayerController : NetworkBehaviour
 
 
     /***********************************************************
-    * 
-    *  Cooroutines 
-    * 
-    * 
-    * 
-    * 
+    *
+    *  Cooroutines
+    *
+    *
+    *
+    *
     * ********************************************************/
+
 
 
 }

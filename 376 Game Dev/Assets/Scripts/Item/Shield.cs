@@ -2,15 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : MonoBehaviour {
+public class Shield : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    float weaponStr = 10f;
+    int durability;
+
+    private void Start()
+    {
+        durability = Random.Range(1, 5);
+
+    }
+
+    public float weaponAttack(float attackVar, int attack)
+    {
+        weaponStr = Random.Range(2, 4);
+        durability--;
+        Debug.Log(durability);
+        if (durability == 0)
+        {
+            gameObject.GetComponent<PlayerController>().unequip();
+        }
+        return (weaponStr / 2);
+
+
+    }
 }

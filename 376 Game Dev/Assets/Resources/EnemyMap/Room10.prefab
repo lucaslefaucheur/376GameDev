@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 2569400266347686934}
   - component: {fileID: 114556948228545120}
   - component: {fileID: 114631305652927438}
+  - component: {fileID: 114670217456877722}
   m_Layer: 0
   m_Name: Room10
   m_TagString: Untagged
@@ -361,6 +362,27 @@ MonoBehaviour:
     i15: 2
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114670217456877722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1210174001716714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 0
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!19719996 &2113883504663209728
 TilemapCollider2D:
   m_ObjectHideFlags: 1

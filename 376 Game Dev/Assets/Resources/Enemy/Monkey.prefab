@@ -57,11 +57,11 @@ GameObject:
   - component: {fileID: 50735975131919272}
   - component: {fileID: 61585826091406220}
   - component: {fileID: 114754065138376964}
+  - component: {fileID: 114437206719498484}
   - component: {fileID: 114376249765268874}
   - component: {fileID: 114171541613398782}
   - component: {fileID: 95287322639089762}
   - component: {fileID: 114170426489007822}
-  - component: {fileID: 114437206719498484}
   m_Layer: 9
   m_Name: Monkey
   m_TagString: Enemy
