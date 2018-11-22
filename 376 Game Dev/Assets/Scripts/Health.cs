@@ -8,7 +8,7 @@ public class Health : NetworkBehaviour {
 
     //variables
     public int startingHealth;
-    
+
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth;
     public RectTransform healthBar;
@@ -64,7 +64,7 @@ public class Health : NetworkBehaviour {
     private void OnChangeHealth(float currentHealth)
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
-        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+        healthBar.sizeDelta = new Vector2((currentHealth / startingHealth) * 100, healthBar.sizeDelta.y);
     }
 
     [Command]
