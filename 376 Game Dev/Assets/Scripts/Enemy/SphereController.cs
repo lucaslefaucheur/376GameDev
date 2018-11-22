@@ -1,26 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class SphereController : MonoBehaviour {
+public class SphereController : NetworkBehaviour {
 
     private Animator anim;
     private float counter; 
 
     private void Start()
     {
-        counter = 5.0f; 
+        counter = 5.75f; 
         anim = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (counter > 0)
+        if (counter > 0.75)
             counter -= Time.deltaTime;
         else {
-            counter = 5.0f;
+            counter = 5.75f;
             anim.SetBool("Explodes", true);
-            Destroy(gameObject, 0.75f);
+            NetworkServer.Destroy(gameObject);
         }
     }
 
@@ -31,6 +32,12 @@ public class SphereController : MonoBehaviour {
         {
             other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
             anim.SetBool("Explodes", true);
+            if (counter > 5)
+                counter -= Time.deltaTime;
+            else
+            {
+                NetworkServer.Destroy(gameObject);
+            }
             Destroy(gameObject, 0.75f);
         }
     }
