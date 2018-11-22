@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 114174984308985420}
   - component: {fileID: 114203826869350034}
   - component: {fileID: 95836007104433060}
+  - component: {fileID: 114405935085069746}
   - component: {fileID: 114552846332890046}
   - component: {fileID: 114292555708849644}
   - component: {fileID: 58305903590938814}
@@ -275,6 +276,25 @@ MonoBehaviour:
   currentHealth: 100
   healthBar: {fileID: 224733182390496034}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+--- !u!114 &114405935085069746
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1988242727864354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95836007104433060}
+  m_ParameterSendBits: 0
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!114 &114552846332890046
 MonoBehaviour:
   m_ObjectHideFlags: 1
