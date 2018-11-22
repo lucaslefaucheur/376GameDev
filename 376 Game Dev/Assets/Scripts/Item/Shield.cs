@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : MonoBehaviour {
+public class Shield : MonoBehaviour
+{
 
     float weaponStr = 10f;
     int durability;
@@ -13,16 +14,16 @@ public class Shield : MonoBehaviour {
 
     }
 
-    public int weaponAttack(float attackVar, int attack)
+    public float weaponAttack(float attackVar, int attack)
     {
-        weaponStr = Random.Range(1, 5);
+        weaponStr = Random.Range(2, 4);
         durability--;
         Debug.Log(durability);
         if (durability == 0)
         {
             gameObject.GetComponent<PlayerController>().unequip();
         }
-        return (int)Mathf.Floor( weaponStr * (1 + attackVar));
+        return (weaponStr / 2);
 
 
     }
