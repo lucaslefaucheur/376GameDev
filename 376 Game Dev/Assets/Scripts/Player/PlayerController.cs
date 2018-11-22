@@ -296,19 +296,16 @@ public class PlayerController : NetworkBehaviour
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
-        arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
-        NetworkServer.Spawn(arrowSpawn);
+        CmdSpawnArrow(temp);
+
+
     }
 
     private void shieldHit()
     {
         float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
         Debug.Log("radius = " + temp);
-        GameObject shieldBubble = Instantiate(bubble, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
-        shieldBubble.GetComponent<Bubble>().setLife(Random.Range(5, 10));
-        shieldBubble.transform.localScale = shieldBubble.transform.localScale * temp;
-        NetworkServer.Spawn(shieldBubble);
+        CmdSpawnBubble(temp);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.left * 2f, Color.green, 5.5f);
@@ -372,6 +369,9 @@ public class PlayerController : NetworkBehaviour
 
     public void unequip()
     {
+        moveVar = 0;
+        armourVar = 0;
+        
         if (GetComponent<Sword>() != null)
         {
             Destroy(gameObject.GetComponent<Sword>());
@@ -556,6 +556,27 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         NetworkServer.Destroy(state);
+
+    }
+
+    [Command]
+    void CmdSpawnArrow(int temp)
+    {
+        // make the change local on the server
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
+        NetworkServer.Spawn(arrowSpawn);
+
+    }
+
+    [Command]
+    void CmdSpawnBubble(float temp)
+    {
+        // make the change local on the server
+        GameObject shieldBubble = Instantiate(bubble, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        shieldBubble.GetComponent<Bubble>().setLife(Random.Range(5, 10));
+        shieldBubble.transform.localScale = shieldBubble.transform.localScale * temp;
+        NetworkServer.Spawn(shieldBubble);
 
     }
 

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212848321372647228}
   - component: {fileID: 114840985277972424}
   - component: {fileID: 60666602729449174}
+  - component: {fileID: 114605479333452522}
   m_Layer: 12
   m_Name: ShieldBubble
   m_TagString: Untagged
@@ -112,6 +113,17 @@ PolygonCollider2D:
       - {x: 0.08491423, y: 0.03208288}
       - {x: 0.067315154, y: 0.05445726}
       - {x: 0.050827958, y: 0.07181626}
+--- !u!114 &114605479333452522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1258235230722250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d435b5f0c9e3d54a966d6462c8b5c3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114840985277972424
 MonoBehaviour:
   m_ObjectHideFlags: 1

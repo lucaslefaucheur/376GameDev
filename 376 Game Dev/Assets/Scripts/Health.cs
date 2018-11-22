@@ -43,8 +43,9 @@ public class Health : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Instantiate(deathFX, transform.position, transform.rotation);
-            Destroy(gameObject);
+            GameObject crys = Instantiate(deathFX, transform.position, transform.rotation);
+            NetworkServer.Spawn(crys);
+            NetworkServer.Destroy(gameObject);
         }
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
