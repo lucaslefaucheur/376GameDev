@@ -10,6 +10,7 @@ public class RhinoController : NetworkBehaviour
     private LayerMask caster;
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
+    public Transform moveSpot;
 
     private Animator anim;
     private SpriteRenderer renderer;
@@ -28,7 +29,6 @@ public class RhinoController : NetworkBehaviour
         loc = transform;
         renderer = GetComponent<SpriteRenderer>();
         caster = 1 << LayerMask.NameToLayer("Player");
-        NetworkServer.Spawn(gameObject);
         anim = GetComponent<Animator>();
 
         InitialPosition.x = transform.position.x;
@@ -37,6 +37,8 @@ public class RhinoController : NetworkBehaviour
         PatrolSpeed = 0.5f;
         FollowSpeed = 1;
         AttackSpeed = 1;
+        moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
+
     }
 
     void FixedUpdate()
@@ -118,7 +120,11 @@ public class RhinoController : NetworkBehaviour
         anim.SetBool("Move", true);
 
         Transform goTo;
-        goTo = Target;
+
+        if (Target == null)
+            goTo = moveSpot;
+        else
+            goTo = Target;
 
         if (Mathf.Abs(loc.position.x - goTo.position.x) > Mathf.Abs(loc.position.y - goTo.position.y))
         {

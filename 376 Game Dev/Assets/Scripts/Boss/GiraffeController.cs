@@ -31,7 +31,6 @@ public class GiraffeController : NetworkBehaviour {
         loc = transform;
         rendy = GetComponent<SpriteRenderer>();
         caster = 1 << LayerMask.NameToLayer("Player");
-        NetworkServer.Spawn(gameObject);
         anim = GetComponent<Animator>();
 
         InitialPosition.x = transform.position.x;

@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4025599702515706}
   - component: {fileID: 70180941695529866}
   - component: {fileID: 114588259517738316}
+  - component: {fileID: 114407107581202056}
   m_Layer: 10
   m_Name: Sword Drop
   m_TagString: Sword
@@ -116,6 +117,27 @@ CapsuleCollider2D:
   m_Offset: {x: 0.034827247, y: 0.78002095}
   m_Size: {x: 0.4541889, y: 1.4975605}
   m_Direction: 0
+--- !u!114 &114407107581202056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1665216285954610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114588259517738316
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 95915275196040670}
   - component: {fileID: 114396206645931556}
   - component: {fileID: 114369174941121420}
+  - component: {fileID: 114912114495626222}
+  - component: {fileID: 114220539885603364}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Enemy
@@ -108,6 +110,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114220539885603364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1732358223554580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 2
+  m_SendInterval: 0
+  m_SyncRotationAxis: 3
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114369174941121420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -151,6 +174,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a8676340cee4c39936da4ef6c1e136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114912114495626222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1732358223554580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95915275196040670}
+  m_ParameterSendBits: 0
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!212 &212441884311480158
 SpriteRenderer:
   m_ObjectHideFlags: 1
