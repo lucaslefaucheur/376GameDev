@@ -43,9 +43,8 @@ public class Health : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            GameObject crys = Instantiate(deathFX, transform.position, transform.rotation);
-            NetworkServer.Spawn(crys);
-            NetworkServer.Destroy(gameObject);
+            CmdSpawnCrys();
+            CmdDestroy(gameObject);
         }
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
@@ -58,6 +57,23 @@ public class Health : NetworkBehaviour {
         {
             currentHealth += heal;
         }
+    }
+
+    [Command]
+    void CmdDestroy(GameObject state)
+    {
+        // make the change local on the server
+        NetworkServer.Destroy(state);
+
+    }
+
+    [Command]
+    void CmdSpawnCrys()
+    {
+        // make the change local on the server
+        GameObject crys = Instantiate(deathFX, transform.position, transform.rotation);
+        NetworkServer.Spawn(crys);
+
     }
 
 }
