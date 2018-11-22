@@ -10,11 +10,10 @@ public class Health : NetworkBehaviour {
     public int startingHealth;
 
     [SyncVar(hook = "OnChangeHealth")]
-    public int currentHealth;
+    public float currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
     private Transform Target;
-
 
     void Awake()
     {
