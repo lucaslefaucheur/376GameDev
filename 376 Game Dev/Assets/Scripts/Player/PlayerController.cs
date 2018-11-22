@@ -143,7 +143,7 @@ public class PlayerController : NetworkBehaviour
                 if (hit.collider.tag.Equals("chest"))
                 {
                     CmdDestroy(hit.collider.gameObject);
-                    GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+                    CmdChest();
                 }
 
                 else if (hit.collider.tag.Equals("Sword"))
@@ -237,15 +237,15 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
+            
             //hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
-
+            CmdDealDamage(hit.collider.gameObject, smallAttack());
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
-            hit.collider.gameObject.GetComponent<Health>().TakeDamage(smallAttack());
+            CmdDealDamage(hit.collider.gameObject, smallAttack());
 
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -278,7 +278,7 @@ public class PlayerController : NetworkBehaviour
             RaycastHit2D hit = Physics2D.Linecast(startPos, targetPos);
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
             {
-                hit.collider.gameObject.GetComponent<Health>().TakeDamage(temp);
+                CmdDealDamage(hit.collider.gameObject, temp);
 
                 //to remove
                 Debug.Log("sword attack hit for: " + temp);
@@ -328,7 +328,7 @@ public class PlayerController : NetworkBehaviour
 
                 if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
                 {
-                    hit[i].gameObject.GetComponent<Health>().TakeDamage(temp);
+                    CmdDealDamage(hit[i].gameObject, temp);
 
                     //to remove
                     Debug.Log("staff attack hit for: " + temp);
@@ -336,7 +336,7 @@ public class PlayerController : NetworkBehaviour
                 else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
                 {
                     //heal
-                    hit[i].gameObject.GetComponent<PlayerController>().setHealth(temp);
+                    CmdHeal(hit[i].gameObject, temp);
                     //to remove
                     Debug.Log("staff attack heal for: " + temp);
 
@@ -551,6 +551,30 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
+    [Command]
+    void CmdDealDamage(GameObject hit, int dmg)
+    {
+        // make the change local on the server
+        hit.GetComponent<Health>().TakeDamage(dmg);
+
+    }
+
+    [Command]
+    void CmdHeal(GameObject hit, int dmg)
+    {
+        // make the change local on the server
+        hit.GetComponent<PlayerController>().setHealth(dmg);
+
+    }
+
+    [Command]
+    void CmdChest()
+    {
+        // make the change local on the server
+        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+
+    }
+
     [Command]
     void CmdDestroy(GameObject state)
     {
