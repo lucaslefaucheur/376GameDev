@@ -22,7 +22,6 @@ public class EnemyController : NetworkBehaviour {
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 

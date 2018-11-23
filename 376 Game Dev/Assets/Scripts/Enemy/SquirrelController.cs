@@ -16,17 +16,16 @@ public class SquirrelController : NetworkBehaviour
     //variables
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
-    private int front = 1;
+    private float counter; 
 
-    private bool test1, test2 = false;
-    private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
     private Rigidbody2D rb;
+
+    public GameObject Nut;
 
     void Start()
     {
@@ -111,10 +110,6 @@ public class SquirrelController : NetworkBehaviour
         if (other.gameObject.layer.Equals(8))
         {
             other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
-
-            // changes direction if it touches the player
-            front = -1;
-            test1 = true;
         }
     }
 
@@ -196,37 +191,14 @@ public class SquirrelController : NetworkBehaviour
 
     void Attack(float distance)
     {
-        if (!test2)
+        if (counter > 0)
+            counter -= Time.deltaTime;
+        else 
         {
-            anim.SetBool("Attack", true);
-            // direction of the attack: towards the position of the player
-            direction.x = Target.transform.position.x - transform.position.x;
-            direction.y = Target.transform.position.y - transform.position.y;
-            direction.Normalize();
-
-            // enemy moves towards the player
-            if (distance >= 2.4)
-            {
-                front = 1;
-                if (test1)
-                {
-                    test2 = true;
-                    counter = 2.0f;
-                }
-            }
-
-            transform.Translate(AttackSpeed * front * direction.x * Time.deltaTime, AttackSpeed * front * direction.y * Time.deltaTime, 0);
+            Instantiate(Nut, transform.position, transform.rotation);
+            counter = 2f;
         }
-        else
-        {
-            anim.SetBool("Attack", false);
-            counter -= Time.deltaTime; // counter between every attacks
-            if (counter <= 0)
-            {
-                test1 = false;
-                test2 = false;
-            }
-        }
+            
     }
 
     /***********************************
