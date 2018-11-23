@@ -176,9 +176,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 10
-  currentHealth: 0
+  currentHealth: 10
   healthBar: {fileID: 0}
-  deathFX: {fileID: 0}
+  deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
 --- !u!114 &114713178326168650
 MonoBehaviour:
   m_ObjectHideFlags: 1
