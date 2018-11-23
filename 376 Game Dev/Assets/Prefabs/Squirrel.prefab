@@ -28,7 +28,6 @@ GameObject:
   - component: {fileID: 95835723586875068}
   - component: {fileID: 114345731942775180}
   - component: {fileID: 114392950419254000}
-  - component: {fileID: 114880964132494556}
   m_Layer: 0
   m_Name: Squirrel
   m_TagString: Untagged
@@ -103,7 +102,7 @@ Animator:
   m_GameObject: {fileID: 1109112083682524}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e3ae47bdc3f844c4d803331eb98a8368, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -142,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6eac353f0ef43c9ab05980880ec927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpot: {fileID: 0}
 --- !u!114 &114486349996177658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae048442e2eaee24cb9dd1b0da06a794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 0
+  startingHealth: 10
   currentHealth: 0
   healthBar: {fileID: 0}
   deathFX: {fileID: 0}
@@ -210,18 +210,6 @@ MonoBehaviour:
     i15: 105
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &114880964132494556
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109112083682524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d12c92c8cd4c46d69d4ad6b4e4e23ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
 --- !u!212 &212490230630251986
 SpriteRenderer:
   m_ObjectHideFlags: 1
