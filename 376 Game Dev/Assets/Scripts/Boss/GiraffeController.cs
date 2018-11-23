@@ -89,40 +89,23 @@ public class GiraffeController : NetworkBehaviour {
         if (!isServer)
             return;
         
-        if (Target == null)
-        {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
             
-            if (hitColliders.Length > 0)
-            {
-                int randomint = FindRandomTarget(hitColliders);
-                if (randomint >= 0)
-                {
-                    Target = hitColliders[randomint].transform;
-                }
-            }
-        }
-    }
-
-    private int FindRandomTarget(Collider2D[] hitList)
-    {
-        int targetnumber = -1;
-        int temp;
-
-        temp = Random.Range(0, hitList.Length);
-        for (int i = 0; i < hitList.Length; i++)
+        if (hitColliders.Length > 0)
         {
-            if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                return temp;
+                Target = null;
             }
             else
             {
-                temp = (temp + 1) % hitList.Length;
+                Target = hitColliders[randomint].transform;
             }
         }
-        return targetnumber;
     }
+
 
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/

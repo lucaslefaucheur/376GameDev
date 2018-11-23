@@ -355,8 +355,9 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
+            //Death
             currentHealth = 0;
-            Destroy(gameObject);
+            Destroy(gameObject, 10);
             Debug.Log("Dead!");
         }
     }

@@ -76,39 +76,22 @@ public class LeopardController : NetworkBehaviour
         if (!isServer)
             return;
 
-        if (Target == null)
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+
+        if (hitColliders.Length > 0)
         {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            int randomint = Random.Range(0, hitColliders.Length);
 
-            if (hitColliders.Length > 0)
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = FindRandomTarget(hitColliders);
-                if (randomint >= 0)
-                {
-                    Target = hitColliders[randomint].transform;
-                }
-            }
-        }
-    }
-
-    private int FindRandomTarget(Collider2D[] hitList)
-    {
-        int targetnumber = -1;
-        int temp;
-
-        temp = Random.Range(0, hitList.Length);
-        for (int i = 0; i < hitList.Length; i++)
-        {
-            if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
-            {
-                return temp;
+                Target = null;
             }
             else
             {
-                temp = (temp + 1) % hitList.Length;
+                Target = hitColliders[randomint].transform;
             }
         }
-        return targetnumber;
+        
     }
 
     public void PushedBack()

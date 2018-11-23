@@ -84,12 +84,17 @@ public class BearController : NetworkBehaviour
         
         if (Target == null)
         {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
             
             if (hitColliders.Length > 0)
             {
-                int randomint = FindRandomTarget(hitColliders);
-                if (randomint >= 0)
+                int randomint = Random.Range(0, hitColliders.Length);
+
+                if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
+                {
+                    Target = null;
+                }
+                else
                 {
                     Target = hitColliders[randomint].transform;
                 }
@@ -100,26 +105,6 @@ public class BearController : NetworkBehaviour
     public Vector3 getTarget()
     {
         return Target.transform.position;
-    }
-
-    private int FindRandomTarget(Collider2D[] hitList)
-    {
-        int targetnumber = -1;
-        int temp;
-
-        temp = Random.Range(0, hitList.Length);
-        for (int i = 0; i < hitList.Length; i++)
-        {
-            if (hitList[temp].GetComponent<PlayerController>().getHealth() > 0)
-            {
-                return temp;
-            }
-            else
-            {
-                temp = (temp + 1) % hitList.Length;
-            }
-        }
-        return targetnumber;
     }
 
 
