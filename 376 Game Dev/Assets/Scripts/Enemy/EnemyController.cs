@@ -196,6 +196,7 @@ public class EnemyController : NetworkBehaviour {
     {
         if (!test2)
         {
+            anim.SetBool("Attack", true);
             // direction of the attack: towards the position of the player
             direction.x = Target.transform.position.x - transform.position.x;
             direction.y = Target.transform.position.y - transform.position.y;
@@ -216,6 +217,7 @@ public class EnemyController : NetworkBehaviour {
         }
         else
         {
+            anim.SetBool("Attack", false);
             counter -= Time.deltaTime; // counter between every attacks
             if (counter <= 0)
             {
