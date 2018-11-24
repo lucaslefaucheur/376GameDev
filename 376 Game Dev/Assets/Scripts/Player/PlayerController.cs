@@ -45,7 +45,9 @@ public class PlayerController : NetworkBehaviour
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
-    
+    //Crystal
+    private int crystalCount = 0;
+
     private void Start()
     {
 
@@ -363,9 +365,26 @@ public class PlayerController : NetworkBehaviour
             //Death
             currentHealth = 0;
             alive = false;
-            Destroy(gameObject, 10);
-            Debug.Log("Dead!");
+            if (crystalCount >= 5)
+            {
+                StartCoroutine(Revive());
+                Debug.Log("Reviving...");
+            }
+            else
+            {
+                Destroy(gameObject, 10);
+                Debug.Log("Dead!");
+            }
         }
+    }
+
+    IEnumerator Revive()
+    {
+        yield return new WaitForSeconds(5);
+        crystalCount -= 5;
+        Debug.Log("Crystal Count " + crystalCount);
+        alive = true;
+        setHealth((int)maxHealth);
     }
 
     //to be used to cast an attack
@@ -455,8 +474,8 @@ public class PlayerController : NetworkBehaviour
 
         if (collision.gameObject.tag == "crystal")
         {
-            GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
-            Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
+            crystalCount++;
+            Debug.Log("Crystal Count " + crystalCount);
             Destroy(collision.gameObject);
         }
         //If contact with RhinoBoss
