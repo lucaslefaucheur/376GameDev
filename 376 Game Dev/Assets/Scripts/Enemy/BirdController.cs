@@ -25,6 +25,8 @@ public class BirdController : NetworkBehaviour
 
     private Rigidbody2D rb;
 
+    public GameObject birdFire; 
+
     void Start()
     {
         loc = transform;
@@ -49,18 +51,22 @@ public class BirdController : NetworkBehaviour
         SearchForTarget();
         if (Target == null)
         {
+            anim.SetBool("Attack", false);
             Patrol();
         }
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2.5f)
+            if (distance > 1.5f)
             {
+                anim.SetBool("Attack", false);
+                counter = 0.583f;
                 Follow();
             }
             else
             {
-                Attack(distance);
+                anim.SetBool("Attack", true);
+                Attack();
             }
 
         }
@@ -100,15 +106,6 @@ public class BirdController : NetworkBehaviour
         pushbackdirection.Normalize();
         rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
 
-    }
-
-    //Colliding with the player will cause damage to the player
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.layer.Equals(8))
-        {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
-        }
     }
 
     void Orientation()
@@ -187,9 +184,17 @@ public class BirdController : NetworkBehaviour
     /* Attack: enemy attacks a player
      *******************************/
 
-    void Attack(float distance)
+    void Attack()
     {
-
+        if (counter > 0) {
+            counter -= Time.deltaTime;
+        }
+        else {
+            Vector2 firePosition = Target.transform.position + (transform.position - Target.transform.position) / 2;
+            firePosition.y -= 0.5f;
+            Instantiate(birdFire, firePosition, transform.rotation);
+            counter = 0.917f + 0.583f;
+        }
     }
 
     /***********************************
