@@ -20,6 +20,7 @@ public class PlayerController : NetworkBehaviour
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
+    private bool alive = true;
 
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
     private float armourVar = 0f;
@@ -44,7 +45,7 @@ public class PlayerController : NetworkBehaviour
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
-
+    
     private void Start()
     {
 
@@ -96,126 +97,130 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        Move();
-
-        if (Input.GetButtonDown("Melee"))
+        if (alive)
         {
-            //Should be different animation anim.SetTrigger("attacking");
-            melee();
-        }
 
-        if (Input.GetButtonDown("Weapon"))
-        {
-            if (GetComponent<Sword>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                swordHit();
-            }
-            else if (GetComponent<Staff>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                staffHit();
-            }
-            else if (GetComponent<bow>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                bowHit();
-            }
-            else if (GetComponent<Shield>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                shieldHit();
-            }
-            else
-                Debug.Log("no weapon attached");
-        }
+            Move();
 
-
-        if (Input.GetButtonDown("Pickup"))
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
+            if (Input.GetButtonDown("Melee"))
             {
-                if (hit.collider.tag.Equals("chest"))
+                //Should be different animation anim.SetTrigger("attacking");
+                melee();
+            }
+
+            if (Input.GetButtonDown("Weapon"))
+            {
+                if (GetComponent<Sword>() != null)
                 {
-                    CmdDestroy(hit.collider.gameObject);
-                    CmdChest();
+                    GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                    anim.SetTrigger("attacking");
+                    swordHit();
+                }
+                else if (GetComponent<Staff>() != null)
+                {
+                    GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                    anim.SetTrigger("attacking");
+                    staffHit();
+                }
+                else if (GetComponent<bow>() != null)
+                {
+                    GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                    anim.SetTrigger("attacking");
+                    bowHit();
+                }
+                else if (GetComponent<Shield>() != null)
+                {
+                    GetComponent<NetworkAnimator>().SetTrigger("attacking");
+                    anim.SetTrigger("attacking");
+                    shieldHit();
+                }
+                else
+                    Debug.Log("no weapon attached");
+            }
+
+
+            if (Input.GetButtonDown("Pickup"))
+            {
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+                if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
+                {
+                    if (hit.collider.tag.Equals("chest"))
+                    {
+                        CmdDestroy(hit.collider.gameObject);
+                        CmdChest();
+                    }
+
+                    else if (hit.collider.tag.Equals("Sword"))
+                    {
+                        moveVar = -0.25f;
+                        armourVar = 0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Sword>();
+                        Debug.Log("has sword");
+
+                        anim.SetBool("hasSword", true);
+                        anim.SetBool("hasStaff", false);
+                        anim.SetBool("hasShield", false);
+                        anim.SetLayerWeight(1, 1f);
+                        anim.SetLayerWeight(2, 0f);
+                        anim.SetLayerWeight(3, 0f);
+                    }
+
+                    else if (hit.collider.tag.Equals("Bow"))
+                    {
+                        moveVar = 0.3f;
+                        armourVar = -0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<bow>();
+                        Debug.Log("has bow");
+                        anim.SetBool("hasStaff", false);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasShield", false);
+                        anim.SetLayerWeight(1, 0f);
+                        anim.SetLayerWeight(2, 0f);
+                        anim.SetLayerWeight(3, 0f);
+                    }
+
+                    else if (hit.collider.tag.Equals("Shield"))
+                    {
+                        moveVar = -0.5f;
+                        armourVar = 0.5f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Shield>();
+                        Debug.Log("has shield");
+                        anim.SetBool("hasShield", true);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasStaff", false);
+                        anim.SetLayerWeight(3, 1f);
+                        anim.SetLayerWeight(1, 0f);
+                        anim.SetLayerWeight(2, 0f);
+                    }
+
+                    else if (hit.collider.tag.Equals("Staff"))
+                    {
+                        moveVar = -0.25f;
+                        armourVar = -0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Staff>();
+                        Debug.Log("has staff");
+                        anim.SetBool("hasStaff", true);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasShield", false);
+                        anim.SetLayerWeight(2, 1f);
+                        anim.SetLayerWeight(1, 0f);
+                        anim.SetLayerWeight(3, 0f);
+                    }
+                }
+                else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
+                {
+                    //revive
                 }
 
-                else if (hit.collider.tag.Equals("Sword"))
-                {
-                    moveVar = -0.25f;
-                    armourVar = 0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Sword>();
-                    Debug.Log("has sword");
-
-                    anim.SetBool("hasSword", true);
-                    anim.SetBool("hasStaff", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 1f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Bow"))
-                {
-                    moveVar = 0.3f;
-                    armourVar = -0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<bow>();
-                    Debug.Log("has bow");
-                    anim.SetBool("hasStaff", false);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Shield"))
-                {
-                    moveVar = -0.5f;
-                    armourVar = 0.5f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Shield>();
-                    Debug.Log("has shield");
-                    anim.SetBool("hasShield", true);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasStaff", false);
-                    anim.SetLayerWeight(3, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Staff"))
-                {
-                    moveVar = -0.25f;
-                    armourVar = -0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Staff>();
-                    Debug.Log("has staff");
-                    anim.SetBool("hasStaff", true);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(2, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
             }
-            else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
-            {
-                //revive
-            }
-
         }
 
     }
@@ -357,6 +362,7 @@ public class PlayerController : NetworkBehaviour
         {
             //Death
             currentHealth = 0;
+            alive = false;
             Destroy(gameObject, 10);
             Debug.Log("Dead!");
         }
