@@ -31,6 +31,7 @@ public class PlayerController : NetworkBehaviour
     //for internal referencing
     private Rigidbody2D playerRB;
     private Animator anim;
+    private NetworkAnimator netAnim;
     private SpriteRenderer rendy;
     public RectTransform healthBar;
 
@@ -57,34 +58,11 @@ public class PlayerController : NetworkBehaviour
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        netAnim = GetComponent<NetworkAnimator>();
         rendy = GetComponent<SpriteRenderer>();
 
         // set initial health
         currentHealth = maxHealth;
-    }
-
-    //On local player start only
-    public override void OnStartLocalPlayer()
-    {
-        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
-
-        netAnim.SetParameterAutoSend(0, true);
-        netAnim.SetParameterAutoSend(1, true);
-        netAnim.SetParameterAutoSend(2, true);
-        netAnim.SetParameterAutoSend(3, true);
-        netAnim.SetParameterAutoSend(4, true);
-        netAnim.SetParameterAutoSend(5, true);
-    }
-
-    public override void PreStartClient()
-    {
-        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
-        netAnim.SetParameterAutoSend(0, true);
-        netAnim.SetParameterAutoSend(1, true);
-        netAnim.SetParameterAutoSend(2, true);
-        netAnim.SetParameterAutoSend(3, true);
-        netAnim.SetParameterAutoSend(4, true);
-        netAnim.SetParameterAutoSend(5, true);
     }
 
     void Update()
@@ -108,26 +86,26 @@ public class PlayerController : NetworkBehaviour
         {
             if (GetComponent<Sword>() != null)
             {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
+                netAnim.SetTrigger("attacking");
+                //anim.SetTrigger("attacking");
                 swordHit();
             }
             else if (GetComponent<Staff>() != null)
             {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
+                netAnim.SetTrigger("attacking");
+                //anim.SetTrigger("attacking");
                 staffHit();
             }
             else if (GetComponent<bow>() != null)
             {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
+                netAnim.SetTrigger("attacking");
+                //anim.SetTrigger("attacking");
                 bowHit();
             }
             else if (GetComponent<Shield>() != null)
             {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
+                netAnim.SetTrigger("attacking");
+                //anim.SetTrigger("attacking");
                 shieldHit();
             }
             else
@@ -158,9 +136,7 @@ public class PlayerController : NetworkBehaviour
                     anim.SetBool("hasSword", true);
                     anim.SetBool("hasStaff", false);
                     anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 1f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
+                    anim.SetBool("hasBow", false);
                 }
 
                 else if (hit.collider.tag.Equals("Bow"))
@@ -171,12 +147,10 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<bow>();
                     Debug.Log("has bow");
+                    anim.SetBool("hasBow", true);
                     anim.SetBool("hasStaff", false);
                     anim.SetBool("hasSword", false);
                     anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
                 }
 
                 else if (hit.collider.tag.Equals("Shield"))
@@ -187,12 +161,10 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<Shield>();
                     Debug.Log("has shield");
+                    anim.SetBool("hasBow", false);
                     anim.SetBool("hasShield", true);
                     anim.SetBool("hasSword", false);
                     anim.SetBool("hasStaff", false);
-                    anim.SetLayerWeight(3, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
                 }
 
                 else if (hit.collider.tag.Equals("Staff"))
@@ -203,12 +175,10 @@ public class PlayerController : NetworkBehaviour
                     unequip();
                     gameObject.AddComponent<Staff>();
                     Debug.Log("has staff");
+                    anim.SetBool("hasBow", false);
                     anim.SetBool("hasStaff", true);
                     anim.SetBool("hasSword", false);
                     anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(2, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(3, 0f);
                 }
             }
             else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
@@ -237,8 +207,6 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            
-            //hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
             CmdDealDamage(hit.collider.gameObject, smallAttack());
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -255,6 +223,7 @@ public class PlayerController : NetworkBehaviour
     //weapon attack function
     private void swordHit()
     {
+      Debug.Log("Sword hit");
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
 
         Vector2 startPos = transform.position; // umm, start position !
@@ -371,18 +340,24 @@ public class PlayerController : NetworkBehaviour
     {
         moveVar = 0;
         armourVar = 0;
-        
+
         if (GetComponent<Sword>() != null)
         {
             Destroy(gameObject.GetComponent<Sword>());
             anim.SetBool("hasSword", false);
         }
-        else if (GetComponent<bow>() != null)
+        else if (GetComponent<bow>() != null){
             Destroy(gameObject.GetComponent<bow>());
-        else if (GetComponent<Staff>() != null)
+            anim.SetBool("hasBow", false);
+          }
+        else if (GetComponent<Staff>() != null){
             Destroy(gameObject.GetComponent<Staff>());
-        else if (GetComponent<Shield>() != null)
+            anim.SetBool("hasStaff", false);
+          }
+        else if (GetComponent<Shield>() != null){
             Destroy(gameObject.GetComponent<Shield>());
+            anim.SetBool("hasShield", false);
+          }
 
         Debug.Log("unequipped");
     }
@@ -452,6 +427,7 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
             Destroy(collision.gameObject);
         }
+
         //If contact with RhinoBoss
         if (collision.gameObject.tag == "RhinoBoss")
         {
@@ -580,6 +556,7 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         NetworkServer.Destroy(state);
+        Debug.Log("object destroyed command");
 
     }
 
