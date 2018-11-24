@@ -210,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
+  birdFire: {fileID: 1533121778887102, guid: d7e24b3fddd3745f88bda49f358eae1a, type: 2}
 --- !u!212 &212699700222989934
 SpriteRenderer:
   m_ObjectHideFlags: 1
