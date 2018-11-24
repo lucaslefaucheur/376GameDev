@@ -59,9 +59,10 @@ GameObject:
   - component: {fileID: 114158218185414048}
   - component: {fileID: 114772503486483298}
   - component: {fileID: 95816191858993102}
+  - component: {fileID: 114914846410789736}
   - component: {fileID: 114748557367171506}
-  - component: {fileID: 61371712983002710}
   - component: {fileID: 114683055782600646}
+  - component: {fileID: 61371712983002710}
   m_Layer: 9
   m_Name: Boss2
   m_TagString: RhinoBoss
@@ -287,6 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb853462d2afdeb4e86d3ee7d906ab2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
   knockedBack: 0
   EnemyHitParticle: {fileID: 0}
 --- !u!114 &114772503486483298
@@ -310,6 +312,25 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114914846410789736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1934414624475004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95816191858993102}
+  m_ParameterSendBits: 0
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!114 &114944673824760506
 MonoBehaviour:
   m_ObjectHideFlags: 1

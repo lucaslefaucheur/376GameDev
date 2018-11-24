@@ -33,7 +33,6 @@ public class CatController : NetworkBehaviour
         loc = transform;
         rendy = GetComponent<SpriteRenderer>();
         caster = 1 << LayerMask.NameToLayer("Player");
-        NetworkServer.Spawn(gameObject);
         anim = GetComponent<Animator>();
 
         InitialPosition.x = transform.position.x;
@@ -95,26 +94,14 @@ public class CatController : NetworkBehaviour
         }
     }
 
-    /* TakeDamage: substracts a number to the enemy's health
-     ******************************************************/
-
-    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
-
-    /*
-    public void TakeDamage(float damage)
+    public void PushedBack()
     {
-        Health -= damage;
-        if (Health <= 0)
-            Destroy(gameObject);
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
-        Invoke("resetColor", 1.0f);
-
         // pushed back
         Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
         pushbackdirection.Normalize();
         rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
     }
-    */
+
 
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)

@@ -13,12 +13,12 @@ public class GameController : NetworkBehaviour
     public GameObject levelTransition;                      //Background for levelText, while level is being set up
     public int level = 1;                                  //Current level number
     private bool settingUp = true;                          //Boolean to check if we're currently setting up game
-    private int numOfPlayers = 0;                           //Keep track of the number of players spawn
+    private int numOfPlayers = 1;                           //Keep track of the number of players spawn
     private GameObject player;
     public float loadTime = 5.0f;
     public Transform[] PlayerSpawn;
-
-    private List<GameObject> playersList;
+    private int tempNum;
+    private GameObject[] playersList;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -57,11 +57,45 @@ public class GameController : NetworkBehaviour
         
     }
 
-
+    
     public void AddPlayer()
     {
-        numOfPlayers++;
+        numOfPlayers = FindPlayerNumber();
         Debug.Log("Num of players: " + numOfPlayers);
+    }
+
+    private int FindPlayerNumber()
+    {
+
+        for(int j = 1; j <= 4; j++)
+        {
+            if (!InList(j))
+            {
+                tempNum = j;
+                break;
+            }
+        }
+
+        return tempNum;
+    }
+
+    private bool InList(int n)
+    {
+        playersList = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < playersList.Length; i++)
+        {
+            if (n == playersList[i].GetComponent<PlayerController>().getNumber())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getPlayerCount()
+    {
+        playersList = GameObject.FindGameObjectsWithTag("Player");
+        return playersList.Length;
     }
 
     public int getNumOfPLayers()

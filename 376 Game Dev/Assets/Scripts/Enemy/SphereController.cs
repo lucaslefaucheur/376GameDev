@@ -1,13 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class SphereController : MonoBehaviour {
+public class SphereController : NetworkBehaviour {
     public int damage;
+
+    private Animator anim;
+    private float counter; 
+
+    private void Start()
+    {
+        counter = 5.75f; 
+        anim = GetComponent<Animator>();
+    }
 
     void Update()
     {
-        Destroy(gameObject, 5);
+        if (counter > 0.75)
+            counter -= Time.deltaTime;
+        else {
+            counter = 5.75f;
+            anim.SetBool("Explodes", true);
+            NetworkServer.Destroy(gameObject);
+        }
     }
 
     //Colliding with the player will cause damage to the player
@@ -16,6 +32,14 @@ public class SphereController : MonoBehaviour {
         if (other.gameObject.layer.Equals(8))
         {
             other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
+            anim.SetBool("Explodes", true);
+            if (counter > 5)
+                counter -= Time.deltaTime;
+            else
+            {
+                NetworkServer.Destroy(gameObject);
+            }
+            Destroy(gameObject, 0.75f);
         }
     }
 }

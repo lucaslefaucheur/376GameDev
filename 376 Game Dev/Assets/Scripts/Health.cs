@@ -8,13 +8,14 @@ public class Health : NetworkBehaviour {
 
     //variables
     public int startingHealth;
-    public int currentHealth;
+
+    [SyncVar(hook = "OnChangeHealth")]
+    public float currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
     private Transform Target;
     public int startingAttackDamage;
     public int currentAttackDamage;
-
 
     void Awake()
     {
@@ -27,6 +28,7 @@ public class Health : NetworkBehaviour {
 
     }
 
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
 
     /***********************************
      *
@@ -38,22 +40,18 @@ public class Health : NetworkBehaviour {
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
 
-   public void TakeDamage(int damage) {
+    public void TakeDamage(int damage) {
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Instantiate(deathFX, transform.position, transform.rotation);
-            Destroy(gameObject);
+            CmdSpawnCrys();
+            CmdDestroy(gameObject);
         }
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
-        // pushed back
-      /*  Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
-        pushbackdirection.Normalize();
-        rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);*/
     }
 
     public void GainHealth(int heal)
@@ -62,6 +60,29 @@ public class Health : NetworkBehaviour {
         {
             currentHealth += heal;
         }
+    }
+
+    private void OnChangeHealth(float currentHealth)
+    {
+        //sets the size of the green healthbar in relaiton to the percentage of health left
+        healthBar.sizeDelta = new Vector2((currentHealth / startingHealth) * 100, healthBar.sizeDelta.y);
+    }
+
+    [Command]
+    void CmdDestroy(GameObject state)
+    {
+        // make the change local on the server
+        NetworkServer.Destroy(state);
+
+    }
+
+    [Command]
+    void CmdSpawnCrys()
+    {
+        // make the change local on the server
+        GameObject crys = Instantiate(deathFX, transform.position, transform.rotation);
+        NetworkServer.Spawn(crys);
+
     }
 
 }

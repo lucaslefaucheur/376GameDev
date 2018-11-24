@@ -35,8 +35,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4919705074823562}
-  - component: {fileID: 114626359202889334}
   - component: {fileID: 58454649980957796}
+  - component: {fileID: 114176176549288052}
+  - component: {fileID: 114235206308149100}
   m_Layer: 10
   m_Name: Bow Drop
   m_TagString: Bow
@@ -86,7 +87,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &114626359202889334
+--- !u!114 &114176176549288052
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +95,51 @@ MonoBehaviour:
   m_GameObject: {fileID: 1092483715728250}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a2797201e161bd45aa9efe7c2c69a28, type: 3}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  weaponType: bow
-  cooldown: 3
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 92
+    i1: 42
+    i2: 192
+    i3: 145
+    i4: 130
+    i5: 36
+    i6: 29
+    i7: 132
+    i8: 154
+    i9: 214
+    i10: 241
+    i11: 137
+    i12: 77
+    i13: 206
+    i14: 96
+    i15: 35
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114235206308149100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1092483715728250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!212 &212213867742127996
 SpriteRenderer:
   m_ObjectHideFlags: 1
