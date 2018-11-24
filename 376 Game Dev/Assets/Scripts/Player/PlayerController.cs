@@ -45,8 +45,11 @@ public class PlayerController : NetworkBehaviour
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
-    //Crystal
+    //Crystal and Revive
     private int crystalCount = 0;
+    private bool reviving = false;
+    public GameObject reviveAnim;
+    private GameObject revive;
 
     private void Start()
     {
@@ -365,7 +368,7 @@ public class PlayerController : NetworkBehaviour
             //Death
             currentHealth = 0;
             alive = false;
-            if (crystalCount >= 5)
+            if (crystalCount >= 5 && !reviving)
             {
                 StartCoroutine(Revive());
                 Debug.Log("Reviving...");
@@ -380,6 +383,10 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator Revive()
     {
+        reviving = true;
+        revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(revive);
+        Destroy(revive, 5f);
         yield return new WaitForSeconds(5);
         crystalCount -= 5;
         Debug.Log("Crystal Count " + crystalCount);
