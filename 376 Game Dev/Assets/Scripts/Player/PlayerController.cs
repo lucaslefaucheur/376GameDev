@@ -350,7 +350,7 @@ public class PlayerController : NetworkBehaviour
             }
             else if (crystalCount < 5)
             {
-                CmdDestroy(gameObject);
+                StartCoroutine(Death(gameObject));
             }
             else
             {
@@ -669,6 +669,12 @@ public class PlayerController : NetworkBehaviour
         setHealth((int)maxHealth);
         reviving = false;
 
+    }
+
+    IEnumerator Death(GameObject player)
+    {
+        yield return new WaitForSeconds(5);
+        CmdDestroy(player);
     }
 
 
