@@ -71,7 +71,11 @@ public class PlayerController : NetworkBehaviour
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
-  
+
+    //Teleport
+    public GameObject teleAnim;
+    private GameObject tele;
+
     private void Start()
     {
 
@@ -400,6 +404,12 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    //teleporting animation
+    public void teleport()
+    {
+        StartCoroutine(TeleportAnimation());
+    }
+
 
     public void playDifferentEnemyAttackSound()
     {
@@ -693,6 +703,13 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
+    void CmdTeleport()
+    {
+        tele = Instantiate(teleAnim, transform.position, Quaternion.identity);
+        NetworkServer.Spawn(tele);
+    }
+
+    [Command]
     void CmdProvideFlipStateToServer(bool state)
     {
         // make the change local on the server
@@ -741,6 +758,15 @@ public class PlayerController : NetworkBehaviour
     {
         yield return new WaitForSeconds(5);
         CmdDestroy(player);
+    }
+
+    IEnumerator TeleportAnimation()
+    {
+        alive = false;
+        CmdTeleport();
+        yield return new WaitForSeconds(1);
+        alive = true;
+        Destroy(tele);
     }
 
 

@@ -69,11 +69,11 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%4 != 0)
             {
-                loadEnemyMap();
+                StartCoroutine(loadEnemyMap());
             }
             else
             {
-                loadBossMap();
+                StartCoroutine(loadBossMap());
             }
 
             hasMap = true;
@@ -157,10 +157,11 @@ public class MapManagerScript : NetworkBehaviour
     }
 
     //get random BOSS map
-    public void loadBossMap()
+    IEnumerator loadBossMap()
     {
         if (isServer)
         {
+            yield return new WaitForSeconds(1);
             //instantiate random map
             bossMapPick = mapBossList[Random.Range(0, mapBossList.Count)];
             currentMap = Instantiate(bossMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
@@ -172,10 +173,11 @@ public class MapManagerScript : NetworkBehaviour
     }
 
     //get random ENEMY map
-    public void loadEnemyMap()
+    IEnumerator loadEnemyMap()
     {
         if (isServer)
         {
+            yield return new WaitForSeconds(1);
             //instantiate random map
             enemyMapPick = mapEnemyList[Random.Range(0, mapEnemyList.Count)];
             currentMap = Instantiate(enemyMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
@@ -183,8 +185,6 @@ public class MapManagerScript : NetworkBehaviour
             //remove map from list
             mapEnemyList.Remove(enemyMapPick);
         }
-        
-
     }
 
     //return random enemy
@@ -206,6 +206,12 @@ public class MapManagerScript : NetworkBehaviour
     public void notifyEntry()
     {
         Destroy(currentMap);
+        playerList = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            playerList[i].GetComponent<PlayerController>().teleport();
+            
+        }
         GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
