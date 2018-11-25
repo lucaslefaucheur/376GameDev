@@ -56,7 +56,7 @@ public class SquirrelController : NetworkBehaviour
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2.5f)
+            if (distance > 4f)
             {
                 Follow();
             }
