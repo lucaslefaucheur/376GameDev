@@ -10,6 +10,7 @@ public class NutController : NetworkBehaviour {
     Vector2 nutDirection;
     Vector3 playerPosition;
     Rigidbody2D mRigidBody2D;
+    private int damage;
 
 
     // Use this for initialization
@@ -31,5 +32,10 @@ public class NutController : NetworkBehaviour {
     public void setTemp(int val)
     {
         temp = val;
+    }
+
+    public void setDamage(int newDamage)
+    {
+        damage = newDamage;
     }
 }

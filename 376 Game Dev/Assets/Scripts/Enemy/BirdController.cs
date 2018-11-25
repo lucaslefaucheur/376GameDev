@@ -189,10 +189,11 @@ public class BirdController : NetworkBehaviour
         if (counter > 0) {
             counter -= Time.deltaTime;
         }
-        else {
+        else if (isServer){
             Vector2 firePosition = Target.transform.position + (transform.position - Target.transform.position) / 2;
             firePosition.y -= 0.5f;
             GameObject temp = Instantiate(birdFire, firePosition, Quaternion.FromToRotation(transform.position, Target.position));
+            temp.GetComponent<BirdFireController>().setDamage(GetComponent<Health>().getAttackDamage());
             NetworkServer.Spawn(temp);
             counter = 0.917f + 0.583f;
         }
