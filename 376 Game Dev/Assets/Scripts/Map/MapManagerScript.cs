@@ -262,7 +262,8 @@ public class MapManagerScript : NetworkBehaviour
             objectList = GameObject.FindObjectsOfType<GameObject>();
             for (int i = 0; i < objectList.Length; i++)
             {
-                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword") || objectList[i].tag.Equals("Shield") || objectList[i].tag.Equals("Bow") || objectList[i].tag.Equals("Staff"))
+                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword") 
+                    || objectList[i].tag.Equals("Shield") || objectList[i].tag.Equals("Bow") || objectList[i].tag.Equals("Staff") || objectList[i].tag.Equals("fire"))
                 {
                     Destroy(objectList[i].gameObject);
                 }

@@ -73,6 +73,7 @@ public class PlayerController : NetworkBehaviour
     private GameObject revive;
 
     //Teleport
+    private bool teleporting = false;
     public GameObject teleAnim;
     private GameObject tele;
 
@@ -407,7 +408,10 @@ public class PlayerController : NetworkBehaviour
     //teleporting animation
     public void teleport()
     {
-        StartCoroutine(TeleportAnimation());
+        if (!teleporting)
+        {
+            StartCoroutine(TeleportAnimation());
+        }
     }
 
 
@@ -762,11 +766,13 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator TeleportAnimation()
     {
+        teleporting = true;
         alive = false;
         CmdTeleport();
         yield return new WaitForSeconds(1);
         alive = true;
-        Destroy(tele);
+        CmdDestroy(tele);
+        teleporting = false;
     }
 
 
