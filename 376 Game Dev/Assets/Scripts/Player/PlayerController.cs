@@ -78,7 +78,8 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetButtonDown("Melee"))
         {
-            //Should be different animation anim.SetTrigger("attacking");
+            netAnim.SetTrigger("melee");
+            netAnim.animator.ResetTrigger("melee");
             melee();
         }
 

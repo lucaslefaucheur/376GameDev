@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 0fdca50276208464c9442c6b786db358
+guid: 58655ee2dd2fea94a940b7aef649e831
 TextureImporter:
   fileIDToRecycleName:
-    21300000: player2_0
-    21300002: player2_1
-    21300004: player2_2
-    21300006: player2_3
-    21300008: player2_4
-    21300010: player2_5
-    21300012: player2_6
-    21300014: player2_7
-    21300016: player2_8
-    21300018: player2_9
-    21300020: player2_10
-    21300022: player2_11
+    21300000: melee_0
+    21300002: melee_1
+    21300004: melee_2
+    21300006: melee_3
+    21300008: melee_4
+    21300010: melee_5
+    21300012: melee_6
+    21300014: melee_7
+    21300016: melee_8
+    21300018: melee_9
+    21300020: melee_10
+    21300022: melee_11
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -92,33 +92,11 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player2_0
+      name: melee_0
       rect:
         serializedVersion: 2
         x: 0
@@ -132,13 +110,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5594a0f212aab194db52947e3a25a278
+      spriteID: 7d916d7e5f10f384d871b420c4121285
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_1
+      name: melee_1
       rect:
         serializedVersion: 2
         x: 512
@@ -152,13 +130,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 258b513bca94fc0439f3b9d21e19d6a7
+      spriteID: e4799e9bb20ca41448da89f822b44f67
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_2
+      name: melee_2
       rect:
         serializedVersion: 2
         x: 1024
@@ -172,13 +150,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bda1c6d37e050a848b5c00e0f70f62d2
+      spriteID: 00c83b3bdd063b24da0db703578961a0
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_3
+      name: melee_3
       rect:
         serializedVersion: 2
         x: 1536
@@ -192,13 +170,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f588b1478651be34789e2bb50153b41f
+      spriteID: 6c8b057b3d3ff6d47b34db4f038aaeb8
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_4
+      name: melee_4
       rect:
         serializedVersion: 2
         x: 0
@@ -212,13 +190,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7328a54dad620143aae8491bd4cfdd3
+      spriteID: 5d1e0425f3c0dbf4fbb7e92a6a4fa61b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_5
+      name: melee_5
       rect:
         serializedVersion: 2
         x: 512
@@ -232,13 +210,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8c0457d82306c74f86b48892de22101
+      spriteID: 11bbb9f4e5d40ae4dadae17b264ed8d1
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_6
+      name: melee_6
       rect:
         serializedVersion: 2
         x: 1024
@@ -252,13 +230,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18e9c3cd2f2b23e4e8b0fd9fe2e69fda
+      spriteID: ecab6bc607fe7224f8a85f8610264a8f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_7
+      name: melee_7
       rect:
         serializedVersion: 2
         x: 1536
@@ -272,13 +250,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4660e2f33a4573a4cb93ebf83b64a092
+      spriteID: 507670d99074b58438c29a448de6eaaf
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_8
+      name: melee_8
       rect:
         serializedVersion: 2
         x: 0
@@ -292,13 +270,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88bd8af8e5bb0194a9a49c5b8d7c11e3
+      spriteID: d0a93e13da00ed14c95c017d00e8bf36
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_9
+      name: melee_9
       rect:
         serializedVersion: 2
         x: 512
@@ -312,13 +290,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc62ce834301df744810f6c9415243a1
+      spriteID: 5c535845259640a4bb5f5b94a8df9d4c
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_10
+      name: melee_10
       rect:
         serializedVersion: 2
         x: 1024
@@ -332,13 +310,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aab5d1a1a0c2f24c97c379a4f10ea27
+      spriteID: d98c932878d31b444b7ea58bfc2756e9
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player2_11
+      name: melee_11
       rect:
         serializedVersion: 2
         x: 1536
@@ -352,7 +330,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eed24373651c00e4f94059e98e118985
+      spriteID: c5cdfb495a2e7234096cf89d9bceabf3
       vertices: []
       indices: 
       edges: []
@@ -360,7 +338,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: ef5564340d35e8343bf386195bb2b1ca
+    spriteID: d23b94f84b03e584d83a98ff24f076fa
     vertices: []
     indices: 
     edges: []
