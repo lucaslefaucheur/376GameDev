@@ -160,8 +160,8 @@ public class WaveManager : NetworkBehaviour {
             Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
             enemy = Instantiate(_enemy, _sp.position, _sp.rotation);
             //Set new enemy attack and health
-            enemy.GetComponent<Health>().currentAttackDamage = enemy.GetComponent<Health>().startingAttackDamage + (scaler.getLevel() - 1) * 5;
-            enemy.GetComponent<Health>().startingHealth = enemy.GetComponent<Health>().startingHealth + (scaler.getLevel() - 1) * 5;
+            enemy.GetComponent<Health>().setAttackDamage(enemy.GetComponent<Health>().getStartingAttack() + (enemy.GetComponent<Health>().getStartingAttack() / 5  * (scaler.getLevel() - 1)));
+            enemy.GetComponent<Health>().setHealth(enemy.GetComponent<Health>().getStartingHealth() + (enemy.GetComponent<Health>().getStartingHealth() / 5 * (scaler.getLevel() - 1)));
             NetworkServer.Spawn(enemy);
         }
 

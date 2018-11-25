@@ -12,10 +12,15 @@ public class BossSpawnManager : NetworkBehaviour {
     private GameObject bossObject;
     private GameObject bossTemp;
 
+    private GameController scaler;
+
     bool loot = false;
 
     // Use this for initialization
     void Start () {
+
+        scaler = GameObject.Find("Manager").GetComponent<GameController>();
+
         //set a scale for the boss' health
         //scale = level * numPlayer;
 
@@ -28,8 +33,8 @@ public class BossSpawnManager : NetworkBehaviour {
             bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
             bossTemp = Instantiate(bossObject, spawnPoint, Quaternion.identity);
             // Health and Damage scaling
-            bossTemp.GetComponent<Health>().currentHealth = bossTemp.GetComponent<Health>().startingHealth;
-            bossTemp.GetComponent<Health>().currentAttackDamage = bossTemp.GetComponent<Health>().startingAttackDamage;
+            bossTemp.GetComponent<Health>().setHealth(bossTemp.GetComponent<Health>().getStartingHealth() + (bossTemp.GetComponent<Health>().getStartingHealth() / 5 * (scaler.getLevel() - 1)));
+            bossTemp.GetComponent<Health>().setAttackDamage(bossTemp.GetComponent<Health>().getStartingAttack() + (bossTemp.GetComponent<Health>().getStartingAttack() / 5 * (scaler.getLevel() - 1)));
             NetworkServer.Spawn(bossTemp);
 
         }
