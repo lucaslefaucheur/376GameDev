@@ -22,11 +22,12 @@ public class EnemyController : NetworkBehaviour {
     private float counter = 2.0f;
     private Vector2 InitialPosition;
     private Vector2 direction;
-    private float minX, maxX, minY, maxY;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
 
     private Rigidbody2D rb;
+
+    private int attackCounter=0;
 
     void Start()
     {
@@ -82,16 +83,22 @@ public class EnemyController : NetworkBehaviour {
         if (!isServer)
             return;
 
-        if (Target == null)
-        {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
 
-            if (hitColliders.Length > 0)
+        if (hitColliders.Length > 0)
+        {
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if(hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                Target = null;
+            }
+            else
+            {
                 Target = hitColliders[randomint].transform;
             }
         }
+        
     }
 
     public void PushedBack()
@@ -108,7 +115,7 @@ public class EnemyController : NetworkBehaviour {
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
 
             // changes direction if it touches the player
             front = -1;
@@ -196,6 +203,7 @@ public class EnemyController : NetworkBehaviour {
     {
         if (!test2)
         {
+            anim.SetBool("Attack", true);
             // direction of the attack: towards the position of the player
             direction.x = Target.transform.position.x - transform.position.x;
             direction.y = Target.transform.position.y - transform.position.y;
@@ -216,6 +224,7 @@ public class EnemyController : NetworkBehaviour {
         }
         else
         {
+            anim.SetBool("Attack", false);
             counter -= Time.deltaTime; // counter between every attacks
             if (counter <= 0)
             {

@@ -24,6 +24,7 @@ public class GiraffeController : NetworkBehaviour {
     
     private float counter;
     //public GameObject EnemyHitParticle;
+    private int attackCounter = 0;
 
     void Start()
     {
@@ -58,10 +59,16 @@ public class GiraffeController : NetworkBehaviour {
                 
             else if (distance > 1) {
                 Attack(distance);
+                attackCounter++;
             }
                 
             else {
                 Teleport();
+            }
+
+            if(attackCounter == 3)
+            {
+                Target = null;
             }
                 
         }
@@ -82,21 +89,27 @@ public class GiraffeController : NetworkBehaviour {
         if (!isServer)
             return;
         
-        if (Target == null)
-        {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
             
-            if (hitColliders.Length > 0)
+        if (hitColliders.Length > 0)
+        {
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                Target = null;
+            }
+            else
+            {
                 Target = hitColliders[randomint].transform;
             }
         }
     }
-    
+
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
+
     void TakeDamage(int number) {
         Health -= number;
         if (Health <= 0) {
@@ -180,12 +193,10 @@ public class GiraffeController : NetworkBehaviour {
         // wait before following 
         if (counter > 0)
         {
-            anim.SetBool("Appear", true);
             counter -= Time.deltaTime;
         }
         else if (isServer)
         {
-            anim.SetBool("Appear", false);
             // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;

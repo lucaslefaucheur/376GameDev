@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 114928630134984088}
   - component: {fileID: 111244003318848030}
   - component: {fileID: 114829073430933958}
+  - component: {fileID: 82676871698107392}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -225,6 +226,101 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772591242014150}
   m_Enabled: 1
+--- !u!82 &82676871698107392
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279971828661606}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &95556547416730474
 Animator:
   serializedVersion: 3
@@ -234,7 +330,7 @@ Animator:
   m_GameObject: {fileID: 1279971828661606}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3b68f2a732e64274e8c8aa0b6f70514b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5110cef0f807f3648ba5f5ada2d48447, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -350,9 +446,24 @@ MonoBehaviour:
   speed: 0
   currentHealth: 0
   healthBar: {fileID: 224953432941844594}
+  swingSound: {fileID: 8300000, guid: c4297284c5a189944bc57768a3b13ea9, type: 3}
+  meleeSound: {fileID: 8300000, guid: 6e5cf64a49c4e3f41bd59bc0059d0959, type: 3}
+  sheildSound: {fileID: 8300000, guid: c558520039262784da970316b91b974d, type: 3}
+  speerSound: {fileID: 8300000, guid: 78812d12cdf15d8459e0caedfed02ecc, type: 3}
+  arrowSound: {fileID: 8300000, guid: a6f472cc60162e7479b66f79f4656913, type: 3}
+  pickWeaponSound: {fileID: 8300000, guid: d4a54e652d5389042ae295d7f0c64c7b, type: 3}
+  pickCrystalSound: {fileID: 8300000, guid: bdf25cc92126cca4881c2adea704f1b3, type: 3}
+  levelUpSound: {fileID: 8300000, guid: 232106ed586e13e4ea6d534e3325d75e, type: 3}
+  dieSound: {fileID: 8300000, guid: 30d9b38ab6f48a946bca67e7bd7b68f4, type: 3}
+  e1Sound: {fileID: 8300000, guid: b0eb782656cf3734aa60be99cfa08c06, type: 3}
+  e2Sound: {fileID: 8300000, guid: 405309970be33ef43a9d5ceff5176772, type: 3}
+  e3Sound: {fileID: 8300000, guid: 9efc35b47b0085942a10bfac6cbcc8ad, type: 3}
+  weaponBreakSound: {fileID: 8300000, guid: f312aa379d549584dbede2dad32f7a66, type: 3}
+  chestOpenSound: {fileID: 8300000, guid: a3dc92c73422aaf4aa70acc747a7bf0a, type: 3}
   grounded: 0
   arrow: {fileID: 1703805394234736, guid: a05c7d6fbd7fdde448d0ca956c69eb06, type: 2}
   bubble: {fileID: 1258235230722250, guid: 76cea1a00b4314648a9067a117aa3a7a, type: 2}
+  reviveAnim: {fileID: 1799000089411724, guid: a997408f282e8de47bf9bffd14e34e80, type: 2}
 --- !u!114 &114730287807954692
 MonoBehaviour:
   m_ObjectHideFlags: 1

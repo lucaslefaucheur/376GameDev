@@ -206,6 +206,7 @@ public class MapManagerScript : NetworkBehaviour
     public void notifyEntry()
     {
         Destroy(currentMap);
+        GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
 

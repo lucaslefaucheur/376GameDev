@@ -77,16 +77,22 @@ public class RhinoController : NetworkBehaviour
         if (!isServer)
             return;
 
-        if (Target == null)
-        {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
 
-            if (hitColliders.Length > 0)
+        if (hitColliders.Length > 0)
+        {
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                Target = null;
+            }
+            else
+            {
                 Target = hitColliders[randomint].transform;
             }
         }
+        
     }
 
     /* Orientation: determines which sprite to use
@@ -165,6 +171,7 @@ public class RhinoController : NetworkBehaviour
         direction.Normalize();
         transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
         counter = 0.2f;
+        Target = null;
     }
 
     //Colliding with the player will cause damage to the player
@@ -173,7 +180,7 @@ public class RhinoController : NetworkBehaviour
         if (other.gameObject.layer.Equals(8))
         {
             Debug.Log("Collision with player");
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(1);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
         }
     }
 

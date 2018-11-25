@@ -11,12 +11,15 @@ public class fireController : MonoBehaviour {
     private float angle;
     private Vector2 centre;
     private Vector2 fireDirection;
+    Vector3 playerPosition;
+    public int damage;
 
 
     // Use this for initialization
     void Start () {
 
-        Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+        //playerPosition = gameObject.GetComponent<BearController>().getTarget();
+        playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         fireDirection = (playerPosition - transform.position).normalized;
 
         timer = Time.time + 8;
@@ -47,7 +50,7 @@ public class fireController : MonoBehaviour {
         speed = 0;
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
         }
         
     }

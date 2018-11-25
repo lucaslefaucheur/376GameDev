@@ -76,16 +76,22 @@ public class LeopardController : NetworkBehaviour
         if (!isServer)
             return;
 
-        if (Target == null)
-        {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
 
-            if (hitColliders.Length > 0)
+        if (hitColliders.Length > 0)
+        {
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                Target = null;
+            }
+            else
+            {
                 Target = hitColliders[randomint].transform;
             }
         }
+        
     }
 
     public void PushedBack()
@@ -102,7 +108,7 @@ public class LeopardController : NetworkBehaviour
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
         }
     }
 
@@ -184,8 +190,13 @@ public class LeopardController : NetworkBehaviour
             // if the enemy reaches the 'move spot'
             if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f || counter <= 0)
             {
-                Instantiate(Sphere, transform.position, transform.rotation);
-                moveSpot.position = new Vector2(Random.Range(Target.position.x - 2.0f, Target.position.x + 2.0f), Random.Range(Target.position.y - 2.0f, Target.position.y + 2.0f));
+                if (isServer)
+                {
+                    GameObject tempSphere = Instantiate(Sphere, transform.position, transform.rotation);
+                    moveSpot.position = new Vector2(Random.Range(Target.position.x - 2.0f, Target.position.x + 2.0f), Random.Range(Target.position.y - 2.0f, Target.position.y + 2.0f));
+                    tempSphere.GetComponent<SphereController>().damage = GetComponent<Health>().currentAttackDamage / 5;
+                    NetworkServer.Spawn(tempSphere);
+                }
                 counter = 5.0f;
             }
         }

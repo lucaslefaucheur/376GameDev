@@ -16,23 +16,44 @@ public class PlayerController : NetworkBehaviour
     private int playerNumber;
 
     //Health
+    [SyncVar]
     private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
+    private bool alive = true;
 
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
+    [SyncVar]
     private float armourVar = 0f;
     private int attack = 10;
     private float attackVar = 0f;
-    private float healthVar = 0f;
+    [SyncVar]
     private float moveVar = 0f;
 
     //for internal referencing
     private Rigidbody2D playerRB;
     private Animator anim;
+    private NetworkAnimator netAnim;
     private SpriteRenderer rendy;
     public RectTransform healthBar;
+
+    //audio clips
+    public AudioClip swingSound;
+    public AudioClip meleeSound;
+    public AudioClip sheildSound;
+    public AudioClip speerSound;
+    public AudioClip arrowSound;
+    public AudioClip pickWeaponSound;
+    public AudioClip pickCrystalSound;
+    public AudioClip levelUpSound;
+    public AudioClip dieSound;
+    public AudioClip e1Sound;
+    public AudioClip e2Sound;
+    public AudioClip e3Sound;
+    public AudioClip weaponBreakSound;
+    public AudioClip chestOpenSound;
+
 
     //item stuff
     private GameObject equipped;
@@ -44,7 +65,13 @@ public class PlayerController : NetworkBehaviour
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
-
+    //Crystal and Revive
+    private int crystalCount = 0;
+    [SyncVar]
+    private bool reviving = false;
+    public GameObject reviveAnim;
+    private GameObject revive;
+  
     private void Start()
     {
 
@@ -57,34 +84,11 @@ public class PlayerController : NetworkBehaviour
         // set local components
         playerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        netAnim = GetComponent<NetworkAnimator>();
         rendy = GetComponent<SpriteRenderer>();
 
         // set initial health
         currentHealth = maxHealth;
-    }
-
-    //On local player start only
-    public override void OnStartLocalPlayer()
-    {
-        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
-
-        netAnim.SetParameterAutoSend(0, true);
-        netAnim.SetParameterAutoSend(1, true);
-        netAnim.SetParameterAutoSend(2, true);
-        netAnim.SetParameterAutoSend(3, true);
-        netAnim.SetParameterAutoSend(4, true);
-        netAnim.SetParameterAutoSend(5, true);
-    }
-
-    public override void PreStartClient()
-    {
-        NetworkAnimator netAnim = GetComponent<NetworkAnimator>();
-        netAnim.SetParameterAutoSend(0, true);
-        netAnim.SetParameterAutoSend(1, true);
-        netAnim.SetParameterAutoSend(2, true);
-        netAnim.SetParameterAutoSend(3, true);
-        netAnim.SetParameterAutoSend(4, true);
-        netAnim.SetParameterAutoSend(5, true);
     }
 
     void Update()
@@ -96,128 +100,134 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        Move();
-
-        if (Input.GetButtonDown("Melee"))
+        if (alive)
         {
-            //Should be different animation anim.SetTrigger("attacking");
-            melee();
+
+            Move();
+
+            if (Input.GetButtonDown("Melee"))
+            {
+                netAnim.SetTrigger("melee");
+                netAnim.animator.ResetTrigger("melee");
+                melee();
+            }
+
+            if (Input.GetButtonDown("Weapon"))
+            {
+                if (GetComponent<Sword>() != null)
+                {
+                    netAnim.SetTrigger("attacking");
+                    netAnim.animator.ResetTrigger("attacking");
+                    //anim.SetTrigger("attacking");
+                    swordHit();
+                }
+                else if (GetComponent<Staff>() != null)
+                {
+                    netAnim.SetTrigger("attacking");
+                    netAnim.animator.ResetTrigger("attacking");
+                    //anim.SetTrigger("attacking");
+                    staffHit();
+                }
+                else if (GetComponent<bow>() != null)
+                {
+                    netAnim.SetTrigger("attacking");
+                    netAnim.animator.ResetTrigger("attacking");
+                    //anim.SetTrigger("attacking");
+                    bowHit();
+                }
+                else if (GetComponent<Shield>() != null)
+                {
+                    netAnim.SetTrigger("attacking");
+                    netAnim.animator.ResetTrigger("attacking");
+                    //anim.SetTrigger("attacking");
+                    shieldHit();
+                }
+                else
+                    Debug.Log("no weapon attached");
+            }
+
+
+            if (Input.GetButtonDown("Pickup"))
+            {
+                
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+                if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
+                {
+                    if (hit.collider.tag.Equals("chest"))
+                    {
+                        gameObject.GetComponent<AudioSource>().clip = chestOpenSound;
+                        gameObject.GetComponent<AudioSource>().Play();
+                        CmdDestroy(hit.collider.gameObject);
+                        CmdChest();
+                    }
+
+                    else if (hit.collider.tag.Equals("Sword"))
+                    {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
+                        moveVar = -0.25f;
+                        armourVar = 0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Sword>();
+                        Debug.Log("has sword");
+
+                        anim.SetBool("hasSword", true);
+                        anim.SetBool("hasStaff", false);
+                        anim.SetBool("hasShield", false);
+                        anim.SetBool("hasBow", false);
+                    }
+
+                    else if (hit.collider.tag.Equals("Bow"))
+                    {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
+                        moveVar = 0.3f;
+                        armourVar = -0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<bow>();
+                        Debug.Log("has bow");
+                        anim.SetBool("hasBow", true);
+                        anim.SetBool("hasStaff", false);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasShield", false);
+                    }
+
+                    else if (hit.collider.tag.Equals("Shield"))
+                    {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
+                        moveVar = -0.5f;
+                        armourVar = 0.5f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Shield>();
+                        Debug.Log("has shield");
+                        anim.SetBool("hasBow", false);
+                        anim.SetBool("hasShield", true);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasStaff", false);
+                    }
+
+                    else if (hit.collider.tag.Equals("Staff"))
+                    {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
+                        moveVar = -0.25f;
+                        armourVar = -0.25f;
+                        CmdDestroy(hit.collider.gameObject);
+                        unequip();
+                        gameObject.AddComponent<Staff>();
+                        Debug.Log("has staff");
+                        anim.SetBool("hasBow", false);
+                        anim.SetBool("hasStaff", true);
+                        anim.SetBool("hasSword", false);
+                        anim.SetBool("hasShield", false);
+                    }
+                }
+            }
         }
-
-        if (Input.GetButtonDown("Weapon"))
-        {
-            if (GetComponent<Sword>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                swordHit();
-            }
-            else if (GetComponent<Staff>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                staffHit();
-            }
-            else if (GetComponent<bow>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                bowHit();
-            }
-            else if (GetComponent<Shield>() != null)
-            {
-                GetComponent<NetworkAnimator>().SetTrigger("attacking");
-                anim.SetTrigger("attacking");
-                shieldHit();
-            }
-            else
-                Debug.Log("no weapon attached");
-        }
-
-
-        if (Input.GetButtonDown("Pickup"))
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-            if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
-            {
-                if (hit.collider.tag.Equals("chest"))
-                {
-                    CmdDestroy(hit.collider.gameObject);
-                    CmdChest();
-                }
-
-                else if (hit.collider.tag.Equals("Sword"))
-                {
-                    moveVar = -0.25f;
-                    armourVar = 0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Sword>();
-                    Debug.Log("has sword");
-
-                    anim.SetBool("hasSword", true);
-                    anim.SetBool("hasStaff", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 1f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Bow"))
-                {
-                    moveVar = 0.3f;
-                    armourVar = -0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<bow>();
-                    Debug.Log("has bow");
-                    anim.SetBool("hasStaff", false);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Shield"))
-                {
-                    moveVar = -0.5f;
-                    armourVar = 0.5f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Shield>();
-                    Debug.Log("has shield");
-                    anim.SetBool("hasShield", true);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasStaff", false);
-                    anim.SetLayerWeight(3, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(2, 0f);
-                }
-
-                else if (hit.collider.tag.Equals("Staff"))
-                {
-                    moveVar = -0.25f;
-                    armourVar = -0.25f;
-                    CmdDestroy(hit.collider.gameObject);
-                    unequip();
-                    gameObject.AddComponent<Staff>();
-                    Debug.Log("has staff");
-                    anim.SetBool("hasStaff", true);
-                    anim.SetBool("hasSword", false);
-                    anim.SetBool("hasShield", false);
-                    anim.SetLayerWeight(2, 1f);
-                    anim.SetLayerWeight(1, 0f);
-                    anim.SetLayerWeight(3, 0f);
-                }
-            }
-            else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
-            {
-                //revive
-            }
-
-        }
-
     }
 
 
@@ -233,12 +243,13 @@ public class PlayerController : NetworkBehaviour
     //attack function
     private void melee()
     {
+        gameObject.GetComponent<AudioSource>().clip = meleeSound;
+        gameObject.GetComponent<AudioSource>().Play();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+        
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
-            
-            //hit.collider.gameObject.GetComponent<EnemyController>().PushedBack();
             CmdDealDamage(hit.collider.gameObject, smallAttack());
             //to remove
             Debug.Log("melee attack hit for: " + smallAttack());
@@ -255,6 +266,9 @@ public class PlayerController : NetworkBehaviour
     //weapon attack function
     private void swordHit()
     {
+
+        gameObject.GetComponent<AudioSource>().clip = swingSound;
+        gameObject.GetComponent<AudioSource>().Play();
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
 
         Vector2 startPos = transform.position; // umm, start position !
@@ -293,6 +307,8 @@ public class PlayerController : NetworkBehaviour
 
     private void bowHit()
     {
+        gameObject.GetComponent<AudioSource>().clip = arrowSound;
+        gameObject.GetComponent<AudioSource>().Play();
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
@@ -303,6 +319,9 @@ public class PlayerController : NetworkBehaviour
 
     private void shieldHit()
     {
+        gameObject.GetComponent<AudioSource>().clip = sheildSound;
+        gameObject.GetComponent<AudioSource>().Play();
+
         float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
         Debug.Log("radius = " + temp);
         CmdSpawnBubble(temp);
@@ -314,6 +333,9 @@ public class PlayerController : NetworkBehaviour
 
     private void staffHit()
     {
+
+        gameObject.GetComponent<AudioSource>().clip = speerSound;
+        gameObject.GetComponent<AudioSource>().Play();
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
@@ -348,6 +370,8 @@ public class PlayerController : NetworkBehaviour
     // to be called by the collision detector
     public void TakeDamage(int amount)
     {
+        playDifferentEnemyAttackSound();
+        gameObject.GetComponent<AudioSource>().Play();
         if (!isServer)
         {
             return;
@@ -355,10 +379,46 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
+            gameObject.GetComponent<AudioSource>().clip = dieSound;
+            GetComponent<AudioSource>().Play();
+            //Death
             currentHealth = 0;
-            Destroy(gameObject);
-            Debug.Log("Dead!");
+            alive = false;
+            if (crystalCount >= 5 && !reviving)
+            {
+                StartCoroutine(Revive());
+                Debug.Log("Reviving...");
+            }
+            else if (crystalCount < 5)
+            {
+                StartCoroutine(Death(gameObject));
+            }
+            else
+            {
+                currentHealth = 0;
+            }
         }
+    }
+
+
+    public void playDifferentEnemyAttackSound()
+    {
+        int randomSound = Random.Range(0, 3);
+
+        switch (randomSound)
+        {
+            case 0:
+                gameObject.GetComponent<AudioSource>().clip = e1Sound;
+                break;
+            case 1:
+                gameObject.GetComponent<AudioSource>().clip = e2Sound; ;
+                break;
+            case 2:
+                gameObject.GetComponent<AudioSource>().clip = e3Sound;
+                break;
+        }
+
+       
     }
 
     //to be used to cast an attack
@@ -369,20 +429,28 @@ public class PlayerController : NetworkBehaviour
 
     public void unequip()
     {
+        gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
+        gameObject.GetComponent<AudioSource>().Play();
         moveVar = 0;
         armourVar = 0;
-        
+
         if (GetComponent<Sword>() != null)
         {
             Destroy(gameObject.GetComponent<Sword>());
             anim.SetBool("hasSword", false);
         }
-        else if (GetComponent<bow>() != null)
+        else if (GetComponent<bow>() != null){
             Destroy(gameObject.GetComponent<bow>());
-        else if (GetComponent<Staff>() != null)
+            anim.SetBool("hasBow", false);
+          }
+        else if (GetComponent<Staff>() != null){
             Destroy(gameObject.GetComponent<Staff>());
-        else if (GetComponent<Shield>() != null)
+            anim.SetBool("hasStaff", false);
+          }
+        else if (GetComponent<Shield>() != null){
             Destroy(gameObject.GetComponent<Shield>());
+            anim.SetBool("hasShield", false);
+          }
 
         Debug.Log("unequipped");
     }
@@ -448,10 +516,13 @@ public class PlayerController : NetworkBehaviour
 
         if (collision.gameObject.tag == "crystal")
         {
-            GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
-            Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
+            crystalCount++;
+            Debug.Log("Crystal Count " + crystalCount);
+            gameObject.GetComponent<AudioSource>().clip = pickCrystalSound;
+            gameObject.GetComponent<AudioSource>().Play();
             Destroy(collision.gameObject);
         }
+
         //If contact with RhinoBoss
         if (collision.gameObject.tag == "RhinoBoss")
         {
@@ -479,6 +550,8 @@ public class PlayerController : NetworkBehaviour
     //to be called when level finishes, to up base stats
     public void levelUp(int level)
     {
+        gameObject.GetComponent<AudioSource>().clip = levelUpSound;
+        gameObject.GetComponent<AudioSource>().Play();
         //scales the attack base up with level up
         attack = (int)Mathf.Floor(attack + (0.325f * level));
         //takes note of the players health percentage
@@ -489,11 +562,7 @@ public class PlayerController : NetworkBehaviour
         currentHealth = maxHealth * temp;
     }
 
-    private void OnChangeHealth(float currentHealth)
-    {
-        //sets the size of the green healthbar in relaiton to the percentage of health left
-        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
-    }
+    
 
     public void setRespawn()
     {
@@ -551,6 +620,13 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
+  
+    private void OnChangeHealth(float currentHealth)
+    {
+        //sets the size of the green healthbar in relaiton to the percentage of health left
+        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
     [Command]
     void CmdDealDamage(GameObject hit, int dmg)
     {
@@ -580,6 +656,7 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         NetworkServer.Destroy(state);
+        Debug.Log("object destroyed command");
 
     }
 
@@ -592,6 +669,17 @@ public class PlayerController : NetworkBehaviour
         NetworkServer.Spawn(arrowSpawn);
 
     }
+
+    [Command]
+    void CmdSpawnRevive()
+    {
+        // make the change local on the server
+        revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(revive);
+        
+
+    }
+
 
     [Command]
     void CmdSpawnBubble(float temp)
@@ -635,7 +723,25 @@ public class PlayerController : NetworkBehaviour
     *
     *
     * ********************************************************/
+    IEnumerator Revive()
+    {
+        reviving = true;
+        CmdSpawnRevive();
+        yield return new WaitForSeconds(5);
+        CmdDestroy(revive);
+        crystalCount -= 5;
+        Debug.Log("Crystal Count " + crystalCount);
+        alive = true;
+        setHealth((int)maxHealth);
+        reviving = false;
 
+    }
+
+    IEnumerator Death(GameObject player)
+    {
+        yield return new WaitForSeconds(5);
+        CmdDestroy(player);
+    }
 
 
 }
