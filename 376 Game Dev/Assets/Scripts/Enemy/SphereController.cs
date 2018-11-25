@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class SphereController : NetworkBehaviour {
+    public int damage;
 
     private Animator anim;
     private float counter; 
@@ -30,7 +31,7 @@ public class SphereController : NetworkBehaviour {
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
             anim.SetBool("Explodes", true);
             if (counter > 5)
                 counter -= Time.deltaTime;

@@ -374,6 +374,8 @@ MonoBehaviour:
   currentHealth: 10
   healthBar: {fileID: 224867672774873492}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+  startingAttackDamage: 5
+  currentAttackDamage: 5
 --- !u!114 &114645517107563764
 MonoBehaviour:
   m_ObjectHideFlags: 1

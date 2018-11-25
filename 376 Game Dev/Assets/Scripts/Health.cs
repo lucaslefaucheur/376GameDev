@@ -14,6 +14,8 @@ public class Health : NetworkBehaviour {
     public RectTransform healthBar;
     public GameObject deathFX;
     private Transform Target;
+    public int startingAttackDamage;
+    public int currentAttackDamage;
 
     void Awake()
     {

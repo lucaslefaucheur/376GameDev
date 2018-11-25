@@ -11,7 +11,7 @@ public class GameController : NetworkBehaviour
     public Text hpText;                                     //A reference to the UI text component that displays the player's HP
     public Text levelText;                                  //A reference to the UI text component that displays the current level number
     public GameObject levelTransition;                      //Background for levelText, while level is being set up
-    private int level = 1;                                  //Current level number
+    public int level = 1;                                  //Current level number
     private bool settingUp = true;                          //Boolean to check if we're currently setting up game
     private int numOfPlayers = 1;                           //Keep track of the number of players spawn
     private GameObject player;
@@ -103,7 +103,7 @@ public class GameController : NetworkBehaviour
         return numOfPlayers;
     }
 
-    private int getLevel()
+    public int getLevel()
     {
         return level;
     }
@@ -115,10 +115,10 @@ public class GameController : NetworkBehaviour
         settingUp = false;
     }
 
-    void LevelUp()
+    public void LevelUp()
     {
         level++;
-        InitGame();
+        //InitGame();
     }
 
     //GameOver when the player reaches 0 HP
