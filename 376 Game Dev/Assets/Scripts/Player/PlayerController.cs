@@ -77,6 +77,10 @@ public class PlayerController : NetworkBehaviour
     public GameObject teleAnim;
     private GameObject tele;
 
+    //Death
+    public GameObject ghostAnim;
+    private GameObject ghost;
+
     private void Start()
     {
 
@@ -714,6 +718,13 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
+    void CmdGhost()
+    {
+        ghost = Instantiate(ghostAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(ghost);
+    }
+
+    [Command]
     void CmdProvideFlipStateToServer(bool state)
     {
         // make the change local on the server
@@ -760,6 +771,7 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator Death(GameObject player)
     {
+        StartCoroutine(FloatingGhost());
         yield return new WaitForSeconds(5);
         CmdDestroy(player);
     }
@@ -773,6 +785,13 @@ public class PlayerController : NetworkBehaviour
         alive = true;
         CmdDestroy(tele);
         teleporting = false;
+    }
+
+    IEnumerator FloatingGhost()
+    {
+        CmdGhost();
+        yield return new WaitForSeconds(10);
+        CmdDestroy(ghost);
     }
 
 
