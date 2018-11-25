@@ -94,7 +94,15 @@ public class BirdController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
+
+                if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
+                {
+                    Target = null;
+                }
+                else
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
