@@ -45,7 +45,12 @@ public class PlayerController : NetworkBehaviour
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
-    
+    //Crystal and Revive
+    private int crystalCount = 0;
+    private bool reviving = false;
+    public GameObject reviveAnim;
+    private GameObject revive;
+
     private void Start()
     {
 
@@ -363,10 +368,23 @@ public class PlayerController : NetworkBehaviour
             //Death
             currentHealth = 0;
             alive = false;
-            Destroy(gameObject, 10);
-            Debug.Log("Dead!");
+            if (crystalCount >= 5 && !reviving)
+            {
+                StartCoroutine(Revive());
+                Debug.Log("Reviving...");
+            }
+            else if (crystalCount < 5)
+            {
+                CmdDestroy(gameObject);
+            }
+            else
+            {
+                currentHealth = 0;
+            }
         }
     }
+
+    
 
     //to be used to cast an attack
     public int smallAttack()
@@ -455,8 +473,8 @@ public class PlayerController : NetworkBehaviour
 
         if (collision.gameObject.tag == "crystal")
         {
-            GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
-            Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
+            crystalCount++;
+            Debug.Log("Crystal Count " + crystalCount);
             Destroy(collision.gameObject);
         }
         //If contact with RhinoBoss
@@ -601,6 +619,17 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
+    void CmdSpawnRevive()
+    {
+        // make the change local on the server
+        revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(revive);
+        
+
+    }
+
+
+    [Command]
     void CmdSpawnBubble(float temp)
     {
         // make the change local on the server
@@ -642,7 +671,18 @@ public class PlayerController : NetworkBehaviour
     *
     *
     * ********************************************************/
+    IEnumerator Revive()
+    {
+        reviving = true;
+        CmdSpawnRevive();
+        yield return new WaitForSeconds(5);
+        CmdDestroy(revive);
+        crystalCount -= 5;
+        Debug.Log("Crystal Count " + crystalCount);
+        alive = true;
+        setHealth((int)maxHealth);
 
+    }
 
 
 }

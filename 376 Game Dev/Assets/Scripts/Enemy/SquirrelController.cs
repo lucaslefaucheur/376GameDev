@@ -198,7 +198,7 @@ public class SquirrelController : NetworkBehaviour
             GameObject temp = Instantiate(Nut, transform.position, transform.rotation);
             NetworkServer.Spawn(temp);
             temp.GetComponent<NutController>().Shoot(Target.transform);
-            counter = 5f;
+            counter = 2.5f;
         }
             
     }
