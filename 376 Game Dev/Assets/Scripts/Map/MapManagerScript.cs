@@ -208,7 +208,7 @@ public class MapManagerScript : NetworkBehaviour
 
     public void notifyEntry()
     {
-        Destroy(currentMap);
+        Destroy(currentMap,1f);
         playerList = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < playerList.Length; i++)
         {

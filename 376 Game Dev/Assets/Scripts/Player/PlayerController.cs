@@ -80,6 +80,7 @@ public class PlayerController : NetworkBehaviour
     //Death
     public GameObject ghostAnim;
     private GameObject ghost;
+    private bool dying = false;
 
     private void Start()
     {
@@ -396,9 +397,8 @@ public class PlayerController : NetworkBehaviour
             if (crystalCount >= 5 && !reviving)
             {
                 StartCoroutine(Revive());
-                Debug.Log("Reviving...");
             }
-            else if (crystalCount < 5)
+            else if (crystalCount < 5 && !dying)
             {
                 StartCoroutine(Death(gameObject));
             }
@@ -771,6 +771,7 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator Death(GameObject player)
     {
+        dying = true;
         StartCoroutine(FloatingGhost());
         yield return new WaitForSeconds(5);
         CmdDestroy(player);
