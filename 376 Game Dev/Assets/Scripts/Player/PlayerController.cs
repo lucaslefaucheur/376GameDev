@@ -51,6 +51,10 @@ public class PlayerController : NetworkBehaviour
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
+    public override void OnDeserialize(NetworkReader reader, bool initialState)
+    {
+        base.OnDeserialize(reader, initialState);
+    }
 
     private void Start()
     {
