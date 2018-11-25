@@ -82,7 +82,6 @@ public class Health : NetworkBehaviour {
         // make the change local on the server
         GameObject crys = Instantiate(deathFX, transform.position, transform.rotation);
         NetworkServer.Spawn(crys);
-
     }
 
 }

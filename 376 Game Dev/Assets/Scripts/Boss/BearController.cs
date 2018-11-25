@@ -84,19 +84,33 @@ public class BearController : NetworkBehaviour
         
         if (Target == null)
         {
-            Collider2D [] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
             
             if (hitColliders.Length > 0)
             {
                 int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
+
+                if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
+                {
+                    Target = null;
+                }
+                else
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
-    
+
+    public Vector3 getTarget()
+    {
+        return Target.transform.position;
+    }
+
+
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-    
+
     void TakeDamage(int number) {
         Health -= number;
         if (Health <= 0) {
@@ -215,7 +229,7 @@ public class BearController : NetworkBehaviour
             yield return new WaitForSeconds(0.8f);
         }
         WalkSpeed = 2;
-
+        Target = null;
     }
 
     /***********************************

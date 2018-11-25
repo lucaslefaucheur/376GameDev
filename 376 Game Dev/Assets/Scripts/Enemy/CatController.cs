@@ -19,7 +19,7 @@ public class CatController : NetworkBehaviour
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
     private float counter = 5.0f;
-    private float counter2 = 0.0f;
+    private float counter2 = 0;
 
     private Vector2 InitialPosition;
     private Vector2 direction;
@@ -82,16 +82,22 @@ public class CatController : NetworkBehaviour
         if (!isServer)
             return;
 
-        if (Target == null)
-        {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(loc.position, FollowRange, caster);
 
-            if (hitColliders.Length > 0)
+        if (hitColliders.Length > 0)
+        {
+            int randomint = Random.Range(0, hitColliders.Length);
+
+            if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
             {
-                int randomint = Random.Range(0, hitColliders.Length);
+                Target = null;
+            }
+            else
+            {
                 Target = hitColliders[randomint].transform;
             }
         }
+        
     }
 
     public void PushedBack()
@@ -203,6 +209,7 @@ public class CatController : NetworkBehaviour
             Target.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
             counter2 = 1.0f;
         }
+        Target = null;
     }
 
     /***********************************
