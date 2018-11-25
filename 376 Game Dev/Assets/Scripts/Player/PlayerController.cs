@@ -177,7 +177,10 @@ public class PlayerController : NetworkBehaviour
                         gameObject.AddComponent<Shield>();
                         Debug.Log("has shield");
                         setAnimation("hasShield");
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                     }
 
                     else if (hit.collider.tag.Equals("Staff"))
@@ -361,6 +364,11 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     //to be used to cast an attack
     public int smallAttack()
     {
@@ -610,7 +618,12 @@ public class PlayerController : NetworkBehaviour
         // make the change local on the server
         revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(revive);
+<<<<<<< Updated upstream
         
+=======
+
+
+>>>>>>> Stashed changes
     }
 
 
