@@ -36,8 +36,8 @@ Transform:
 <<<<<<< Updated upstream
   m_LocalPosition: {x: 2.8349712, y: 0.45468587, z: 0}
 =======
-  m_LocalPosition: {x: -1.3438013, y: 0.40783545, z: 0}
->>>>>>> Stashed changes
+  m_LocalPosition: {x: 15.466869, y: -9.580668, z: 0}
+>>>>>>> c4a861a91a22d99f4672f58ca21a18e3e2bdd423
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

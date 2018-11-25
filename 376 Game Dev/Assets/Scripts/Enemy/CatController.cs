@@ -19,7 +19,7 @@ public class CatController : NetworkBehaviour
     private readonly float FollowRange = 10;
     private readonly float PatrolRange = 3;
     private float counter = 5.0f;
-    private float counter2 = 0.0f;
+    private float counter2 = 0;
 
     private Vector2 InitialPosition;
     private Vector2 direction;

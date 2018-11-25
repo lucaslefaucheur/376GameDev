@@ -193,12 +193,10 @@ public class GiraffeController : NetworkBehaviour {
         // wait before following 
         if (counter > 0)
         {
-            anim.SetBool("Appear", true);
             counter -= Time.deltaTime;
         }
         else if (isServer)
         {
-            anim.SetBool("Appear", false);
             // direction of the follow: towards the position of the player
             direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
             transform.position = direction;
