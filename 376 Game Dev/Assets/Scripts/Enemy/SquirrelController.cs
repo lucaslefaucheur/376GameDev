@@ -207,6 +207,7 @@ public class SquirrelController : NetworkBehaviour
             NetworkServer.Spawn(temp);
             temp.GetComponent<NutController>().Shoot(Target.transform);
             counter = 2.5f;
+            Target = null;
         }
             
     }

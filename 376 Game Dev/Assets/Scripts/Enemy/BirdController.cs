@@ -203,6 +203,7 @@ public class BirdController : NetworkBehaviour
             GameObject temp = Instantiate(birdFire, firePosition, Quaternion.FromToRotation(transform.position, Target.position));
             NetworkServer.Spawn(temp);
             counter = 0.917f + 0.583f;
+            Target = null;
         }
     }
 
