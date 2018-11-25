@@ -16,17 +16,19 @@ public class PlayerController : NetworkBehaviour
     private int playerNumber;
 
     //Health
+    [SyncVar]
     private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
-    [SyncVar(hook = "OnChangeHealth")]
+    [SyncVar(hook = "CmdOnChangeHealth")]
     public float currentHealth;
     private bool alive = true;
 
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
+    [SyncVar]
     private float armourVar = 0f;
     private int attack = 10;
     private float attackVar = 0f;
-    private float healthVar = 0f;
+    [SyncVar]
     private float moveVar = 0f;
 
     //for internal referencing
@@ -48,6 +50,7 @@ public class PlayerController : NetworkBehaviour
 
     //Crystal and Revive
     private int crystalCount = 0;
+    [SyncVar]
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
@@ -493,11 +496,7 @@ public class PlayerController : NetworkBehaviour
         currentHealth = maxHealth * temp;
     }
 
-    private void OnChangeHealth(float currentHealth)
-    {
-        //sets the size of the green healthbar in relaiton to the percentage of health left
-        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
-    }
+    
 
     public void setRespawn()
     {
@@ -555,6 +554,13 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
+     [Command]
+    private void CmdOnChangeHealth(float currentHealth)
+    {
+        //sets the size of the green healthbar in relaiton to the percentage of health left
+        healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
     [Command]
     void CmdDealDamage(GameObject hit, int dmg)
     {
