@@ -705,7 +705,7 @@ public class PlayerController : NetworkBehaviour
     [Command]
     void CmdTeleport()
     {
-        tele = Instantiate(teleAnim, transform.position, Quaternion.identity);
+        tele = Instantiate(teleAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(tele);
     }
 

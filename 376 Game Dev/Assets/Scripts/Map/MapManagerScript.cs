@@ -11,6 +11,7 @@ public class MapManagerScript : NetworkBehaviour
     public GameObject doorPrefab;
     private GameObject currentMap;
     private GameObject[] playerList;
+    private GameObject[] objectList;
 
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
@@ -161,6 +162,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
             bossMapPick = mapBossList[Random.Range(0, mapBossList.Count)];
@@ -177,6 +179,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
             enemyMapPick = mapEnemyList[Random.Range(0, mapEnemyList.Count)];
@@ -249,6 +252,21 @@ public class MapManagerScript : NetworkBehaviour
             GameObject itemPick = items[Random.Range(0, items.Count)];
             GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
             NetworkServer.Spawn(itemDrop);
+        }
+    }
+
+    private void deleteAll()
+    {
+        if (isServer)
+        {
+            objectList = GameObject.FindObjectsOfType<GameObject>();
+            for (int i = 0; i < objectList.Length; i++)
+            {
+                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword") || objectList[i].tag.Equals("Shield") || objectList[i].tag.Equals("Bow") || objectList[i].tag.Equals("Staff"))
+                {
+                    Destroy(objectList[i].gameObject);
+                }
+            }
         }
     }
 
