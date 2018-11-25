@@ -159,12 +159,16 @@ public class PlayerController : NetworkBehaviour
                         gameObject.AddComponent<Sword>();
                         Debug.Log("has sword");
 
+<<<<<<< Updated upstream
                         anim.SetBool("hasSword", true);
                         anim.SetBool("hasStaff", false);
                         anim.SetBool("hasShield", false);
                         anim.SetLayerWeight(1, 1f);
                         anim.SetLayerWeight(2, 0f);
                         anim.SetLayerWeight(3, 0f);
+=======
+                        setAnimation("hasSword");
+>>>>>>> Stashed changes
                     }
 
                     else if (hit.collider.tag.Equals("Bow"))
@@ -175,12 +179,16 @@ public class PlayerController : NetworkBehaviour
                         unequip();
                         gameObject.AddComponent<bow>();
                         Debug.Log("has bow");
+<<<<<<< Updated upstream
                         anim.SetBool("hasStaff", false);
                         anim.SetBool("hasSword", false);
                         anim.SetBool("hasShield", false);
                         anim.SetLayerWeight(1, 0f);
                         anim.SetLayerWeight(2, 0f);
                         anim.SetLayerWeight(3, 0f);
+=======
+                        setAnimation("hasBow");
+>>>>>>> Stashed changes
                     }
 
                     else if (hit.collider.tag.Equals("Shield"))
@@ -191,12 +199,16 @@ public class PlayerController : NetworkBehaviour
                         unequip();
                         gameObject.AddComponent<Shield>();
                         Debug.Log("has shield");
+<<<<<<< Updated upstream
                         anim.SetBool("hasShield", true);
                         anim.SetBool("hasSword", false);
                         anim.SetBool("hasStaff", false);
                         anim.SetLayerWeight(3, 1f);
                         anim.SetLayerWeight(1, 0f);
                         anim.SetLayerWeight(2, 0f);
+=======
+                        setAnimation("hasShield");
+>>>>>>> Stashed changes
                     }
 
                     else if (hit.collider.tag.Equals("Staff"))
@@ -207,12 +219,17 @@ public class PlayerController : NetworkBehaviour
                         unequip();
                         gameObject.AddComponent<Staff>();
                         Debug.Log("has staff");
+<<<<<<< Updated upstream
                         anim.SetBool("hasStaff", true);
                         anim.SetBool("hasSword", false);
                         anim.SetBool("hasShield", false);
                         anim.SetLayerWeight(2, 1f);
                         anim.SetLayerWeight(1, 0f);
                         anim.SetLayerWeight(3, 0f);
+=======
+                        setAnimation("hasStaff");
+
+>>>>>>> Stashed changes
                     }
                 }
                 else if (hit.collider != null && hit.collider.gameObject.layer.Equals(8))
@@ -234,6 +251,18 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
+
+    //set the animation for the selected weapon
+    private void setAnimation(string type)
+    {
+      anim.SetBool("hasBow", false);
+      anim.SetBool("hasStaff", false);
+      anim.SetBool("hasSword", false);
+      anim.SetBool("hasShield", false);
+
+      anim.SetBool(type, true);
+    }
+
 
     //attack function
     private void melee()
@@ -368,6 +397,11 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     //to be used to cast an attack
     public int smallAttack()
     {
@@ -601,6 +635,20 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
+<<<<<<< Updated upstream
+=======
+    void CmdSpawnRevive()
+    {
+        // make the change local on the server
+        revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(revive);
+
+
+    }
+
+
+    [Command]
+>>>>>>> Stashed changes
     void CmdSpawnBubble(float temp)
     {
         // make the change local on the server
