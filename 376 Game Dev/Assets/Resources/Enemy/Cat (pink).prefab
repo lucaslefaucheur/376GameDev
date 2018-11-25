@@ -67,7 +67,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &61501205540088512
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -102,7 +102,7 @@ Animator:
   m_GameObject: {fileID: 1838210402347068}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7f64bf277e7ad4ee2b2e21443d68fe9e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   startingHealth: 0
   currentHealth: 0
   healthBar: {fileID: 0}
-  deathFX: {fileID: 0}
+  deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
   startingAttackDamage: 0
   currentAttackDamage: 0
 --- !u!114 &114425932730696006
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5845c1ae81824e979751062303d121d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpot: {fileID: 0}
+  moveSpot: {fileID: 4981396990265802, guid: 31b4aceddc95f442baca9614967c2673, type: 2}
 --- !u!212 &212569350334383998
 SpriteRenderer:
   m_ObjectHideFlags: 1
