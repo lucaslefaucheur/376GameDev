@@ -19,7 +19,7 @@ public class PlayerController : NetworkBehaviour
     [SyncVar]
     private float maxHealth = 50f;
     //sych health over network to know when your teammates are dead
-    [SyncVar(hook = "CmdOnChangeHealth")]
+    [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
     private bool alive = true;
 
@@ -54,11 +54,7 @@ public class PlayerController : NetworkBehaviour
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
-    public override void OnDeserialize(NetworkReader reader, bool initialState)
-    {
-        base.OnDeserialize(reader, initialState);
-    }
-
+  
     private void Start()
     {
 
@@ -554,8 +550,8 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
-     [Command]
-    private void CmdOnChangeHealth(float currentHealth)
+  
+    private void OnChangeHealth(float currentHealth)
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
         healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
