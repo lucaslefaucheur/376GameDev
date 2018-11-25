@@ -35,6 +35,23 @@ public class PlayerController : NetworkBehaviour
     private SpriteRenderer rendy;
     public RectTransform healthBar;
 
+    //audio clips
+    public AudioClip swingSound;
+    public AudioClip meleeSound;
+    public AudioClip sheildSound;
+    public AudioClip speerSound;
+    public AudioClip arrowSound;
+    public AudioClip pickWeaponSound;
+    public AudioClip pickCrystalSound;
+    public AudioClip levelUpSound;
+    public AudioClip dieSound;
+    public AudioClip e1Sound;
+    public AudioClip e2Sound;
+    public AudioClip e3Sound;
+    public AudioClip weaponBreakSound;
+    public AudioClip chestOpenSound;
+
+
     //item stuff
     private GameObject equipped;
     public bool grounded;
@@ -141,17 +158,22 @@ public class PlayerController : NetworkBehaviour
 
             if (Input.GetButtonDown("Pickup"))
             {
+                
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
                     if (hit.collider.tag.Equals("chest"))
                     {
+                        gameObject.GetComponent<AudioSource>().clip = chestOpenSound;
+                        gameObject.GetComponent<AudioSource>().Play();
                         CmdDestroy(hit.collider.gameObject);
                         CmdChest();
                     }
 
                     else if (hit.collider.tag.Equals("Sword"))
                     {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
@@ -169,6 +191,8 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Bow"))
                     {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
@@ -185,6 +209,8 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Shield"))
                     {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
@@ -201,6 +227,8 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Staff"))
                     {
+                        gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
+                        gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
@@ -238,8 +266,11 @@ public class PlayerController : NetworkBehaviour
     //attack function
     private void melee()
     {
+        gameObject.GetComponent<AudioSource>().clip = meleeSound;
+        gameObject.GetComponent<AudioSource>().Play();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+        
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             
@@ -260,6 +291,8 @@ public class PlayerController : NetworkBehaviour
     //weapon attack function
     private void swordHit()
     {
+        gameObject.GetComponent<AudioSource>().clip = swingSound;
+        gameObject.GetComponent<AudioSource>().Play();
         int temp = GetComponent<Sword>().weaponAttack(attackVar, attack);
 
         Vector2 startPos = transform.position; // umm, start position !
@@ -298,6 +331,8 @@ public class PlayerController : NetworkBehaviour
 
     private void bowHit()
     {
+        gameObject.GetComponent<AudioSource>().clip = arrowSound;
+        gameObject.GetComponent<AudioSource>().Play();
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
@@ -308,6 +343,9 @@ public class PlayerController : NetworkBehaviour
 
     private void shieldHit()
     {
+        gameObject.GetComponent<AudioSource>().clip = sheildSound;
+        gameObject.GetComponent<AudioSource>().Play();
+
         float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
         Debug.Log("radius = " + temp);
         CmdSpawnBubble(temp);
@@ -319,6 +357,9 @@ public class PlayerController : NetworkBehaviour
 
     private void staffHit()
     {
+
+        gameObject.GetComponent<AudioSource>().clip = speerSound;
+        gameObject.GetComponent<AudioSource>().Play();
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
@@ -353,6 +394,8 @@ public class PlayerController : NetworkBehaviour
     // to be called by the collision detector
     public void TakeDamage(int amount)
     {
+        playDifferentEnemyAttackSound();
+        gameObject.GetComponent<AudioSource>().Play();
         if (!isServer)
         {
             return;
@@ -360,12 +403,34 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
+            gameObject.GetComponent<AudioSource>().clip = dieSound;
+            GetComponent<AudioSource>().Play();
             //Death
             currentHealth = 0;
             alive = false;
             Destroy(gameObject, 10);
             Debug.Log("Dead!");
         }
+    }
+
+    public void playDifferentEnemyAttackSound()
+    {
+        int randomSound = Random.Range(0, 3);
+
+        switch (randomSound)
+        {
+            case 0:
+                gameObject.GetComponent<AudioSource>().clip = e1Sound;
+                break;
+            case 1:
+                gameObject.GetComponent<AudioSource>().clip = e2Sound; ;
+                break;
+            case 2:
+                gameObject.GetComponent<AudioSource>().clip = e3Sound;
+                break;
+        }
+
+       
     }
 
     //to be used to cast an attack
@@ -376,6 +441,8 @@ public class PlayerController : NetworkBehaviour
 
     public void unequip()
     {
+        gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
+        gameObject.GetComponent<AudioSource>().Play();
         moveVar = 0;
         armourVar = 0;
         
@@ -455,6 +522,8 @@ public class PlayerController : NetworkBehaviour
 
         if (collision.gameObject.tag == "crystal")
         {
+            gameObject.GetComponent<AudioSource>().clip = pickCrystalSound;
+            gameObject.GetComponent<AudioSource>().Play();
             GameObject.Find("Manager").GetComponent<CrystalManager>().addCrystal();
             Debug.Log("Crystal" + GameObject.Find("Manager").GetComponent<CrystalManager>().getCrystalCount());
             Destroy(collision.gameObject);
@@ -486,6 +555,8 @@ public class PlayerController : NetworkBehaviour
     //to be called when level finishes, to up base stats
     public void levelUp(int level)
     {
+        gameObject.GetComponent<AudioSource>().clip = levelUpSound;
+        gameObject.GetComponent<AudioSource>().Play();
         //scales the attack base up with level up
         attack = (int)Mathf.Floor(attack + (0.325f * level));
         //takes note of the players health percentage
