@@ -1,16 +1,13 @@
 fileFormatVersion: 2
-guid: 2473c1b831d19084d934fa0d72ffceac
+guid: 9035200f0116644d4b9def41c9931201
 TextureImporter:
   fileIDToRecycleName:
-    21300000: BlueSquirrel_0
-    21300002: BlueSquirrel_1
-    21300004: BlueSquirrel_2
-    21300006: BlueSquirrel_3
-    21300008: BlueSquirrel_4
-    21300010: BlueSquirrel_5
-    21300012: BlueSquirrel_6
-    21300014: BlueSquirrel_7
-    21300016: BlueSquirrel_8
+    21300000: MonkeyAttack_0
+    21300002: MonkeyAttack_1
+    21300004: MonkeyAttack_2
+    21300006: MonkeyAttack_3
+    21300008: MonkeyAttack_4
+    21300010: MonkeyAttack_5
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -93,73 +90,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlueSquirrel_0
+      name: MonkeyAttack_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 278
-        width: 128
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5572bf824f9fa48ee8011f064b7527cd
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_1
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 278
-        width: 128
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ca06c175096fc49b2aaebf086fa34eab
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_2
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 278
-        width: 128
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 09dd74d4884f24223a07cd1a91396f7f
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_3
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 142
+        x: 13
+        y: 143
         width: 120
-        height: 120
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,39 +104,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60b53090105a041c69b2db8a8fcd6b2b
+      spriteID: 9bdc19d647b8045468c38fbccacc7301
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSquirrel_4
+      name: MonkeyAttack_1
       rect:
         serializedVersion: 2
-        x: 136
-        y: 142
-        width: 120
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0908788066550494f8cddd06b9af076f
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_5
-      rect:
-        serializedVersion: 2
-        x: 272
-        y: 142
+        x: 143
+        y: 143
         width: 128
-        height: 120
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -207,59 +124,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b5fd9ef3c8b274b2eb5fcd5efb8b8519
+      spriteID: ea11f9eaf7de14d2a837727abbb5b3a5
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSquirrel_6
+      name: MonkeyAttack_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 5
-        width: 120
-        height: 121
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 16, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ff49121263fa417ea1984bcb23e7c11
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_7
-      rect:
-        serializedVersion: 2
-        x: 136
-        y: 6
-        width: 118
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 13, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1291b3f2c52fe4ce6a85b6b2021d7fdf
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSquirrel_8
-      rect:
-        serializedVersion: 2
-        x: 264
-        y: 5
+        x: 281
+        y: 143
         width: 112
-        height: 121
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -267,7 +144,67 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ecf0f951d237458a888f6602299aa02
+      spriteID: 128a601fdbbcb4c1eb5e44f92ca7f59a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MonkeyAttack_3
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 5
+        width: 120
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 717ae00860cff47a08f94a9c42ce7499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MonkeyAttack_4
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 5
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7359b46cd695d4b4ab599f125680571a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MonkeyAttack_5
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 5
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d38d8a5407e74d4da4f77feffb7e17c
       vertices: []
       indices: 
       edges: []
@@ -275,7 +212,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 2ef934740fc603847a364861929fac9d
+    spriteID: 6b3099d76b1cc48d2a79060d90c319fd
     vertices: []
     indices: 
     edges: []
