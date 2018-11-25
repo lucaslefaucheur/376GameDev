@@ -32,6 +32,7 @@ public class WaveManager : NetworkBehaviour {
 
     private int numberOfPlayer = 1;
     private MapManagerScript mapManager;
+    private GameController scaler;
     private bool doorSpawned = false;
 
     void Start()
@@ -47,12 +48,14 @@ public class WaveManager : NetworkBehaviour {
         if (managerObject != null)
         {
             mapManager = managerObject.GetComponent<MapManagerScript>();
+            scaler = managerObject.GetComponent<GameController>();
         }
         if (managerObject == null)
         {
-            Debug.Log("Cannot find 'Map Manager' script");
+            Debug.Log("Cannot find 'Manager' script");
         }
 
+        setPlayer(scaler.getNumOfPLayers());
         waveCountdown = timeBetweenWaves;
         wavesCompleted = false;
     }
@@ -154,9 +157,12 @@ public class WaveManager : NetworkBehaviour {
     {
         if (isServer)
         {
-             Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
-             enemy = Instantiate(_enemy, _sp.position, _sp.rotation);
-             NetworkServer.Spawn(enemy);
+            Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            enemy = Instantiate(_enemy, _sp.position, _sp.rotation);
+            //Set new enemy attack and health
+            enemy.GetComponent<Health>().currentAttackDamage = enemy.GetComponent<Health>().startingAttackDamage + (scaler.getLevel() - 1) * 5;
+            enemy.GetComponent<Health>().startingHealth = enemy.GetComponent<Health>().startingHealth + (scaler.getLevel() - 1) * 5;
+            NetworkServer.Spawn(enemy);
         }
 
     }

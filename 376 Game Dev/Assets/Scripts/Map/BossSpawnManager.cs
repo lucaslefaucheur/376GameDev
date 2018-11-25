@@ -27,6 +27,9 @@ public class BossSpawnManager : NetworkBehaviour {
         {
             bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
             bossTemp = Instantiate(bossObject, spawnPoint, Quaternion.identity);
+            // Health and Damage scaling
+            bossTemp.GetComponent<Health>().currentHealth = bossTemp.GetComponent<Health>().startingHealth;
+            bossTemp.GetComponent<Health>().currentAttackDamage = bossTemp.GetComponent<Health>().startingAttackDamage;
             NetworkServer.Spawn(bossTemp);
 
         }

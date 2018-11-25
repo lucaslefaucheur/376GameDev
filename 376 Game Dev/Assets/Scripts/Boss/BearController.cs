@@ -224,6 +224,7 @@ public class BearController : NetworkBehaviour
         for(int i = 0; i<7; i++)
         {
             GameObject insFire = Instantiate(fire, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+            insFire.GetComponent<fireController>().damage = GetComponent<Health>().currentAttackDamage;
             NetworkServer.Spawn(insFire);
             yield return new WaitForSeconds(0.8f);
         }
