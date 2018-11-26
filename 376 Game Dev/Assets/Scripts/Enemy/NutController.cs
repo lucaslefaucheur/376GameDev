@@ -24,7 +24,7 @@ public class NutController : NetworkBehaviour {
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.gameObject.layer.Equals(8))
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
         NetworkServer.Destroy(gameObject);
 
     }
