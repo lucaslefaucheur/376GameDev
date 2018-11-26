@@ -9,14 +9,16 @@ public class bow : MonoBehaviour {
     private void Start()
     {
         durability = Random.Range(15, 25);
-        
+        gameObject.GetComponent<PlayerController>().setDurInit(durability);
+        gameObject.GetComponent<PlayerController>().setDurCur(durability);
+
     }
 
     public int weaponAttack(float attackVar, int attack)
     {
         weaponStr = Random.Range(10, 25);
         durability--;
-        Debug.Log(durability);
+        gameObject.GetComponent<PlayerController>().setDurCur(durability);
         if (durability == 0)
         {
             gameObject.GetComponent<PlayerController>().unequip();

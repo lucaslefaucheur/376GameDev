@@ -62,6 +62,8 @@ public class PlayerController : NetworkBehaviour
     public bool grounded;
     public GameObject arrow;
     public GameObject bubble;
+    private int durInit = 50;
+    private float durCur = 0;
 
     //UI
     public Text Weapon;
@@ -106,7 +108,6 @@ public class PlayerController : NetworkBehaviour
         gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
         playerNumber = gameManager.GetComponent<GameController>().getNumOfPLayers();
-        Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
 
         this.transform.position = playerInitialSpawn[playerNumber - 1];
         // set local components
@@ -117,6 +118,8 @@ public class PlayerController : NetworkBehaviour
 
         // set initial health
         currentHealth = maxHealth;
+
+        durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
     }
 
     void Update()
@@ -171,8 +174,6 @@ public class PlayerController : NetworkBehaviour
                     //anim.SetTrigger("attacking");
                     shieldHit();
                 }
-                else
-                    Debug.Log("no weapon attached");
             }
 
 
@@ -200,7 +201,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Sword>();
-                        Debug.Log("has sword");
 
                         anim.SetBool("hasSword", true);
                         anim.SetBool("hasStaff", false);
@@ -218,7 +218,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<bow>();
-                        Debug.Log("has bow");
                         anim.SetBool("hasBow", true);
                         anim.SetBool("hasStaff", false);
                         anim.SetBool("hasSword", false);
@@ -235,7 +234,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Shield>();
-                        Debug.Log("has shield");
                         anim.SetBool("hasBow", false);
                         anim.SetBool("hasShield", true);
                         anim.SetBool("hasSword", false);
@@ -252,7 +250,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Staff>();
-                        Debug.Log("has staff");
                         anim.SetBool("hasBow", false);
                         anim.SetBool("hasStaff", true);
                         anim.SetBool("hasSword", false);
@@ -284,15 +281,10 @@ public class PlayerController : NetworkBehaviour
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             CmdDealDamage(hit.collider.gameObject, smallAttack());
-            //to remove
-            Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
             CmdDealDamage(hit.collider.gameObject, smallAttack());
-
-            //to remove
-            Debug.Log("melee attack hit for: " + smallAttack());
         }
     }
 
@@ -326,9 +318,6 @@ public class PlayerController : NetworkBehaviour
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
             {
                 CmdDealDamage(hit.collider.gameObject, temp);
-
-                //to remove
-                Debug.Log("sword attack hit for: " + temp);
             }
 
 
@@ -356,7 +345,6 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().Play();
 
         float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
-        Debug.Log("radius = " + temp);
         CmdSpawnBubble(temp);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
@@ -384,16 +372,11 @@ public class PlayerController : NetworkBehaviour
                 if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
                 {
                     CmdDealDamage(hit[i].gameObject, temp);
-
-                    //to remove
-                    Debug.Log("staff attack hit for: " + temp);
                 }
                 else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
                 {
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
-                    //to remove
-                    Debug.Log("staff attack heal for: " + temp);
 
                 }
             }
@@ -492,8 +475,6 @@ public class PlayerController : NetworkBehaviour
             Destroy(gameObject.GetComponent<Shield>());
             anim.SetBool("hasShield", false);
           }
-
-        Debug.Log("unequipped");
     }
 
     //to move player + animations
@@ -558,7 +539,6 @@ public class PlayerController : NetworkBehaviour
         if (collision.gameObject.tag == "crystal")
         {
             crystalCount++;
-            Debug.Log("Crystal Count " + crystalCount);
             gameObject.GetComponent<AudioSource>().clip = pickCrystalSound;
             gameObject.GetComponent<AudioSource>().Play();
             Destroy(collision.gameObject);
@@ -647,6 +627,17 @@ public class PlayerController : NetworkBehaviour
         return playerNumber;
     }
 
+    public void setDurInit(int dur)
+    {
+        durInit = dur;
+    }
+
+    public void setDurCur(int dur)
+    {
+        durCur = dur;
+        durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
+    }
+
     /***********************************************************
      *
      *
@@ -706,7 +697,6 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         NetworkServer.Destroy(state);
-        Debug.Log("object destroyed command");
 
     }
 
@@ -794,7 +784,6 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(5);
         CmdDestroy(revive);
         crystalCount -= 5;
-        Debug.Log("Crystal Count " + crystalCount);
         alive = true;
         setHealth((int)maxHealth);
         reviving = false;
@@ -825,8 +814,8 @@ public class PlayerController : NetworkBehaviour
     IEnumerator FloatingGhost()
     {
         CmdGhost();
-        yield return new WaitForSeconds(10);
-        
+        yield return new WaitForSeconds(0);
+
     }
 
 
