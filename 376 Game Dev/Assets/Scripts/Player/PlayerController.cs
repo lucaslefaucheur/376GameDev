@@ -413,7 +413,7 @@ public class PlayerController : NetworkBehaviour
             }
         }
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
-        Invoke("resetColor", 1.0f);
+        Invoke("resetColor", 0.5f);
     }
 
     //reset color of player
