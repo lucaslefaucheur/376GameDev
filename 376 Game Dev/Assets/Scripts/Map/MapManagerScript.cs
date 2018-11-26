@@ -192,7 +192,7 @@ public class MapManagerScript : NetworkBehaviour
     //return random enemy
     public GameObject getRandomEnemy()
     {
-        currentEnemy = enemyList[Random.Range(0, enemyList.Count -1)];
+        currentEnemy = enemyList[Random.Range(0, enemyList.Count)];
         enemyList.Remove(currentEnemy);
         return currentEnemy;
     }

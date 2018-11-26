@@ -133,8 +133,8 @@ public class PlayerController : NetworkBehaviour
 
         if (alive)
         {
-            
-            
+
+
             Move();
 
             if (Input.GetButtonDown("Melee"))
@@ -179,7 +179,7 @@ public class PlayerController : NetworkBehaviour
 
             if (Input.GetButtonDown("Pickup"))
             {
-                
+
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
@@ -277,7 +277,7 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().Play();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        
+
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             CmdDealDamage(hit.collider.gameObject, smallAttack());
@@ -395,7 +395,7 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
-            
+
             //Death
             currentHealth = 0;
             alive = false;
@@ -412,7 +412,12 @@ public class PlayerController : NetworkBehaviour
                 currentHealth = 0;
             }
         }
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 1.0f);
     }
+
+    //reset color of player
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
 
     //teleporting animation
     public void teleport()
@@ -441,7 +446,7 @@ public class PlayerController : NetworkBehaviour
                 break;
         }
 
-       
+
     }
 
     //to be used to cast an attack
@@ -574,10 +579,10 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().clip = levelUpSound;
         gameObject.GetComponent<AudioSource>().Play();
         //scales the attack base up with level up
-        
+
     }
 
-    
+
 
     public void setRespawn()
     {
@@ -646,7 +651,7 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
-  
+
     private void OnChangeHealth(float currentHealth)
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
@@ -716,7 +721,7 @@ public class PlayerController : NetworkBehaviour
         // make the change local on the server
         revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(revive);
-        
+
 
     }
 
