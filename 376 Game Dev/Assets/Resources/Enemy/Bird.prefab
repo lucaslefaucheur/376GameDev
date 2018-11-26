@@ -120,7 +120,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &61697680520446894
 BoxCollider2D:
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 2
+  m_TransformSyncMode: 1
   m_SendInterval: 0.1
   m_SyncRotationAxis: 3
   m_RotationSyncCompression: 0
@@ -373,11 +373,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 10
-  currentHealth: 10
   healthBar: {fileID: 224644888509434624}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
   startingAttackDamage: 0
-  currentAttackDamage: 0
 --- !u!114 &114726406071352070
 MonoBehaviour:
   m_ObjectHideFlags: 1
