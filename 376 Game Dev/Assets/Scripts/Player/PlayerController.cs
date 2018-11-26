@@ -26,7 +26,10 @@ public class PlayerController : NetworkBehaviour
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
     [SyncVar]
     private float armourVar = 0f;
-    private int attack = 10;
+    private int startingAttack = 5;
+    [SyncVar]
+    private int attack = 5;
+    [SyncVar]
     private float attackVar = 0f;
     [SyncVar]
     private float moveVar = 0f;
@@ -66,6 +69,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
     //Crystal and Revive
+    [SyncVar(hook = "OnChangeCrystals")]
     private int crystalCount = 0;
     [SyncVar]
     private bool reviving = false;
@@ -73,6 +77,7 @@ public class PlayerController : NetworkBehaviour
     private GameObject revive;
 
     //Teleport
+    [SyncVar]
     private bool teleporting = false;
     public GameObject teleAnim;
     private GameObject tele;
@@ -80,6 +85,7 @@ public class PlayerController : NetworkBehaviour
     //Death
     public GameObject ghostAnim;
     private GameObject ghost;
+    [SyncVar]
     private bool dying = false;
 
     private void Start()
@@ -173,12 +179,12 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Sword"))
                     {
+                        unequip();
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Sword>();
                         Debug.Log("has sword");
 
@@ -190,12 +196,12 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Bow"))
                     {
+                        unequip();
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<bow>();
                         Debug.Log("has bow");
                         anim.SetBool("hasBow", true);
@@ -206,12 +212,12 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Shield"))
                     {
+                        unequip();
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Shield>();
                         Debug.Log("has shield");
                         anim.SetBool("hasBow", false);
@@ -222,12 +228,12 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Staff"))
                     {
+                        unequip();
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Staff>();
                         Debug.Log("has staff");
                         anim.SetBool("hasBow", false);
@@ -571,13 +577,7 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().clip = levelUpSound;
         gameObject.GetComponent<AudioSource>().Play();
         //scales the attack base up with level up
-        attack = (int)Mathf.Floor(attack + (0.325f * level));
-        //takes note of the players health percentage
-        float temp = (currentHealth / maxHealth) * 100;
-        //scales the health base up wih the level up
-        maxHealth = (int)Mathf.Floor(maxHealth + (0.25f * level));
-        //scales the current health of the player by using the presisting the helth precentage
-        currentHealth = maxHealth * temp;
+        
     }
 
     
@@ -643,6 +643,20 @@ public class PlayerController : NetworkBehaviour
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
         healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
+    private void OnChangeCrystals(int crystalCount)
+    {
+        Debug.LogError("before Health = " + currentHealth);
+        attack = (int)Mathf.Floor(startingAttack + crystalCount^(2/3));
+        //takes note of the players health percentage
+        float temp = (currentHealth / maxHealth);
+        Debug.LogError("temp = " + temp);
+        //scales the health base up wih the level up
+        maxHealth = (int)Mathf.Floor(50 + crystalCount );
+        //scales the current health of the player by using the presisting the helth precentage
+        currentHealth = maxHealth * temp;
+        Debug.LogError("after Health = " + currentHealth);
     }
 
     [Command]
