@@ -47,7 +47,6 @@ public class PlayerController : NetworkBehaviour
     public AudioClip pickWeaponSound;
     public AudioClip pickCrystalSound;
     public AudioClip levelUpSound;
-    public AudioClip dieSound;
     public AudioClip e1Sound;
     public AudioClip e2Sound;
     public AudioClip e3Sound;
@@ -389,8 +388,7 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
-            gameObject.GetComponent<AudioSource>().clip = dieSound;
-            GetComponent<AudioSource>().Play();
+            
             //Death
             currentHealth = 0;
             alive = false;
