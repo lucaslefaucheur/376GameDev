@@ -55,7 +55,7 @@ public class MapManagerScript : NetworkBehaviour
         loadAllEnemyMap();
         loadAllEnemy();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -99,7 +99,7 @@ public class MapManagerScript : NetworkBehaviour
             loadAllEnemy();
         }
 
-		
+
 	}
 
     //load all boss maps
@@ -192,7 +192,7 @@ public class MapManagerScript : NetworkBehaviour
     //return random enemy
     public GameObject getRandomEnemy()
     {
-        currentEnemy = enemyList[Random.Range(0, enemyList.Count)];
+        currentEnemy = enemyList[Random.Range(0, enemyList.Count -1)];
         enemyList.Remove(currentEnemy);
         return currentEnemy;
     }
@@ -212,7 +212,7 @@ public class MapManagerScript : NetworkBehaviour
         for (int i = 0; i < playerList.Length; i++)
         {
             playerList[i].GetComponent<PlayerController>().teleport();
-            
+
         }
         GetComponent<GameController>().LevelUp();
         hasMap = false;
@@ -261,7 +261,7 @@ public class MapManagerScript : NetworkBehaviour
             objectList = GameObject.FindObjectsOfType<GameObject>();
             for (int i = 0; i < objectList.Length; i++)
             {
-                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword") 
+                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword")
                     || objectList[i].tag.Equals("Shield") || objectList[i].tag.Equals("Bow") || objectList[i].tag.Equals("Staff") || objectList[i].tag.Equals("fire"))
                 {
                     Destroy(objectList[i].gameObject);
