@@ -11,6 +11,7 @@ public class MapManagerScript : NetworkBehaviour
     public GameObject doorPrefab;
     private GameObject currentMap;
     private GameObject[] playerList;
+    private GameObject[] objectList;
 
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
@@ -69,11 +70,11 @@ public class MapManagerScript : NetworkBehaviour
             Debug.Log(mapPicker);
             if(mapPicker%4 != 0)
             {
-                loadEnemyMap();
+                StartCoroutine(loadEnemyMap());
             }
             else
             {
-                loadBossMap();
+                StartCoroutine(loadBossMap());
             }
 
             hasMap = true;
@@ -157,10 +158,12 @@ public class MapManagerScript : NetworkBehaviour
     }
 
     //get random BOSS map
-    public void loadBossMap()
+    IEnumerator loadBossMap()
     {
         if (isServer)
         {
+            deleteAll();
+            yield return new WaitForSeconds(1);
             //instantiate random map
             bossMapPick = mapBossList[Random.Range(0, mapBossList.Count)];
             currentMap = Instantiate(bossMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
@@ -172,10 +175,12 @@ public class MapManagerScript : NetworkBehaviour
     }
 
     //get random ENEMY map
-    public void loadEnemyMap()
+    IEnumerator loadEnemyMap()
     {
         if (isServer)
         {
+            deleteAll();
+            yield return new WaitForSeconds(1);
             //instantiate random map
             enemyMapPick = mapEnemyList[Random.Range(0, mapEnemyList.Count)];
             currentMap = Instantiate(enemyMapPick, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
@@ -183,8 +188,6 @@ public class MapManagerScript : NetworkBehaviour
             //remove map from list
             mapEnemyList.Remove(enemyMapPick);
         }
-        
-
     }
 
     //return random enemy
@@ -205,7 +208,13 @@ public class MapManagerScript : NetworkBehaviour
 
     public void notifyEntry()
     {
-        Destroy(currentMap);
+        Destroy(currentMap,1f);
+        playerList = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            playerList[i].GetComponent<PlayerController>().teleport();
+            
+        }
         GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
@@ -243,6 +252,22 @@ public class MapManagerScript : NetworkBehaviour
             GameObject itemPick = items[Random.Range(0, items.Count)];
             GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
             NetworkServer.Spawn(itemDrop);
+        }
+    }
+
+    private void deleteAll()
+    {
+        if (isServer)
+        {
+            objectList = GameObject.FindObjectsOfType<GameObject>();
+            for (int i = 0; i < objectList.Length; i++)
+            {
+                if (objectList[i].tag.Equals("crystal")|| objectList[i].tag.Equals("chest")|| objectList[i].tag.Equals("Sword") 
+                    || objectList[i].tag.Equals("Shield") || objectList[i].tag.Equals("Bow") || objectList[i].tag.Equals("Staff") || objectList[i].tag.Equals("fire"))
+                {
+                    Destroy(objectList[i].gameObject);
+                }
+            }
         }
     }
 

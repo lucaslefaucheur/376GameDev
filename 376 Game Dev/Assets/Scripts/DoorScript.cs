@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {
+    private float startTime;
+
+    void Start()
+    {
+        startTime = Time.time;
+    }
 
     private bool ScanForPlayer()
     {
@@ -28,7 +34,7 @@ public class DoorScript : MonoBehaviour
         if (collision.tag.Equals("Player"))
         {
          
-            if (ScanForPlayer())
+            if (ScanForPlayer() && Time.time>(startTime+2f))
             {
                 GameObject.Find("Manager").GetComponent<MapManagerScript>().notifyEntry();
                 Destroy(this.gameObject);

@@ -71,7 +71,17 @@ public class PlayerController : NetworkBehaviour
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
-  
+
+    //Teleport
+    private bool teleporting = false;
+    public GameObject teleAnim;
+    private GameObject tele;
+
+    //Death
+    public GameObject ghostAnim;
+    private GameObject ghost;
+    private bool dying = false;
+
     private void Start()
     {
 
@@ -387,9 +397,8 @@ public class PlayerController : NetworkBehaviour
             if (crystalCount >= 5 && !reviving)
             {
                 StartCoroutine(Revive());
-                Debug.Log("Reviving...");
             }
-            else if (crystalCount < 5)
+            else if (crystalCount < 5 && !dying)
             {
                 StartCoroutine(Death(gameObject));
             }
@@ -397,6 +406,15 @@ public class PlayerController : NetworkBehaviour
             {
                 currentHealth = 0;
             }
+        }
+    }
+
+    //teleporting animation
+    public void teleport()
+    {
+        if (!teleporting)
+        {
+            StartCoroutine(TeleportAnimation());
         }
     }
 
@@ -693,6 +711,20 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
+    void CmdTeleport()
+    {
+        tele = Instantiate(teleAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(tele);
+    }
+
+    [Command]
+    void CmdGhost()
+    {
+        ghost = Instantiate(ghostAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(ghost);
+    }
+
+    [Command]
     void CmdProvideFlipStateToServer(bool state)
     {
         // make the change local on the server
@@ -739,8 +771,28 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator Death(GameObject player)
     {
+        dying = true;
+        StartCoroutine(FloatingGhost());
         yield return new WaitForSeconds(5);
         CmdDestroy(player);
+    }
+
+    IEnumerator TeleportAnimation()
+    {
+        teleporting = true;
+        alive = false;
+        CmdTeleport();
+        yield return new WaitForSeconds(1);
+        alive = true;
+        CmdDestroy(tele);
+        teleporting = false;
+    }
+
+    IEnumerator FloatingGhost()
+    {
+        CmdGhost();
+        yield return new WaitForSeconds(10);
+        CmdDestroy(ghost);
     }
 
 
