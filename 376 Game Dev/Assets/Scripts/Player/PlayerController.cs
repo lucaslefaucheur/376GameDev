@@ -63,6 +63,13 @@ public class PlayerController : NetworkBehaviour
     public GameObject arrow;
     public GameObject bubble;
 
+    //UI
+    public Text Weapon;
+    public RectTransform durBar;
+    public Text cc;
+    public Text dung;
+    public GameObject UIcam;
+
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
@@ -74,6 +81,8 @@ public class PlayerController : NetworkBehaviour
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
+
+    GameObject gameManager;
 
     //Teleport
     [SyncVar]
@@ -90,7 +99,11 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
 
-        GameObject gameManager = GameObject.Find("Manager");
+        if (isLocalPlayer)
+        {
+            UIcam.GetComponent<Canvas>().enabled = true;
+        }
+        gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
         playerNumber = gameManager.GetComponent<GameController>().getNumOfPLayers();
         Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
@@ -117,7 +130,8 @@ public class PlayerController : NetworkBehaviour
 
         if (alive)
         {
-
+            
+            
             Move();
 
             if (Input.GetButtonDown("Melee"))
@@ -179,6 +193,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Sword"))
                     {
                         unequip();
+                        Weapon.text = "Sword";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
@@ -196,6 +211,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Bow"))
                     {
                         unequip();
+                        Weapon.text = "Bow";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
@@ -212,6 +228,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Shield"))
                     {
                         unequip();
+                        Weapon.text = "Shield";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
@@ -228,6 +245,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Staff"))
                     {
                         unequip();
+                        Weapon.text = "Staff";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
@@ -453,6 +471,7 @@ public class PlayerController : NetworkBehaviour
     {
         gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
         gameObject.GetComponent<AudioSource>().Play();
+        Weapon.text = "None";
         moveVar = 0;
         armourVar = 0;
 
@@ -655,6 +674,7 @@ public class PlayerController : NetworkBehaviour
         //scales the current health of the player by using the presisting the helth precentage
         currentHealth = maxHealth * temp;
         Debug.Log("after Health = " + currentHealth);
+        cc.text = crystalCount.ToString();
     }
 
     [Command]
@@ -786,6 +806,7 @@ public class PlayerController : NetworkBehaviour
         dying = true;
         StartCoroutine(FloatingGhost());
         yield return new WaitForSeconds(5);
+        CmdDestroy(ghost);
         CmdDestroy(player);
     }
 
@@ -797,6 +818,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(1);
         alive = true;
         CmdDestroy(tele);
+        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
         teleporting = false;
     }
 
@@ -804,7 +826,7 @@ public class PlayerController : NetworkBehaviour
     {
         CmdGhost();
         yield return new WaitForSeconds(10);
-        CmdDestroy(ghost);
+        
     }
 
 

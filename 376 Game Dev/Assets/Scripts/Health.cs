@@ -7,15 +7,14 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour {
 
     //variables
-    [SerializeField]
+    [SyncVar] [SerializeField]
     private int startingHealth;
-
     [SyncVar(hook = "OnChangeHealth")]
     private float currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
     private Transform Target;
-    [SerializeField]
+    [SyncVar][SerializeField]
     private int startingAttackDamage;
     private int currentAttackDamage;
 
