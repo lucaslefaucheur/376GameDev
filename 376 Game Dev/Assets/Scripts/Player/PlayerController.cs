@@ -21,6 +21,7 @@ public class PlayerController : NetworkBehaviour
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
+    [SyncVar]
     private bool alive = true;
 
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
