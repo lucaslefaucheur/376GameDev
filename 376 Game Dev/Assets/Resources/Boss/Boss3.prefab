@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 4393444253723642}
   - component: {fileID: 198381499361532974}
   - component: {fileID: 199868249277940782}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,11 +324,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
-  currentHealth: 100
   healthBar: {fileID: 224251045304870096}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
   startingAttackDamage: 10
-  currentAttackDamage: 10
 --- !u!114 &114226435542729422
 MonoBehaviour:
   m_ObjectHideFlags: 1
