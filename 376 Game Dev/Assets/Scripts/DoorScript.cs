@@ -43,7 +43,7 @@ public class DoorScript : MonoBehaviour
             else
             {
                 //Display Waiting
-                Debug.Log("Waiting for all players to be ready!");
+                //Debug.Log("Waiting for all players to be ready!");
             }
         }
 

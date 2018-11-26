@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class bow : MonoBehaviour {
-    float weaponStr = 10f;
-    int durability;
+    private float weaponStr = 10f;
+    private int durability;
 
     private void Start()
     {
@@ -24,5 +24,10 @@ public class bow : MonoBehaviour {
         return (int)Mathf.Floor((attack + weaponStr) * (1 + attackVar));
 
 
+    }
+
+    public int getDurability()
+    {
+        return durability;
     }
 }

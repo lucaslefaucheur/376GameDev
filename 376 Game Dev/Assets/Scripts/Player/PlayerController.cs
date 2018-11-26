@@ -50,7 +50,6 @@ public class PlayerController : NetworkBehaviour
     public AudioClip pickWeaponSound;
     public AudioClip pickCrystalSound;
     public AudioClip levelUpSound;
-    public AudioClip dieSound;
     public AudioClip e1Sound;
     public AudioClip e2Sound;
     public AudioClip e3Sound;
@@ -395,8 +394,7 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
-            gameObject.GetComponent<AudioSource>().clip = dieSound;
-            GetComponent<AudioSource>().Play();
+            
             //Death
             currentHealth = 0;
             alive = false;
@@ -647,16 +645,16 @@ public class PlayerController : NetworkBehaviour
 
     private void OnChangeCrystals(int crystalCount)
     {
-        Debug.LogError("before Health = " + currentHealth);
-        attack = (int)Mathf.Floor(startingAttack + crystalCount^(2/3));
+        Debug.Log("before Health = " + currentHealth);
+        attack = (int)Mathf.Floor(startingAttack + crystalCount^(1/2));
         //takes note of the players health percentage
         float temp = (currentHealth / maxHealth);
-        Debug.LogError("temp = " + temp);
+        Debug.Log("temp = " + temp);
         //scales the health base up wih the level up
         maxHealth = (int)Mathf.Floor(50 + crystalCount );
         //scales the current health of the player by using the presisting the helth precentage
         currentHealth = maxHealth * temp;
-        Debug.LogError("after Health = " + currentHealth);
+        Debug.Log("after Health = " + currentHealth);
     }
 
     [Command]
