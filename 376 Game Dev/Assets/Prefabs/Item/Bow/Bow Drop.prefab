@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212213867742127996}
   m_Layer: 10
   m_Name: Weapons_1
-  m_TagString: Untagged
+  m_TagString: Bow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

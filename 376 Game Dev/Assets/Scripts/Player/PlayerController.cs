@@ -99,6 +99,11 @@ public class PlayerController : NetworkBehaviour
     [SyncVar]
     private bool dying = false;
 
+    //color
+    private Color playerColor;
+    private Color[] colorString = { new Color(1f, 0.8f, 0.5f, 1f), new Color(0.5f, 0.5f, 1f, 1f), new Color(0.5f, 1f, 0.5f, 1f), new Color(0.8f, 0.5f, 1f, 1f) };
+
+
     private void Start()
     {
 
@@ -119,8 +124,8 @@ public class PlayerController : NetworkBehaviour
 
         // set initial health
         currentHealth = maxHealth;
-
         durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
+        playerColor = gameObject.GetComponent<SpriteRenderer>().color = colorString[playerNumber-1];
     }
 
     void Update()
@@ -377,8 +382,10 @@ public class PlayerController : NetworkBehaviour
                 {
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
+
+                    Color playerInitialColor = colorString[hit[i].gameObject.GetComponent<PlayerController>().getNumber() - 1];
                     hit[i].gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1);
-                    StartCoroutine(resetColorStaff(hit[i], 0.5f));
+                    StartCoroutine(resetColorStaff(hit[i], playerInitialColor, 0.5f));
                 }
             }
         }
@@ -420,13 +427,13 @@ public class PlayerController : NetworkBehaviour
     //reset color of player
     public void resetColor()
     {
-      gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+      gameObject.GetComponent<SpriteRenderer>().color = playerColor;
     }
 
-    IEnumerator resetColorStaff(Collider2D hit, float delayTime)
+    IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
    {
        yield return new WaitForSeconds(delayTime);
-       hit.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+       hit.gameObject.GetComponent<SpriteRenderer>().color = oldColor;
    }
 
     //teleporting animation
@@ -590,8 +597,6 @@ public class PlayerController : NetworkBehaviour
         //scales the attack base up with level up
 
     }
-
-
 
     public void setRespawn()
     {
