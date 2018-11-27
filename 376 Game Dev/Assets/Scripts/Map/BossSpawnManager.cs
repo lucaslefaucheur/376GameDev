@@ -71,6 +71,7 @@ public class BossSpawnManager : NetworkBehaviour {
             bossTemp.GetComponent<Health>().setHealth(bossTemp.GetComponent<Health>().getStartingHealth() + (bossTemp.GetComponent<Health>().getStartingHealth() / 5 * (scaler.getLevel() - 1)));
             bossTemp.GetComponent<Health>().setAttackDamage(bossTemp.GetComponent<Health>().getStartingAttack() + (bossTemp.GetComponent<Health>().getStartingAttack() / 5 * (scaler.getLevel() - 1)));
             NetworkServer.Spawn(bossTemp);
+            yield return new WaitForSeconds(1);
         }
         bossSpawned = true;
     }
