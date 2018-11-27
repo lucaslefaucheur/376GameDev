@@ -110,6 +110,7 @@ public class WaveManager : NetworkBehaviour {
                 {
                     Debug.Log("Random Enemy Spawned");
                     SpawnEnemy(mapManager.getRandomEnemy());
+                    yield return new WaitForSeconds(1);
                 }
             }
             yield return new WaitForSeconds(1f / _wave.rate);

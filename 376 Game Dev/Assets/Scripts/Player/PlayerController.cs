@@ -383,9 +383,7 @@ public class PlayerController : NetworkBehaviour
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
 
-                    Color playerInitialColor = colorString[hit[i].gameObject.GetComponent<PlayerController>().getNumber() - 1];
-                    hit[i].gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1);
-                    StartCoroutine(resetColorStaff(hit[i], playerInitialColor, 0.5f));
+                    
                 }
             }
         }
@@ -430,11 +428,6 @@ public class PlayerController : NetworkBehaviour
       gameObject.GetComponent<SpriteRenderer>().color = playerColor;
     }
 
-    IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
-   {
-       yield return new WaitForSeconds(delayTime);
-       hit.gameObject.GetComponent<SpriteRenderer>().color = oldColor;
-   }
 
     //teleporting animation
     public void teleport()
@@ -700,7 +693,9 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         hit.GetComponent<PlayerController>().setHealth(dmg);
-
+        Color playerInitialColor = colorString[hit.gameObject.GetComponent<PlayerController>().getNumber() - 1];
+        hit.gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1);
+        StartCoroutine(resetColorStaff(hit, playerInitialColor, 0.5f));
     }
 
     [Command]
@@ -833,6 +828,12 @@ public class PlayerController : NetworkBehaviour
         CmdGhost();
         yield return new WaitForSeconds(0);
 
+    }
+
+    IEnumerator resetColorStaff(GameObject hit, Color oldColor, float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        hit.GetComponent<SpriteRenderer>().color = oldColor;
     }
 
 

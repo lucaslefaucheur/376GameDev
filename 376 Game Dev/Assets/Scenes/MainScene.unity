@@ -124,7 +124,6 @@ GameObject:
   - component: {fileID: 1153235}
   - component: {fileID: 1153232}
   - component: {fileID: 1153234}
-  - component: {fileID: 1153236}
   m_Layer: 0
   m_Name: Manager
   m_TagString: GameController
@@ -143,9 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919ce53811a08bf4a8fea10c9b7481ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpText: {fileID: 0}
-  levelText: {fileID: 0}
-  levelTransition: {fileID: 0}
   level: 1
   loadTime: 5
   PlayerSpawn: []
@@ -218,17 +214,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &1153236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1153231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 335c7cf805c34674e91c99eeeb03be1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &78205314
 GameObject:
   m_ObjectHideFlags: 0

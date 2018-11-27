@@ -7,11 +7,9 @@ using UnityEngine.UI;
 
 public class GameController : NetworkBehaviour
 {
-    public static GameController instance = null;           //Static instance of GameController which allows it to be accessed by other scripts
-    public Text hpText;                                     //A reference to the UI text component that displays the player's HP
-    public Text levelText;                                  //A reference to the UI text component that displays the current level number
-    public GameObject levelTransition;                      //Background for levelText, while level is being set up
-    public int level = 1;                                  //Current level number
+    public static GameController instance = null;           //Static instance of GameController which allows it to be accessed by other scripts          
+    private GameObject levelTransition;                      //Background for levelText, while level is being set up
+    public int level = 30;                                  //Current level number
     private bool settingUp = true;                          //Boolean to check if we're currently setting up game
     private int numOfPlayers = 1;                           //Keep track of the number of players spawn
     private GameObject player;
@@ -40,9 +38,6 @@ public class GameController : NetworkBehaviour
         //While setting up the game, player shouldn't be able to perform actions
         settingUp = true;
         levelTransition = GameObject.Find("LevelImage");
-        // levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        // levelText.text = "Level " + level;
-        // levelTransition.SetActive(true);
         //Call the HideLevelTransition function with a delay
         Invoke("HideLevelTransition", 2f);
         //Setup level
