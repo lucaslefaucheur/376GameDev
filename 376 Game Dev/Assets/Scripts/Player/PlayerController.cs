@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
-    [SyncVar]   
+    [SyncVar]
     private Vector2 facing;
 
     //Player Number
@@ -216,15 +216,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<bow>();
-<<<<<<< HEAD
                         Debug.Log("has bow");
                         setAnimation("hasBow");
-=======
-                        anim.SetBool("hasBow", true);
-                        anim.SetBool("hasStaff", false);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasShield", false);
->>>>>>> 5cc70fe8bac82b948ba89894496dd28e06de1164
                     }
 
                     else if (hit.collider.tag.Equals("Shield"))
@@ -237,15 +230,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Shield>();
-<<<<<<< HEAD
                         Debug.Log("has shield");
                         setAnimation("hasShield");
-=======
-                        anim.SetBool("hasBow", false);
-                        anim.SetBool("hasShield", true);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasStaff", false);
->>>>>>> 5cc70fe8bac82b948ba89894496dd28e06de1164
                     }
 
                     else if (hit.collider.tag.Equals("Staff"))
@@ -258,16 +244,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Staff>();
-<<<<<<< HEAD
                         Debug.Log("has staff");
                         setAnimation("hasStaff");
-
-=======
-                        anim.SetBool("hasBow", false);
-                        anim.SetBool("hasStaff", true);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasShield", false);
->>>>>>> 5cc70fe8bac82b948ba89894496dd28e06de1164
                     }
                 }
             }
@@ -454,13 +432,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-
-=======
-
     public void playDifferentEnemyAttackSound()
     {
         int randomSound = Random.Range(0, 3);
@@ -480,11 +451,7 @@ public class PlayerController : NetworkBehaviour
 
 
     }
->>>>>>> 8e4e2476b51f24db962cd5ee92f02431c65b7d6a
 
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     //to be used to cast an attack
     public int smallAttack()
     {
@@ -757,11 +724,6 @@ public class PlayerController : NetworkBehaviour
         // make the change local on the server
         revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(revive);
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 5cc70fe8bac82b948ba89894496dd28e06de1164
     }
 
 
