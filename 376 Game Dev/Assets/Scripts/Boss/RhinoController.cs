@@ -24,6 +24,8 @@ public class RhinoController : NetworkBehaviour
     private float counter;
     public GameObject EnemyHitParticle;
 
+    private float startTime;
+
     void Start()
     {
         loc = transform;
@@ -39,6 +41,7 @@ public class RhinoController : NetworkBehaviour
         AttackSpeed = 1;
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
 
+        startTime = Time.time;
     }
 
     void FixedUpdate()
@@ -57,7 +60,10 @@ public class RhinoController : NetworkBehaviour
                 Follow(5);
             else
             {
-                Attack(distance);
+                if(Time.time > startTime + 3f)
+                {
+                    Attack(distance);
+                }
             }
         }
         Orientation();

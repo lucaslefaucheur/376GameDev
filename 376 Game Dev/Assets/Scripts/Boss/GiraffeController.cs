@@ -27,6 +27,7 @@ public class GiraffeController : NetworkBehaviour {
     int Health;
 
     private float counter;
+    private float startTime;
     //public GameObject EnemyHitParticle;
 
     void Start()
@@ -42,6 +43,8 @@ public class GiraffeController : NetworkBehaviour {
         PatrolSpeed = 0.5f;
         FollowSpeed = 2;
         AttackSpeed = 3;
+
+        startTime = Time.time;
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
     }
@@ -59,7 +62,8 @@ public class GiraffeController : NetworkBehaviour {
             if (distance > 2){
                 Follow();
             }
-            else if(!attacked){
+            else if(!attacked && Time.time > startTime + 2f)
+            {
                 Attack(distance);               
             }
                 
