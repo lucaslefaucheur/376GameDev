@@ -293,9 +293,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 10
-  currentHealth: 10
   healthBar: {fileID: 224783935892531942}
   deathFX: {fileID: 1837547153435240, guid: 088f54cc5de64c74a9c21965a8bfda37, type: 2}
+  startingAttackDamage: 5
 --- !u!114 &114713178326168650
 MonoBehaviour:
   m_ObjectHideFlags: 1

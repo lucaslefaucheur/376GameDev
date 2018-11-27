@@ -109,7 +109,7 @@ public class SquirrelController : NetworkBehaviour
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().getAttackDamage());
         }
     }
 

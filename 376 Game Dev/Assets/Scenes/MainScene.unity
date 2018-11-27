@@ -146,6 +146,7 @@ MonoBehaviour:
   hpText: {fileID: 0}
   levelText: {fileID: 0}
   levelTransition: {fileID: 0}
+  level: 1
   loadTime: 5
   PlayerSpawn: []
 --- !u!4 &1153233

@@ -13,8 +13,9 @@ public class BossSpawnManager : NetworkBehaviour {
     private GameObject bossTemp;
 
     private GameController scaler;
-
-    bool loot = false;
+    private float delayFunc = 1;
+    private bool bossSpawned = false;
+    private bool loot = false;
 
     // Use this for initialization
     void Start () {
@@ -30,15 +31,7 @@ public class BossSpawnManager : NetworkBehaviour {
         //spawn random bossObject
         if (isServer)
         {
-            for (int i = 0; i < (Mathf.Floor(scaler.getLevel() / 30) + 1); i++)
-            {
-                bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
-                bossTemp = Instantiate(bossObject, spawnPoint, Quaternion.identity);
-                // Health and Damage scaling
-                bossTemp.GetComponent<Health>().setHealth(bossTemp.GetComponent<Health>().getStartingHealth() + (bossTemp.GetComponent<Health>().getStartingHealth() / 5 * (scaler.getLevel() - 1)));
-                bossTemp.GetComponent<Health>().setAttackDamage(bossTemp.GetComponent<Health>().getStartingAttack() + (bossTemp.GetComponent<Health>().getStartingAttack() / 5 * (scaler.getLevel() - 1)));
-                NetworkServer.Spawn(bossTemp);
-            }
+            StartCoroutine(spawnBoss());
         }
 
     }
@@ -54,11 +47,33 @@ public class BossSpawnManager : NetworkBehaviour {
         }
         */
 
-        if (isServer && bossTemp == null && !loot)
+        if (isServer && bossSpawned && delayFunc < 0 && GameObject.FindGameObjectsWithTag("Enemy") == null && !loot)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().SpawnDoor();
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest();
             loot = true;
+            delayFunc = 1;
+        }
+        else
+        {
+            delayFunc -= Time.deltaTime;
         }
 	}
+
+    IEnumerator spawnBoss()
+    {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < (Mathf.Floor(scaler.getLevel() / 30) + 1); i++)
+        {
+            bossObject = GameObject.Find("Manager").GetComponent<MapManagerScript>().getRandomBoss();
+            bossTemp = Instantiate(bossObject, spawnPoint, Quaternion.identity);
+            // Health and Damage scaling
+            bossTemp.GetComponent<Health>().setHealth(bossTemp.GetComponent<Health>().getStartingHealth() + (bossTemp.GetComponent<Health>().getStartingHealth() / 5 * (scaler.getLevel() - 1)));
+            bossTemp.GetComponent<Health>().setAttackDamage(bossTemp.GetComponent<Health>().getStartingAttack() + (bossTemp.GetComponent<Health>().getStartingAttack() / 5 * (scaler.getLevel() - 1)));
+            NetworkServer.Spawn(bossTemp);
+        }
+        bossSpawned = true;
+    }
 }
+
+
