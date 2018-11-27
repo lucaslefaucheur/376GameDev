@@ -57,7 +57,7 @@ public class BossSpawnManager : NetworkBehaviour {
         if (isServer && bossTemp == null && !loot)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().SpawnDoor();
-            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest();
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(3.6f, -5f, -1f));
             loot = true;
         }
 	}

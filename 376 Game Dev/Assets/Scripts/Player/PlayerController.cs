@@ -186,10 +186,11 @@ public class PlayerController : NetworkBehaviour
                 {
                     if (hit.collider.tag.Equals("chest"))
                     {
+                        Vector3 chestPos = hit.collider.gameObject.transform.position;
                         gameObject.GetComponent<AudioSource>().clip = chestOpenSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         CmdDestroy(hit.collider.gameObject);
-                        CmdChest();
+                        CmdChest(chestPos);
                     }
 
                     else if (hit.collider.tag.Equals("Sword"))
@@ -691,10 +692,10 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    void CmdChest()
+    void CmdChest(Vector3 vec)
     {
         // make the change local on the server
-        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon(vec);
 
     }
 
