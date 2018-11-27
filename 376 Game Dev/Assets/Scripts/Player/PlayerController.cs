@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
+    [SyncVar]   
     private Vector2 facing;
 
     //Player Number
@@ -88,7 +89,6 @@ public class PlayerController : NetworkBehaviour
     GameObject gameManager;
 
     //Teleport
-    [SyncVar]
     private bool teleporting = false;
     public GameObject teleAnim;
     private GameObject tele;
