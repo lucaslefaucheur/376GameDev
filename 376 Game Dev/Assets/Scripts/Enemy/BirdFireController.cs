@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class BirdFireController : NetworkBehaviour {
     
     private float counter;
+    private int damage;
 
     private void Start()
     {
@@ -27,9 +28,14 @@ public class BirdFireController : NetworkBehaviour {
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
             NetworkServer.Destroy(gameObject);
         }
+    }
+
+    public void setDamage(int newDamage)
+    {
+        damage = newDamage;
     }
 
 }
