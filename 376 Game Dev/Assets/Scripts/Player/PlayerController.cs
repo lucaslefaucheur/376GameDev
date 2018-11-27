@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
+    [SyncVar]   
     private Vector2 facing;
 
     //Player Number
@@ -21,12 +22,16 @@ public class PlayerController : NetworkBehaviour
     //sych health over network to know when your teammates are dead
     [SyncVar(hook = "OnChangeHealth")]
     public float currentHealth;
+    [SyncVar]
     private bool alive = true;
 
     //Base Stats -- To be used to calculate attacks and damage, and to be changed with getters and setters
     [SyncVar]
     private float armourVar = 0f;
-    private int attack = 10;
+    private int startingAttack = 5;
+    [SyncVar]
+    private int attack = 5;
+    [SyncVar]
     private float attackVar = 0f;
     [SyncVar]
     private float moveVar = 0f;
@@ -47,7 +52,6 @@ public class PlayerController : NetworkBehaviour
     public AudioClip pickWeaponSound;
     public AudioClip pickCrystalSound;
     public AudioClip levelUpSound;
-    public AudioClip dieSound;
     public AudioClip e1Sound;
     public AudioClip e2Sound;
     public AudioClip e3Sound;
@@ -60,25 +64,51 @@ public class PlayerController : NetworkBehaviour
     public bool grounded;
     public GameObject arrow;
     public GameObject bubble;
+    private int durInit = 50;
+    private float durCur = 0;
+
+    //UI
+    public Text Weapon;
+    public RectTransform durBar;
+    public Text cc;
+    public Text dung;
+    public GameObject UIcam;
 
     //spawn point
     private bool respawn = false;
     private Vector3[] playerInitialSpawn = { new Vector3(-11.2f, 0.8f, 0.0f), new Vector3(5.3f, 0.8f, 0.0f), new Vector3(-11.2f, -9.3f, 0.0f), new Vector3(5.3f, -9.3f, 0.0f) };
 
     //Crystal and Revive
+    [SyncVar(hook = "OnChangeCrystals")]
     private int crystalCount = 0;
     [SyncVar]
     private bool reviving = false;
     public GameObject reviveAnim;
     private GameObject revive;
-  
+
+    GameObject gameManager;
+
+    //Teleport
+    private bool teleporting = false;
+    public GameObject teleAnim;
+    private GameObject tele;
+
+    //Death
+    public GameObject ghostAnim;
+    private GameObject ghost;
+    [SyncVar]
+    private bool dying = false;
+
     private void Start()
     {
 
-        GameObject gameManager = GameObject.Find("Manager");
+        if (isLocalPlayer)
+        {
+            UIcam.GetComponent<Canvas>().enabled = true;
+        }
+        gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
         playerNumber = gameManager.GetComponent<GameController>().getNumOfPLayers();
-        Debug.Log("Player number " + gameManager.GetComponent<GameController>().getNumOfPLayers() + " has joined the game.");
 
         this.transform.position = playerInitialSpawn[playerNumber - 1];
         // set local components
@@ -89,6 +119,8 @@ public class PlayerController : NetworkBehaviour
 
         // set initial health
         currentHealth = maxHealth;
+
+        durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
     }
 
     void Update()
@@ -102,6 +134,7 @@ public class PlayerController : NetworkBehaviour
 
         if (alive)
         {
+
 
             Move();
 
@@ -142,14 +175,12 @@ public class PlayerController : NetworkBehaviour
                     //anim.SetTrigger("attacking");
                     shieldHit();
                 }
-                else
-                    Debug.Log("no weapon attached");
             }
 
 
             if (Input.GetButtonDown("Pickup"))
             {
-                
+
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
@@ -163,14 +194,14 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Sword"))
                     {
+                        unequip();
+                        Weapon.text = "Sword";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Sword>();
-                        Debug.Log("has sword");
 
                         anim.SetBool("hasSword", true);
                         anim.SetBool("hasStaff", false);
@@ -180,14 +211,14 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Bow"))
                     {
+                        unequip();
+                        Weapon.text = "Bow";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<bow>();
-                        Debug.Log("has bow");
                         anim.SetBool("hasBow", true);
                         anim.SetBool("hasStaff", false);
                         anim.SetBool("hasSword", false);
@@ -196,14 +227,14 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Shield"))
                     {
+                        unequip();
+                        Weapon.text = "Shield";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Shield>();
-                        Debug.Log("has shield");
                         anim.SetBool("hasBow", false);
                         anim.SetBool("hasShield", true);
                         anim.SetBool("hasSword", false);
@@ -212,14 +243,14 @@ public class PlayerController : NetworkBehaviour
 
                     else if (hit.collider.tag.Equals("Staff"))
                     {
+                        unequip();
+                        Weapon.text = "Staff";
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
-                        unequip();
                         gameObject.AddComponent<Staff>();
-                        Debug.Log("has staff");
                         anim.SetBool("hasBow", false);
                         anim.SetBool("hasStaff", true);
                         anim.SetBool("hasSword", false);
@@ -247,19 +278,14 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().Play();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-        
+
         if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
         {
             CmdDealDamage(hit.collider.gameObject, smallAttack());
-            //to remove
-            Debug.Log("melee attack hit for: " + smallAttack());
         }
         else if (hit.collider != null && hit.collider.gameObject.tag == "RhinoBoss")
         {
             CmdDealDamage(hit.collider.gameObject, smallAttack());
-
-            //to remove
-            Debug.Log("melee attack hit for: " + smallAttack());
         }
     }
 
@@ -293,9 +319,6 @@ public class PlayerController : NetworkBehaviour
             if (hit.collider != null && hit.collider.gameObject.layer.Equals(9))
             {
                 CmdDealDamage(hit.collider.gameObject, temp);
-
-                //to remove
-                Debug.Log("sword attack hit for: " + temp);
             }
 
 
@@ -323,7 +346,6 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().Play();
 
         float temp = (GetComponent<Shield>().weaponAttack(attackVar, attack));
-        Debug.Log("radius = " + temp);
         CmdSpawnBubble(temp);
         Debug.DrawRay(transform.position, Vector2.up * 2f, Color.green, 5.5f);
         Debug.DrawRay(transform.position, Vector2.right * 2f, Color.green, 5.5f);
@@ -351,16 +373,11 @@ public class PlayerController : NetworkBehaviour
                 if (hit[i] != null && hit[i].gameObject.layer.Equals(9))
                 {
                     CmdDealDamage(hit[i].gameObject, temp);
-
-                    //to remove
-                    Debug.Log("staff attack hit for: " + temp);
                 }
                 else if (hit[i] != null && hit[i].gameObject.layer.Equals(8))
                 {
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
-                    //to remove
-                    Debug.Log("staff attack heal for: " + temp);
 
                 }
             }
@@ -379,17 +396,15 @@ public class PlayerController : NetworkBehaviour
         currentHealth -= amount * (1 - armourVar);
         if (currentHealth <= 0)
         {
-            gameObject.GetComponent<AudioSource>().clip = dieSound;
-            GetComponent<AudioSource>().Play();
+
             //Death
             currentHealth = 0;
             alive = false;
             if (crystalCount >= 5 && !reviving)
             {
                 StartCoroutine(Revive());
-                Debug.Log("Reviving...");
             }
-            else if (crystalCount < 5)
+            else if (crystalCount < 5 && !dying)
             {
                 StartCoroutine(Death(gameObject));
             }
@@ -397,6 +412,20 @@ public class PlayerController : NetworkBehaviour
             {
                 currentHealth = 0;
             }
+        }
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
+        Invoke("resetColor", 0.5f);
+    }
+
+    //reset color of player
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+
+    //teleporting animation
+    public void teleport()
+    {
+        if (!teleporting)
+        {
+            StartCoroutine(TeleportAnimation());
         }
     }
 
@@ -418,7 +447,7 @@ public class PlayerController : NetworkBehaviour
                 break;
         }
 
-       
+
     }
 
     //to be used to cast an attack
@@ -431,6 +460,7 @@ public class PlayerController : NetworkBehaviour
     {
         gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
         gameObject.GetComponent<AudioSource>().Play();
+        Weapon.text = "None";
         moveVar = 0;
         armourVar = 0;
 
@@ -451,8 +481,6 @@ public class PlayerController : NetworkBehaviour
             Destroy(gameObject.GetComponent<Shield>());
             anim.SetBool("hasShield", false);
           }
-
-        Debug.Log("unequipped");
     }
 
     //to move player + animations
@@ -517,7 +545,6 @@ public class PlayerController : NetworkBehaviour
         if (collision.gameObject.tag == "crystal")
         {
             crystalCount++;
-            Debug.Log("Crystal Count " + crystalCount);
             gameObject.GetComponent<AudioSource>().clip = pickCrystalSound;
             gameObject.GetComponent<AudioSource>().Play();
             Destroy(collision.gameObject);
@@ -553,16 +580,10 @@ public class PlayerController : NetworkBehaviour
         gameObject.GetComponent<AudioSource>().clip = levelUpSound;
         gameObject.GetComponent<AudioSource>().Play();
         //scales the attack base up with level up
-        attack = (int)Mathf.Floor(attack + (0.325f * level));
-        //takes note of the players health percentage
-        float temp = (currentHealth / maxHealth) * 100;
-        //scales the health base up wih the level up
-        maxHealth = (int)Mathf.Floor(maxHealth + (0.25f * level));
-        //scales the current health of the player by using the presisting the helth precentage
-        currentHealth = maxHealth * temp;
+
     }
 
-    
+
 
     public void setRespawn()
     {
@@ -612,6 +633,17 @@ public class PlayerController : NetworkBehaviour
         return playerNumber;
     }
 
+    public void setDurInit(int dur)
+    {
+        durInit = dur;
+    }
+
+    public void setDurCur(int dur)
+    {
+        durCur = dur;
+        durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
+    }
+
     /***********************************************************
      *
      *
@@ -620,11 +652,26 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
-  
+
     private void OnChangeHealth(float currentHealth)
     {
         //sets the size of the green healthbar in relaiton to the percentage of health left
         healthBar.sizeDelta = new Vector2((currentHealth / maxHealth) * 100, healthBar.sizeDelta.y);
+    }
+
+    private void OnChangeCrystals(int crystalCount)
+    {
+        Debug.Log("before Health = " + currentHealth);
+        attack = (int)Mathf.Floor(startingAttack + crystalCount^(1/2));
+        //takes note of the players health percentage
+        float temp = (currentHealth / maxHealth);
+        Debug.Log("temp = " + temp);
+        //scales the health base up wih the level up
+        maxHealth = (int)Mathf.Floor(50 + crystalCount );
+        //scales the current health of the player by using the presisting the helth precentage
+        currentHealth = maxHealth * temp;
+        Debug.Log("after Health = " + currentHealth);
+        cc.text = crystalCount.ToString();
     }
 
     [Command]
@@ -656,7 +703,6 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         NetworkServer.Destroy(state);
-        Debug.Log("object destroyed command");
 
     }
 
@@ -676,7 +722,7 @@ public class PlayerController : NetworkBehaviour
         // make the change local on the server
         revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(revive);
-        
+
 
     }
 
@@ -690,6 +736,20 @@ public class PlayerController : NetworkBehaviour
         shieldBubble.transform.localScale = shieldBubble.transform.localScale * temp;
         NetworkServer.Spawn(shieldBubble);
 
+    }
+
+    [Command]
+    void CmdTeleport()
+    {
+        tele = Instantiate(teleAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(tele);
+    }
+
+    [Command]
+    void CmdGhost()
+    {
+        ghost = Instantiate(ghostAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
+        NetworkServer.Spawn(ghost);
     }
 
     [Command]
@@ -730,7 +790,6 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(5);
         CmdDestroy(revive);
         crystalCount -= 5;
-        Debug.Log("Crystal Count " + crystalCount);
         alive = true;
         setHealth((int)maxHealth);
         reviving = false;
@@ -739,8 +798,30 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator Death(GameObject player)
     {
+        dying = true;
+        StartCoroutine(FloatingGhost());
         yield return new WaitForSeconds(5);
+        CmdDestroy(ghost);
         CmdDestroy(player);
+    }
+
+    IEnumerator TeleportAnimation()
+    {
+        teleporting = true;
+        alive = false;
+        CmdTeleport();
+        yield return new WaitForSeconds(1);
+        alive = true;
+        CmdDestroy(tele);
+        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
+        teleporting = false;
+    }
+
+    IEnumerator FloatingGhost()
+    {
+        CmdGhost();
+        yield return new WaitForSeconds(0);
+
     }
 
 

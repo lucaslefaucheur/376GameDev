@@ -19,6 +19,7 @@ public class BirdController : NetworkBehaviour
     private float counter;
 
     private Vector2 InitialPosition;
+    private Vector2 AttackPosition;
     private Vector2 direction;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
@@ -56,8 +57,13 @@ public class BirdController : NetworkBehaviour
         }
         else
         {
-            float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 1.5f)
+            if (loc.position.x - Target.position.x > 0)
+                AttackPosition = new Vector2(Target.position.x + 1.5f, Target.position.y);
+            else
+                AttackPosition = new Vector2(Target.position.x - 1.5f, Target.position.y);
+
+            float distance = Vector3.Distance(loc.position, AttackPosition);
+            if (distance > 0)
             {
                 anim.SetBool("Attack", false);
                 counter = 0.583f;
@@ -94,7 +100,15 @@ public class BirdController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
+
+                if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
+                {
+                    Target = null;
+                }
+                else
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
@@ -105,7 +119,6 @@ public class BirdController : NetworkBehaviour
         Vector2 pushbackdirection = Target.transform.position - gameObject.transform.position;
         pushbackdirection.Normalize();
         rb.AddForce(-pushbackdirection * 5, ForceMode2D.Impulse);
-
     }
 
     void Orientation()
@@ -175,8 +188,8 @@ public class BirdController : NetworkBehaviour
     {
         if (Target != null && isServer)
         {
-            // direction of the follow: towards the position of the player
-            direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), Target.position, FollowSpeed * Time.deltaTime);
+
+            direction = Vector2.MoveTowards(new Vector2(loc.position.x, loc.position.y), AttackPosition, FollowSpeed * Time.deltaTime);
             transform.position = direction;
         }
     }
@@ -196,6 +209,7 @@ public class BirdController : NetworkBehaviour
             temp.GetComponent<BirdFireController>().setDamage(GetComponent<Health>().getAttackDamage());
             NetworkServer.Spawn(temp);
             counter = 0.917f + 0.583f;
+            Target = null;
         }
     }
 
