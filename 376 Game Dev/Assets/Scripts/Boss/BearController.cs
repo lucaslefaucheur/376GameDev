@@ -24,7 +24,6 @@ public class BearController : NetworkBehaviour
     private float PatrolSpeed, WalkSpeed;
     
     private float counter;
-    private float startTime;
 
     public GameObject fire;
     private float fireTimer;
@@ -44,7 +43,6 @@ public class BearController : NetworkBehaviour
 
         moveSpot.position = new Vector2(Random.Range(InitialPosition.x - PatrolRange, InitialPosition.x + PatrolRange), Random.Range(InitialPosition.y - PatrolRange, InitialPosition.y + PatrolRange));
         fireTimer = Time.time;
-        startTime = Time.time;
     }
 
     void FixedUpdate()
@@ -62,7 +60,7 @@ public class BearController : NetworkBehaviour
             }
                 
             else{
-                if(Time.time > fireTimer && Time.time > startTime+2f)
+                if(Time.time > fireTimer)
                 Attack();
             }
 
