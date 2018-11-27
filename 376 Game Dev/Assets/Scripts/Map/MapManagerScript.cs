@@ -69,7 +69,7 @@ public class MapManagerScript : NetworkBehaviour
             mapPicker = Random.Range(0, 5);
             if(mapPicker%4 != 0)
             {
-                StartCoroutine(loadEnemyMap());
+                StartCoroutine(loadBossMap());
             }
             else
             {

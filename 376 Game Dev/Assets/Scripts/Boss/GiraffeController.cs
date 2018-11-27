@@ -16,15 +16,18 @@ public class GiraffeController : NetworkBehaviour {
 
     private Vector2 InitialPosition;
     private Vector2 direction;
-    int Health = 10;
+
+    public GameObject circle;
+    private bool attacked = false;
 
     public Transform moveSpot;
 
     private float PatrolSpeed, FollowSpeed, AttackSpeed;
-    
+
+    int Health;
+
     private float counter;
     //public GameObject EnemyHitParticle;
-    private int attackCounter = 0;
 
     void Start()
     {
@@ -53,22 +56,11 @@ public class GiraffeController : NetworkBehaviour {
         else
         {
             float distance = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-            if (distance > 2) {
+            if (distance > 2){
                 Follow();
             }
-                
-            else if (distance > 1) {
-                Attack(distance);
-                attackCounter++;
-            }
-                
-            else {
-                Teleport();
-            }
-
-            if(attackCounter == 3)
-            {
-                Target = null;
+            else if(!attacked){
+                Attack(distance);               
             }
                 
         }
@@ -109,7 +101,6 @@ public class GiraffeController : NetworkBehaviour {
 
     /* TakeDamage: substracts a number to the enemy's health
      ******************************************************/
-
     void TakeDamage(int number) {
         Health -= number;
         if (Health <= 0) {
@@ -208,35 +199,30 @@ public class GiraffeController : NetworkBehaviour {
 
     void Attack(float distance)
     {
+        attacked = true;
         // direction of the attack: towards the position of the player
-        direction.x = Target.transform.position.x - transform.position.x;
-        direction.y = Target.transform.position.y - transform.position.y;
-        direction.Normalize();
-        transform.Translate(AttackSpeed * direction.x * Time.deltaTime, AttackSpeed * direction.y * Time.deltaTime, 0);
-        counter = 0.917f;
+        GameObject insCir = Instantiate(circle, new Vector3(transform.position.x, transform.position.y-1f), Quaternion.identity);
+        insCir.GetComponent<CircleController>().damage = GetComponent<Health>().getAttackDamage();
+        NetworkServer.Spawn(insCir);
+        Destroy(insCir, 2f);
+        StartCoroutine(Teleport());
+        Target = null;
     }
 
     /* Teleport: enemy teleports to a random position around the player
      *****************************************************************/
-    
-    void Teleport() {
-        // wait before exploding
-        if (counter > 0)
-        {
-            anim.SetBool("Explode", true);
-            counter -= Time.deltaTime;
-        }
-        else
-        {
-            anim.SetBool("Explode", false);
-            //Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
-            Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-            teleportPosition.Normalize();
-            teleportPosition.x *= 2;
-            teleportPosition.y *= 2;
-            transform.position += new Vector3(3 * teleportPosition.x, 3 * teleportPosition.y, 0); // modify the position of the enemy
-            counter = 0.583f;
-        }
+
+    IEnumerator Teleport() {
+
+        anim.SetBool("Explode", true);
+        yield return new WaitForSeconds(1f);
+        anim.SetBool("Explode", false);
+        //Instantiate(EnemyHitParticle, gameObject.transform.position, gameObject.transform.rotation); // emit a particle effect
+        Vector2 teleportPosition = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        teleportPosition.Normalize();
+        transform.position += new Vector3(4 * teleportPosition.x, 4 * teleportPosition.y, 0); // modify the position of the enemy
+        attacked = false;
+
     }
     
     /***********************************
