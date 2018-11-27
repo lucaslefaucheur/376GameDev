@@ -108,7 +108,7 @@ public class LeopardController : NetworkBehaviour
     {
         if (other.gameObject.layer.Equals(8))
         {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().currentAttackDamage);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(GetComponent<Health>().getAttackDamage());
         }
     }
 
@@ -194,7 +194,7 @@ public class LeopardController : NetworkBehaviour
                 {
                     GameObject tempSphere = Instantiate(Sphere, transform.position, transform.rotation);
                     moveSpot.position = new Vector2(Random.Range(Target.position.x - 2.0f, Target.position.x + 2.0f), Random.Range(Target.position.y - 2.0f, Target.position.y + 2.0f));
-                    tempSphere.GetComponent<SphereController>().damage = GetComponent<Health>().currentAttackDamage / 5;
+                    tempSphere.GetComponent<SphereController>().damage = GetComponent<Health>().getAttackDamage() / 5;
                     NetworkServer.Spawn(tempSphere);
                 }
                 counter = 5.0f;

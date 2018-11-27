@@ -10,6 +10,7 @@ public class NutController : NetworkBehaviour {
     Vector2 nutDirection;
     Vector3 playerPosition;
     Rigidbody2D mRigidBody2D;
+    private int damage;
 
 
     // Use this for initialization
@@ -23,7 +24,7 @@ public class NutController : NetworkBehaviour {
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.gameObject.layer.Equals(8))
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
         NetworkServer.Destroy(gameObject);
 
     }
@@ -31,5 +32,10 @@ public class NutController : NetworkBehaviour {
     public void setTemp(int val)
     {
         temp = val;
+    }
+
+    public void setDamage(int newDamage)
+    {
+        damage = newDamage;
     }
 }

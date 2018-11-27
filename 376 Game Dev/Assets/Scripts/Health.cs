@@ -7,28 +7,39 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour {
 
     //variables
-    public int startingHealth;
-
+    [SyncVar] [SerializeField]
+    private int startingHealth;
     [SyncVar(hook = "OnChangeHealth")]
-    public float currentHealth;
+    private float currentHealth;
     public RectTransform healthBar;
     public GameObject deathFX;
     private Transform Target;
-    public int startingAttackDamage;
-    public int currentAttackDamage;
+    [SyncVar][SerializeField]
+    private int startingAttackDamage;
+    private int currentAttackDamage;
 
-    void Awake()
+    void Start()
     {
         // Set the initial health of the enemy
         currentHealth = startingHealth;
     }
 
-    void Start()
-    {
+    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
 
+    public void setAttackDamage(int newAttack) { currentAttackDamage = newAttack; }
+
+    public int getAttackDamage() { return currentAttackDamage; }
+
+    public int getStartingAttack() { return startingAttackDamage; }
+
+    public void setHealth(int newHealth) {
+        startingHealth = newHealth;
+        currentHealth = startingHealth;
     }
 
-    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+    public float getHealth() { return currentHealth; }
+
+    public int getStartingHealth() { return startingHealth; }
 
     /***********************************
      *
@@ -51,7 +62,7 @@ public class Health : NetworkBehaviour {
         }
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.75f, 0, 0, 1);
         Invoke("resetColor", 1.0f);
-        healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
+        
     }
 
     public void GainHealth(int heal)

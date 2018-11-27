@@ -29,10 +29,12 @@ public class SphereController : NetworkBehaviour {
     //Colliding with the player will cause damage to the player
     void OnCollisionEnter2D(Collision2D other)
     {
+      
         if (other.gameObject.layer.Equals(8))
         {
             other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
             anim.SetBool("Explodes", true);
+            
             if (counter > 5)
                 counter -= Time.deltaTime;
             else

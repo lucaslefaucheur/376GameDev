@@ -90,7 +90,15 @@ public class SquirrelController : NetworkBehaviour
             if (hitColliders.Length > 0)
             {
                 int randomint = Random.Range(0, hitColliders.Length);
-                Target = hitColliders[randomint].transform;
+
+                if (hitColliders[randomint].GetComponent<PlayerController>().getHealth() <= 0)
+                {
+                    Target = null;
+                }
+                else
+                {
+                    Target = hitColliders[randomint].transform;
+                }
             }
         }
     }
@@ -193,12 +201,14 @@ public class SquirrelController : NetworkBehaviour
     {
         if (counter > 0)
             counter -= Time.deltaTime;
-        else 
+        else if (isServer)
         {
             GameObject temp = Instantiate(Nut, transform.position, transform.rotation);
+            temp.GetComponent<NutController>().setDamage(GetComponent<Health>().getAttackDamage());
             NetworkServer.Spawn(temp);
             temp.GetComponent<NutController>().Shoot(Target.transform);
             counter = 2.5f;
+            Target = null;
         }
             
     }
