@@ -330,7 +330,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-
     private void bowHit()
     {
         gameObject.GetComponent<AudioSource>().clip = arrowSound;
@@ -339,8 +338,6 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
         CmdSpawnArrow(temp);
-
-
     }
 
     private void shieldHit()
@@ -358,7 +355,6 @@ public class PlayerController : NetworkBehaviour
 
     private void staffHit()
     {
-
         gameObject.GetComponent<AudioSource>().clip = speerSound;
         gameObject.GetComponent<AudioSource>().Play();
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
@@ -381,7 +377,8 @@ public class PlayerController : NetworkBehaviour
                 {
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
-
+                    hit[i].gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1);
+                    StartCoroutine(resetColorStaff(hit[i], 0.5f));
                 }
             }
         }
@@ -421,7 +418,16 @@ public class PlayerController : NetworkBehaviour
     }
 
     //reset color of player
-    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+    public void resetColor()
+    {
+      gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+    }
+
+    IEnumerator resetColorStaff(Collider2D hit, float delayTime)
+   {
+       yield return new WaitForSeconds(delayTime);
+       hit.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+   }
 
     //teleporting animation
     public void teleport()
