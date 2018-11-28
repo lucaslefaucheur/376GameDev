@@ -184,8 +184,7 @@ public class PlayerController : NetworkBehaviour
 
 
             if (Input.GetButtonDown("Pickup"))
-            {
-
+            {   anim.SetBool("isMoving", false);
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
