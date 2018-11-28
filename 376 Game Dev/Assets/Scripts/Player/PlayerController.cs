@@ -184,7 +184,7 @@ public class PlayerController : NetworkBehaviour
 
 
             if (Input.GetButtonDown("Pickup"))
-            {   anim.SetBool("isMoving", false);
+            {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
@@ -206,7 +206,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Sword>();
-
                         setAnimation("hasSword");
                     }
 
@@ -273,8 +272,8 @@ public class PlayerController : NetworkBehaviour
       anim.SetBool("hasStaff", false);
       anim.SetBool("hasSword", false);
       anim.SetBool("hasShield", false);
-
       anim.SetBool(type, true);
+      StartCoroutine(changingWeapon());
     }
 
 
@@ -428,12 +427,6 @@ public class PlayerController : NetworkBehaviour
     {
       gameObject.GetComponent<SpriteRenderer>().color = playerColor;
     }
-
-    IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
-   {
-       yield return new WaitForSeconds(delayTime);
-       hit.gameObject.GetComponent<SpriteRenderer>().color = oldColor;
-   }
 
     //teleporting animation
     public void teleport()
@@ -832,6 +825,18 @@ public class PlayerController : NetworkBehaviour
         CmdGhost();
         yield return new WaitForSeconds(0);
 
+    }
+
+    IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
+    {
+       yield return new WaitForSeconds(delayTime);
+       hit.gameObject.GetComponent<SpriteRenderer>().color = oldColor;
+    }
+
+    IEnumerator changingWeapon()
+    {
+       yield return new WaitForSeconds(1f);
+       anim.SetBool("isMoving", false);
     }
 
 
