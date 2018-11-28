@@ -842,7 +842,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Staff
+  m_Text: None
 --- !u!114 &114570436175175102
 MonoBehaviour:
   m_ObjectHideFlags: 1
