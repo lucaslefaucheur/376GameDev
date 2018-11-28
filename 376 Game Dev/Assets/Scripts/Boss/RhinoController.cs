@@ -118,7 +118,7 @@ public class RhinoController : NetworkBehaviour
             if ((loc.position.x - goTo.position.x) < 0)
             {
                 renderer.flipX = false; // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(renderer.flipX);
+                //CmdProvideFlipStateToServer(renderer.flipX);
             }
             else if ((loc.position.x - goTo.position.x) > 0)
             {

@@ -130,7 +130,7 @@ public class GiraffeController : NetworkBehaviour {
             if ((loc.position.x - goTo.position.x) < 0)
             {
                 rendy.flipX = false; // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(rendy.flipX);
+                //CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if ((loc.position.x - goTo.position.x) > 0)
             {
