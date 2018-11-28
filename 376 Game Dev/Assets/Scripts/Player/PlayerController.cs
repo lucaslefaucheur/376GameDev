@@ -432,6 +432,10 @@ public class PlayerController : NetworkBehaviour
     //teleporting animation
     public void teleport()
     {
+        if (!isServer)
+        {
+            return;
+        }
         if (!teleporting)
         {
             StartCoroutine(TeleportAnimation());
