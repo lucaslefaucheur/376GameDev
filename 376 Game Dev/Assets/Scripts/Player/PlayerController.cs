@@ -156,28 +156,24 @@ public class PlayerController : NetworkBehaviour
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     swordHit();
                 }
                 else if (GetComponent<Staff>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     staffHit();
                 }
                 else if (GetComponent<bow>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     bowHit();
                 }
                 else if (GetComponent<Shield>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     shieldHit();
                 }
             }
