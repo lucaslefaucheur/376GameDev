@@ -58,7 +58,7 @@ public class GameController : NetworkBehaviour
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(-6.94f, -5.61f, 0f));
         }
-        if (numOfPlayers == 4)
+        if (numOfPlayers == 3)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(0.83f, -5.61f, 0f));
         }
