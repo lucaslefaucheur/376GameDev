@@ -50,7 +50,7 @@ public class BossSpawnManager : NetworkBehaviour {
         if (isServer && bossSpawned && delayFunc < 0 && GameObject.FindGameObjectsWithTag("Enemy").Length == 0 && !loot)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().SpawnDoor();
-            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(3.6f, -5f, -1f));
+            GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(3.6f, -5f, 0f));
             loot = true;
             delayFunc = 1;
         }
