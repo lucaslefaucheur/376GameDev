@@ -157,6 +157,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            GetComponent<GameController>().LevelUp();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -174,6 +175,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            GetComponent<GameController>().LevelUp();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -210,8 +212,6 @@ public class MapManagerScript : NetworkBehaviour
             playerList[i].GetComponent<PlayerController>().teleport();
 
         }
-        if (isServer)
-            GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
 
