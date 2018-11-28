@@ -12,9 +12,9 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: 376 Game Dev
-  productName: 376 Game Dev
-  defaultCursor: {fileID: 0}
+  companyName: Team W
+  productName: Animal Dungeon
+  defaultCursor: {fileID: 2800000, guid: 4bb55d47e67fe8f41a2c50c7cd1fb4c7, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.7607844, g: 0.95294124, b: 0.9686275, a: 1}
   m_ShowUnitySplashScreen: 1
@@ -25,7 +25,7 @@ PlayerSettings:
   m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 0.088
   m_SplashScreenLogoAnimationZoom: 0.417
-  m_SplashScreenBackgroundLandscapeAspect: 1
+  m_SplashScreenBackgroundLandscapeAspect: 1.7777778
   m_SplashScreenBackgroundPortraitAspect: 1
   m_SplashScreenBackgroundLandscapeUvs:
     serializedVersion: 2
@@ -300,6 +300,13 @@ PlayerSettings:
       m_Icon: {fileID: 0}
       m_Width: 16
       m_Height: 16
+      m_Kind: 0
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 019d0fda97aa52a469d733cfd5833540, type: 3}
+      m_Width: 128
+      m_Height: 128
       m_Kind: 0
   m_BuildTargetPlatformIcons: []
   m_BuildTargetBatching: []
