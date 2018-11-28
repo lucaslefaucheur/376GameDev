@@ -824,7 +824,6 @@ public class PlayerController : NetworkBehaviour
     {
         CmdGhost();
         yield return new WaitForSeconds(0);
-
     }
 
     IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
@@ -835,8 +834,10 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator changingWeapon()
     {
-       yield return new WaitForSeconds(1f);
+       alive = false;
        anim.SetBool("isMoving", false);
+       yield return new WaitForSeconds(0.1f);
+       alive = true;
     }
 
 
