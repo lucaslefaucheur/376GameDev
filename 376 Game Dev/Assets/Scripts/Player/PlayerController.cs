@@ -767,6 +767,12 @@ public class PlayerController : NetworkBehaviour
         RpcSendFlipState(state);
     }
 
+    [Command]
+    void CmdGetLevel()
+    {
+        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
+    }
+
     // invoked by the server only but executed on ALL clients
     [ClientRpc]
     void RpcSendFlipState(bool state)
@@ -818,7 +824,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(1);
         alive = true;
         CmdDestroy(tele);
-        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
+        CmdGetLevel();
         teleporting = false;
     }
 
