@@ -768,9 +768,9 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    void CmdGetLevel()
+    int CmdGetLevel()
     {
-        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
+        return gameManager.GetComponent<GameController>().getLevel();
     }
 
     // invoked by the server only but executed on ALL clients
@@ -824,7 +824,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(1);
         alive = true;
         CmdDestroy(tele);
-        CmdGetLevel();
+        dung.text = (CmdGetLevel() - 1).ToString();
         teleporting = false;
     }
 
