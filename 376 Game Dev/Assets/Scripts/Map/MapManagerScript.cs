@@ -210,7 +210,8 @@ public class MapManagerScript : NetworkBehaviour
             playerList[i].GetComponent<PlayerController>().teleport();
 
         }
-        GetComponent<GameController>().LevelUp();
+        if (isServer)
+            GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
 
