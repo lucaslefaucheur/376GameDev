@@ -10,7 +10,6 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
-    [SyncVar]
     private Vector2 facing;
 
     //Player Number
@@ -338,7 +337,7 @@ public class PlayerController : NetworkBehaviour
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
-        CmdSpawnArrow(temp);
+        CmdSpawnArrow(temp, facing);
     }
 
     private void shieldHit()
@@ -715,10 +714,10 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    void CmdSpawnArrow(int temp)
+    void CmdSpawnArrow(int temp, Vector2 pos)
     {
         // make the change local on the server
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, Vector2.right));
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, pos));
         arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
         NetworkServer.Spawn(arrowSpawn);
 
