@@ -129,7 +129,7 @@ public class BossController : NetworkBehaviour
             }
 
             // invoke the change on the Server as you already named the function
-            CmdProvideFlipStateToServer(rendy.flipX);
+            //CmdProvideFlipStateToServer(rendy.flipX);
             return;
         }
 

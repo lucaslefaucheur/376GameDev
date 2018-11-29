@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
-    [SyncVar]   
+    [SyncVar]
     private Vector2 facing;
 
     //Player Number
@@ -99,6 +99,11 @@ public class PlayerController : NetworkBehaviour
     [SyncVar]
     private bool dying = false;
 
+    //color
+    private Color playerColor;
+    private Color[] colorString = { new Color(1f, 0.8f, 0.5f, 1f), new Color(0.5f, 0.5f, 1f, 1f), new Color(0.5f, 1f, 0.5f, 1f), new Color(0.8f, 0.5f, 1f, 1f) };
+
+
     private void Start()
     {
 
@@ -119,8 +124,8 @@ public class PlayerController : NetworkBehaviour
 
         // set initial health
         currentHealth = maxHealth;
-
         durBar.sizeDelta = new Vector2((durCur / durInit) * 100, durBar.sizeDelta.y);
+        playerColor = gameObject.GetComponent<SpriteRenderer>().color = colorString[playerNumber-1];
     }
 
     void Update()
@@ -151,28 +156,24 @@ public class PlayerController : NetworkBehaviour
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     swordHit();
                 }
                 else if (GetComponent<Staff>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     staffHit();
                 }
                 else if (GetComponent<bow>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     bowHit();
                 }
                 else if (GetComponent<Shield>() != null)
                 {
                     netAnim.SetTrigger("attacking");
                     netAnim.animator.ResetTrigger("attacking");
-                    //anim.SetTrigger("attacking");
                     shieldHit();
                 }
             }
@@ -180,16 +181,16 @@ public class PlayerController : NetworkBehaviour
 
             if (Input.GetButtonDown("Pickup"))
             {
-
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
                 if (hit.collider != null && hit.collider.gameObject.layer.Equals(10))
                 {
                     if (hit.collider.tag.Equals("chest"))
                     {
+                        Vector3 chestPos = hit.collider.gameObject.transform.position;
                         gameObject.GetComponent<AudioSource>().clip = chestOpenSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         CmdDestroy(hit.collider.gameObject);
-                        CmdChest();
+                        CmdChest(chestPos);
                     }
 
                     else if (hit.collider.tag.Equals("Sword"))
@@ -202,11 +203,7 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Sword>();
-
-                        anim.SetBool("hasSword", true);
-                        anim.SetBool("hasStaff", false);
-                        anim.SetBool("hasShield", false);
-                        anim.SetBool("hasBow", false);
+                        setAnimation("hasSword");
                     }
 
                     else if (hit.collider.tag.Equals("Bow"))
@@ -219,10 +216,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<bow>();
-                        anim.SetBool("hasBow", true);
-                        anim.SetBool("hasStaff", false);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasShield", false);
+                        Debug.Log("has bow");
+                        setAnimation("hasBow");
                     }
 
                     else if (hit.collider.tag.Equals("Shield"))
@@ -235,10 +230,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Shield>();
-                        anim.SetBool("hasBow", false);
-                        anim.SetBool("hasShield", true);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasStaff", false);
+                        Debug.Log("has shield");
+                        setAnimation("hasShield");
                     }
 
                     else if (hit.collider.tag.Equals("Staff"))
@@ -251,10 +244,8 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Staff>();
-                        anim.SetBool("hasBow", false);
-                        anim.SetBool("hasStaff", true);
-                        anim.SetBool("hasSword", false);
-                        anim.SetBool("hasShield", false);
+                        Debug.Log("has staff");
+                        setAnimation("hasStaff");
                     }
                 }
             }
@@ -270,6 +261,18 @@ public class PlayerController : NetworkBehaviour
      *
      *
      * ********************************************************/
+
+    //set the animation for the selected weapon
+    private void setAnimation(string type)
+    {
+      anim.SetBool("hasBow", false);
+      anim.SetBool("hasStaff", false);
+      anim.SetBool("hasSword", false);
+      anim.SetBool("hasShield", false);
+      anim.SetBool(type, true);
+      StartCoroutine(changingWeapon());
+    }
+
 
     //attack function
     private void melee()
@@ -327,7 +330,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-
     private void bowHit()
     {
         gameObject.GetComponent<AudioSource>().clip = arrowSound;
@@ -336,8 +338,6 @@ public class PlayerController : NetworkBehaviour
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
         CmdSpawnArrow(temp);
-
-
     }
 
     private void shieldHit()
@@ -355,7 +355,6 @@ public class PlayerController : NetworkBehaviour
 
     private void staffHit()
     {
-
         gameObject.GetComponent<AudioSource>().clip = speerSound;
         gameObject.GetComponent<AudioSource>().Play();
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 2f);
@@ -378,6 +377,7 @@ public class PlayerController : NetworkBehaviour
                 {
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
+
 
                 }
             }
@@ -418,17 +418,24 @@ public class PlayerController : NetworkBehaviour
     }
 
     //reset color of player
-    public void resetColor() { gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); }
+    public void resetColor()
+    {
+      gameObject.GetComponent<SpriteRenderer>().color = playerColor;
+    }
+
 
     //teleporting animation
     public void teleport()
     {
+        if (!isServer)
+        {
+            return;
+        }
         if (!teleporting)
         {
             StartCoroutine(TeleportAnimation());
         }
     }
-
 
     public void playDifferentEnemyAttackSound()
     {
@@ -583,8 +590,6 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-
-
     public void setRespawn()
     {
         respawn = true;
@@ -687,14 +692,16 @@ public class PlayerController : NetworkBehaviour
     {
         // make the change local on the server
         hit.GetComponent<PlayerController>().setHealth(dmg);
-
+        Color playerInitialColor = colorString[hit.gameObject.GetComponent<PlayerController>().getNumber() - 1];
+        hit.gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1);
+        StartCoroutine(resetColorStaff(hit, playerInitialColor, 0.5f));
     }
 
     [Command]
-    void CmdChest()
+    void CmdChest(Vector3 vec)
     {
         // make the change local on the server
-        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon();
+        GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnWeapon(vec);
 
     }
 
@@ -722,8 +729,6 @@ public class PlayerController : NetworkBehaviour
         // make the change local on the server
         revive = Instantiate(reviveAnim, new Vector3(transform.position.x, transform.position.y, -1f), Quaternion.identity);
         NetworkServer.Spawn(revive);
-
-
     }
 
 
@@ -760,6 +765,12 @@ public class PlayerController : NetworkBehaviour
 
         // forward the change also to all clients
         RpcSendFlipState(state);
+    }
+
+    [Command]
+    int CmdGetLevel()
+    {
+        return gameManager.GetComponent<GameController>().getLevel();
     }
 
     // invoked by the server only but executed on ALL clients
@@ -813,7 +824,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(1);
         alive = true;
         CmdDestroy(tele);
-        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
+        dung.text = (CmdGetLevel() - 1).ToString();
         teleporting = false;
     }
 
@@ -821,7 +832,26 @@ public class PlayerController : NetworkBehaviour
     {
         CmdGhost();
         yield return new WaitForSeconds(0);
+    }
 
+    IEnumerator resetColorStaff(Collider2D hit, Color oldColor, float delayTime)
+    {
+       yield return new WaitForSeconds(delayTime);
+       hit.gameObject.GetComponent<SpriteRenderer>().color = oldColor;
+    }
+
+    IEnumerator changingWeapon()
+    {
+       alive = false;
+       anim.SetBool("isMoving", false);
+       yield return new WaitForSeconds(0.1f);
+       alive = true;
+    }
+
+    IEnumerator resetColorStaff(GameObject hit, Color oldColor, float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        hit.GetComponent<SpriteRenderer>().color = oldColor;
     }
 
 

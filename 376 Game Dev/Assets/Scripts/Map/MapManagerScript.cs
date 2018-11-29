@@ -31,6 +31,7 @@ public class MapManagerScript : NetworkBehaviour
     private int mapPicker;
 
     public GameObject chest;
+    private Vector3 chestPosition;
     public List<GameObject> items = new List<GameObject>();
 
     void Awake()
@@ -59,14 +60,11 @@ public class MapManagerScript : NetworkBehaviour
 	// Update is called once per frame
 	void Update () {
 
-        if (start)
-        {
-            start = false;
-        }
-
         if (!hasMap){
 
-            mapPicker = Random.Range(0, 5);
+            //integer: exclusive max, random number 0, 1, 2, 3
+            mapPicker = Random.Range(0, 4);
+            //75% vs. 25%
             if(mapPicker%4 != 0)
             {
                 StartCoroutine(loadEnemyMap());
@@ -161,6 +159,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            GetComponent<GameController>().LevelUp();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -178,6 +177,7 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
+            GetComponent<GameController>().LevelUp();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -214,7 +214,6 @@ public class MapManagerScript : NetworkBehaviour
             playerList[i].GetComponent<PlayerController>().teleport();
 
         }
-        GetComponent<GameController>().LevelUp();
         hasMap = false;
     }
 
@@ -235,21 +234,21 @@ public class MapManagerScript : NetworkBehaviour
         }
     }
 
-    public void spawnChest()
+    public void spawnChest(Vector3 vec)
     {
         if (isServer)
         {
-            GameObject spawnedChest = Instantiate(chest, new Vector3(3.6f, -5f, -1f), Quaternion.identity);
+            GameObject spawnedChest = Instantiate(chest, vec, Quaternion.identity);
             NetworkServer.Spawn(spawnedChest);
         }
     }
 
-    public void spawnWeapon()
+    public void spawnWeapon(Vector3 vec)
     {
         if (isServer)
         {
             GameObject itemPick = items[Random.Range(0, items.Count)];
-            GameObject itemDrop = Instantiate(itemPick, new Vector3(3.6f, -5f, -0.5f), Quaternion.identity);
+            GameObject itemDrop = Instantiate(itemPick, vec, Quaternion.identity);
             NetworkServer.Spawn(itemDrop);
         }
     }
