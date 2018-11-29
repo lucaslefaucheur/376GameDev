@@ -68,7 +68,12 @@ public class PlayerController : NetworkBehaviour
     private float durCur = 0;
 
     //UI
-    public Text Weapon;
+    public Image Weapon;
+    public Sprite none;
+    public Sprite sword;
+    public Sprite staff;
+    public Sprite shield;
+    public Sprite bow;
     public RectTransform durBar;
     public Text cc;
     public Text dung;
@@ -200,7 +205,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Sword"))
                     {
                         unequip();
-                        Weapon.text = "Sword";
+                        Weapon.sprite = sword;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
@@ -213,7 +218,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Bow"))
                     {
                         unequip();
-                        Weapon.text = "Bow";
+                        Weapon.sprite = bow;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
@@ -227,7 +232,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Shield"))
                     {
                         unequip();
-                        Weapon.text = "Shield";
+                        Weapon.sprite = shield;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
@@ -241,7 +246,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Staff"))
                     {
                         unequip();
-                        Weapon.text = "Staff";
+                        Weapon.sprite = staff;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
@@ -476,7 +481,7 @@ public class PlayerController : NetworkBehaviour
     {
         gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
         gameObject.GetComponent<AudioSource>().Play();
-        Weapon.text = "None";
+        Weapon.sprite = none;
         moveVar = 0;
         armourVar = 0;
 
