@@ -56,6 +56,7 @@ public class PlayerController : NetworkBehaviour
     public AudioClip e3Sound;
     public AudioClip weaponBreakSound;
     public AudioClip chestOpenSound;
+    public GameObject audioListener;
 
 
     //item stuff
@@ -111,6 +112,8 @@ public class PlayerController : NetworkBehaviour
         if (isLocalPlayer)
         {
             UIcam.GetComponent<Canvas>().enabled = true;
+            (audioListener.GetComponent(typeof(AudioListener)) as AudioListener).enabled = true;
+
         }
         gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
