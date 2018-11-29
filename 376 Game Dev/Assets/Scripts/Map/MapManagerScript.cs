@@ -7,8 +7,6 @@ public class MapManagerScript : NetworkBehaviour
 {
 
     public static MapManagerScript instance = null;
-    public AudioClip backgroundSound;
-    public AudioClip bossSound;
     public GameObject initialMapPrefab;
     public GameObject doorPrefab;
     private GameObject currentMap;
@@ -162,8 +160,6 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
-            GetComponent<AudioSource>().clip = bossSound;
-            GetComponent<AudioSource>().Play();
             GetComponent<GameController>().LevelUp();
             notify();
             deleteAll();
@@ -183,8 +179,6 @@ public class MapManagerScript : NetworkBehaviour
     {
         if (isServer)
         {
-            GetComponent<AudioSource>().clip = backgroundSound;
-            GetComponent<AudioSource>().Play();
             GetComponent<GameController>().LevelUp();
             notify();
             deleteAll();
