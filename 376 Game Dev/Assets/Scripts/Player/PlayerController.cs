@@ -72,6 +72,8 @@ public class PlayerController : NetworkBehaviour
     public Text cc;
     public Text dung;
     public GameObject UIcam;
+    [SyncVar]
+    private int level = 0;
 
     //spawn point
     private bool respawn = false;
@@ -274,7 +276,8 @@ public class PlayerController : NetworkBehaviour
 
     public void setLevel(int v)
     {
-        dung.text = (v).ToString();
+        level = v;
+        dung.text = level.ToString();
     }
 
 
