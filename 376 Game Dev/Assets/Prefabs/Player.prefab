@@ -414,7 +414,7 @@ AudioListener:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772591242014150}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!82 &82676871698107392
 AudioSource:
   m_ObjectHideFlags: 1
@@ -708,6 +708,7 @@ MonoBehaviour:
   e3Sound: {fileID: 8300000, guid: 9efc35b47b0085942a10bfac6cbcc8ad, type: 3}
   weaponBreakSound: {fileID: 8300000, guid: f312aa379d549584dbede2dad32f7a66, type: 3}
   chestOpenSound: {fileID: 8300000, guid: a3dc92c73422aaf4aa70acc747a7bf0a, type: 3}
+  audioListener: {fileID: 1772591242014150}
   grounded: 0
   arrow: {fileID: 1703805394234736, guid: a05c7d6fbd7fdde448d0ca956c69eb06, type: 2}
   bubble: {fileID: 1258235230722250, guid: 76cea1a00b4314648a9067a117aa3a7a, type: 2}
