@@ -10,7 +10,6 @@ public class PlayerController : NetworkBehaviour
 
     //variable set up
     public float speed;
-    [SyncVar]
     private Vector2 facing;
 
     //Player Number
@@ -57,6 +56,7 @@ public class PlayerController : NetworkBehaviour
     public AudioClip e3Sound;
     public AudioClip weaponBreakSound;
     public AudioClip chestOpenSound;
+    public GameObject audioListener;
 
 
     //item stuff
@@ -73,6 +73,8 @@ public class PlayerController : NetworkBehaviour
     public Text cc;
     public Text dung;
     public GameObject UIcam;
+    [SyncVar (hook = "OnLevelChange")]
+    private int level = 0;
 
     //spawn point
     private bool respawn = false;
@@ -110,6 +112,8 @@ public class PlayerController : NetworkBehaviour
         if (isLocalPlayer)
         {
             UIcam.GetComponent<Canvas>().enabled = true;
+            (audioListener.GetComponent(typeof(AudioListener)) as AudioListener).enabled = true;
+
         }
         gameManager = GameObject.Find("Manager");
         gameManager.GetComponent<GameController>().AddPlayer();
@@ -273,6 +277,11 @@ public class PlayerController : NetworkBehaviour
       StartCoroutine(changingWeapon());
     }
 
+    public void setLevel(int v)
+    {
+        level = v;
+    }
+
 
     //attack function
     private void melee()
@@ -337,7 +346,7 @@ public class PlayerController : NetworkBehaviour
 
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
         int temp = (GetComponent<bow>().weaponAttack(attackVar, attack));
-        CmdSpawnArrow(temp);
+        CmdSpawnArrow(temp, facing);
     }
 
     private void shieldHit()
@@ -679,6 +688,11 @@ public class PlayerController : NetworkBehaviour
         cc.text = crystalCount.ToString();
     }
 
+    private void OnLevelChange(int level)
+    {
+        dung.text = level.ToString();
+    }
+
     [Command]
     void CmdDealDamage(GameObject hit, int dmg)
     {
@@ -714,10 +728,10 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    void CmdSpawnArrow(int temp)
+    void CmdSpawnArrow(int temp, Vector2 pos)
     {
         // make the change local on the server
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, facing));
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, pos));
         arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
         NetworkServer.Spawn(arrowSpawn);
 
@@ -768,9 +782,9 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    int CmdGetLevel()
+    void CmdGetLevel()
     {
-        return gameManager.GetComponent<GameController>().getLevel();
+        gameManager.GetComponent<GameController>().getLevel();
     }
 
     // invoked by the server only but executed on ALL clients
@@ -824,7 +838,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(1);
         alive = true;
         CmdDestroy(tele);
-        dung.text = (CmdGetLevel() - 1).ToString();
+        dung.text = (gameManager.GetComponent<GameController>().getLevel() - 1).ToString();
         teleporting = false;
     }
 
