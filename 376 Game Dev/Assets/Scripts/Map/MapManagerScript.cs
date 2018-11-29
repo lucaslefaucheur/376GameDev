@@ -65,7 +65,9 @@ public class MapManagerScript : NetworkBehaviour
 
         if (!hasMap){
 
-            mapPicker = Random.Range(0, 5);
+            //integer: exclusive max, random number 0, 1, 2, 3
+            mapPicker = Random.Range(0, 4);
+            //75% vs. 25%
             if(mapPicker%4 != 0)
             {
                 StartCoroutine(loadEnemyMap());
@@ -163,6 +165,7 @@ public class MapManagerScript : NetworkBehaviour
             GetComponent<AudioSource>().clip = bossSound;
             GetComponent<AudioSource>().Play();
             GetComponent<GameController>().LevelUp();
+            notify();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -183,6 +186,7 @@ public class MapManagerScript : NetworkBehaviour
             GetComponent<AudioSource>().clip = backgroundSound;
             GetComponent<AudioSource>().Play();
             GetComponent<GameController>().LevelUp();
+            notify();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -256,6 +260,15 @@ public class MapManagerScript : NetworkBehaviour
             GameObject itemDrop = Instantiate(itemPick, vec, Quaternion.identity);
             NetworkServer.Spawn(itemDrop);
         }
+    }
+
+    public void notify()
+    {
+        if (isServer)
+            for (int i = 0; i < playerList.Length; i++)
+            {
+                playerList[i].GetComponent<PlayerController>().setLevel(GameObject.Find("Manager").GetComponent<GameController>().getLevel() - 1);
+            }
     }
 
     private void deleteAll()
