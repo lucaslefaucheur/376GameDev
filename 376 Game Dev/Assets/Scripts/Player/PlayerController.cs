@@ -718,7 +718,7 @@ public class PlayerController : NetworkBehaviour
     void CmdSpawnArrow(int temp)
     {
         // make the change local on the server
-        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector3.up, new Vector3(facing.x, facing.y, 0)));
+        GameObject arrowSpawn = Instantiate(arrow, transform.position, Quaternion.FromToRotation(Vector2.up, Vector2.right));
         arrowSpawn.GetComponent<bowProjectile>().setTemp(temp);
         NetworkServer.Spawn(arrowSpawn);
 
