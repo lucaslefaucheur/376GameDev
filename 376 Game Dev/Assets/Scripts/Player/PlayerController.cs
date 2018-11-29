@@ -138,7 +138,6 @@ public class PlayerController : NetworkBehaviour
 
         if (alive)
         {
-            Debug.LogError(facing);
 
 
             Move();
