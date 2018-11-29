@@ -72,7 +72,7 @@ public class PlayerController : NetworkBehaviour
     public Text cc;
     public Text dung;
     public GameObject UIcam;
-    [SyncVar]
+    [SyncVar (hook = "OnLevelChange")]
     private int level = 0;
 
     //spawn point
@@ -277,7 +277,6 @@ public class PlayerController : NetworkBehaviour
     public void setLevel(int v)
     {
         level = v;
-        dung.text = level.ToString();
     }
 
 
@@ -684,6 +683,11 @@ public class PlayerController : NetworkBehaviour
         currentHealth = maxHealth * temp;
         Debug.Log("after Health = " + currentHealth);
         cc.text = crystalCount.ToString();
+    }
+
+    private void OnLevelChange(int level)
+    {
+        dung.text = level.ToString();
     }
 
     [Command]
