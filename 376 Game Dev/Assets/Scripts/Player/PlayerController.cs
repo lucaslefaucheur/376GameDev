@@ -272,6 +272,11 @@ public class PlayerController : NetworkBehaviour
       StartCoroutine(changingWeapon());
     }
 
+    public void setLevel(int v)
+    {
+        dung.text = (v).ToString();
+    }
+
 
     //attack function
     private void melee()

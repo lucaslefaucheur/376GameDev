@@ -158,6 +158,7 @@ public class MapManagerScript : NetworkBehaviour
         if (isServer)
         {
             GetComponent<GameController>().LevelUp();
+            notify();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -176,6 +177,7 @@ public class MapManagerScript : NetworkBehaviour
         if (isServer)
         {
             GetComponent<GameController>().LevelUp();
+            notify();
             deleteAll();
             yield return new WaitForSeconds(1);
             //instantiate random map
@@ -249,6 +251,15 @@ public class MapManagerScript : NetworkBehaviour
             GameObject itemDrop = Instantiate(itemPick, vec, Quaternion.identity);
             NetworkServer.Spawn(itemDrop);
         }
+    }
+
+    public void notify()
+    {
+        if (isServer)
+            for (int i = 0; i < playerList.Length; i++)
+            {
+                playerList[i].GetComponent<PlayerController>().setLevel(GameObject.Find("Manager").GetComponent<GameController>().getLevel() - 1);
+            }
     }
 
     private void deleteAll()

@@ -9,7 +9,6 @@ public class GameController : NetworkBehaviour
 {
     public static GameController instance = null;           //Static instance of GameController which allows it to be accessed by other scripts          
     private GameObject levelTransition;                      //Background for levelText, while level is being set up
-    [SyncVar]
     public int level = 30;                                  //Current level number
     private bool settingUp = true;                          //Boolean to check if we're currently setting up game
     private int numOfPlayers = 1;                           //Keep track of the number of players spawn
