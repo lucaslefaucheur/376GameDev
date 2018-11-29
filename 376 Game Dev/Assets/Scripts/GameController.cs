@@ -53,7 +53,7 @@ public class GameController : NetworkBehaviour
     public void AddPlayer()
     {
         numOfPlayers = FindPlayerNumber();
-        Debug.Log("Num of players: " + numOfPlayers);
+        //Debug.Log("Num of players: " + numOfPlayers);
         if(numOfPlayers == 1)
         {
             GameObject.Find("Manager").GetComponent<MapManagerScript>().spawnChest(new Vector3(-6.94f, -5.61f, 0f));

@@ -13,6 +13,7 @@ public class MapManagerScript : NetworkBehaviour
     private GameObject[] playerList;
     private GameObject[] objectList;
 
+
     //BOSS MAPS
     public List<GameObject> mapBossList = new List<GameObject>();
     private GameObject bossMapPick;

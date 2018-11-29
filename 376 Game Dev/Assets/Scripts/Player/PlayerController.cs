@@ -68,7 +68,12 @@ public class PlayerController : NetworkBehaviour
     private float durCur = 0;
 
     //UI
-    public Text Weapon;
+    public Image Weapon;
+    public Sprite none;
+    public Sprite sword;
+    public Sprite staff;
+    public Sprite shield;
+    public Sprite bow;
     public RectTransform durBar;
     public Text cc;
     public Text dung;
@@ -200,7 +205,7 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Sword"))
                     {
                         unequip();
-                        Weapon.text = "Sword";
+                        Weapon.sprite = sword;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
@@ -213,42 +218,39 @@ public class PlayerController : NetworkBehaviour
                     else if (hit.collider.tag.Equals("Bow"))
                     {
                         unequip();
-                        Weapon.text = "Bow";
+                        Weapon.sprite = bow;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = 0.3f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<bow>();
-                        Debug.Log("has bow");
                         setAnimation("hasBow");
                     }
 
                     else if (hit.collider.tag.Equals("Shield"))
                     {
                         unequip();
-                        Weapon.text = "Shield";
+                        Weapon.sprite = shield;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.5f;
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Shield>();
-                        Debug.Log("has shield");
                         setAnimation("hasShield");
                     }
 
                     else if (hit.collider.tag.Equals("Staff"))
                     {
                         unequip();
-                        Weapon.text = "Staff";
+                        Weapon.sprite = staff;
                         gameObject.GetComponent<AudioSource>().clip = pickWeaponSound;
                         gameObject.GetComponent<AudioSource>().Play();
                         moveVar = -0.25f;
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Staff>();
-                        Debug.Log("has staff");
                         setAnimation("hasStaff");
                     }
                 }
@@ -476,7 +478,7 @@ public class PlayerController : NetworkBehaviour
     {
         gameObject.GetComponent<AudioSource>().clip =weaponBreakSound;
         gameObject.GetComponent<AudioSource>().Play();
-        Weapon.text = "None";
+        Weapon.sprite = none;
         moveVar = 0;
         armourVar = 0;
 
@@ -675,16 +677,13 @@ public class PlayerController : NetworkBehaviour
 
     private void OnChangeCrystals(int crystalCount)
     {
-        Debug.Log("before Health = " + currentHealth);
         attack = (int)Mathf.Floor(startingAttack + crystalCount^(1/2));
         //takes note of the players health percentage
         float temp = (currentHealth / maxHealth);
-        Debug.Log("temp = " + temp);
         //scales the health base up wih the level up
         maxHealth = (int)Mathf.Floor(50 + crystalCount );
         //scales the current health of the player by using the presisting the helth precentage
         currentHealth = maxHealth * temp;
-        Debug.Log("after Health = " + currentHealth);
         cc.text = crystalCount.ToString();
     }
 
