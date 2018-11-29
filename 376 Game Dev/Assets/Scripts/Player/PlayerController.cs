@@ -225,7 +225,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<bow>();
-                        Debug.Log("has bow");
                         setAnimation("hasBow");
                     }
 
@@ -239,7 +238,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = 0.5f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Shield>();
-                        Debug.Log("has shield");
                         setAnimation("hasShield");
                     }
 
@@ -253,7 +251,6 @@ public class PlayerController : NetworkBehaviour
                         armourVar = -0.25f;
                         CmdDestroy(hit.collider.gameObject);
                         gameObject.AddComponent<Staff>();
-                        Debug.Log("has staff");
                         setAnimation("hasStaff");
                     }
                 }
@@ -680,16 +677,13 @@ public class PlayerController : NetworkBehaviour
 
     private void OnChangeCrystals(int crystalCount)
     {
-        Debug.Log("before Health = " + currentHealth);
         attack = (int)Mathf.Floor(startingAttack + crystalCount^(1/2));
         //takes note of the players health percentage
         float temp = (currentHealth / maxHealth);
-        Debug.Log("temp = " + temp);
         //scales the health base up wih the level up
         maxHealth = (int)Mathf.Floor(50 + crystalCount );
         //scales the current health of the player by using the presisting the helth precentage
         currentHealth = maxHealth * temp;
-        Debug.Log("after Health = " + currentHealth);
         cc.text = crystalCount.ToString();
     }
 
