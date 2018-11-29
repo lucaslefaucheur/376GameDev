@@ -377,7 +377,7 @@ public class PlayerController : NetworkBehaviour
                     //heal
                     CmdHeal(hit[i].gameObject, temp);
 
-                    
+
                 }
             }
         }
